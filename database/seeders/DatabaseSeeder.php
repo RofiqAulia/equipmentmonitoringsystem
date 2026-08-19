@@ -27,6 +27,15 @@ class DatabaseSeeder extends Seeder
             'avatar' => 'https://ui-avatars.com/api/?name=Super+Admin&background=1E293B&color=fff',
         ]);
 
+            $superAdmin = User::create([
+            'name' => 'Super Admin',
+            'username' => 'admin2',
+            'email' => 'admin2@inventory.com',
+            'password' => Hash::make('password123'),
+            'role' => 'admin',
+            'avatar' => 'https://ui-avatars.com/api/?name=Super+Admin&background=1E293B&color=fff',
+        ]);
+
         // Supervisors (SPV)
         $spv1 = User::create([
             'name' => 'SPV - Budi Santoso',
