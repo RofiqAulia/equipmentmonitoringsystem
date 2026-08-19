@@ -1,0 +1,127 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Item;
+use App\Models\ItemRequisition;
+use Illuminate\Http\Request;
+
+class AdminStockController extends Controller
+{
+    /**
+     * Display Input & Restock Stock Barang Form.
+     */
+    public function inputForm(Request $request)
+    {
+        $items = Item::orderBy('name')->get();
+        $selectedItem = null;
+
+        if ($request->filled('item_id')) {
+            $selectedItem = Item::find($request->input('item_id'));
+        }
+
+        return view('admin.stock_input', [
+            'items' => $items,
+            'selectedItem' => $selectedItem,
+        ]);
+    }
+
+    /**
+     * Store new stock entry or update existing item stock with image file upload support.
+     */
+    public function storeStock(Request $request)
+    {
+        $request->validate([
+            'mode' => 'required|in:new,existing',
+            'item_id' => 'nullable|required_if:mode,existing|exists:items,id',
+            'sku' => 'nullable|required_if:mode,new|string|max:50',
+            'name' => 'nullable|required_if:mode,new|string|max:255',
+            'location_bin' => 'required|string|max:100',
+            'quantity' => 'required|integer|min:1',
+            'minimum_stock' => 'required|integer|min:0',
+            'image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
+        ]);
+
+        $uploadedImageUrl = null;
+
+        // Handle Image File Upload (All Image Types Supported)
+        if ($request->hasFile('image_file')) {
+            $file = $request->file('image_file');
+            $uploadPath = public_path('uploads/items');
+            
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+            $filename = time() . '_' . uniqid() . '.' . $extension;
+            $file->move($uploadPath, $filename);
+            
+            $uploadedImageUrl = asset('uploads/items/' . $filename);
+        }
+
+        if ($request->input('mode') === 'existing') {
+            $item = Item::findOrFail($request->input('item_id'));
+            $item->available_stock += (int) $request->input('quantity');
+            $item->location_bin = $request->input('location_bin');
+            $item->minimum_stock = (int) $request->input('minimum_stock');
+            
+            if ($uploadedImageUrl) {
+                $item->image_url = $uploadedImageUrl;
+            }
+            
+            $item->save();
+
+            return redirect()->route('admin.stock.input')
+                ->with('success', "Stok barang '{$item->name}' (SKU: {$item->sku}) berhasil ditambah +{$request->input('quantity')} unit. Total stok sekarang: {$item->available_stock}.");
+        }
+
+        // Mode New Item
+        $sku = strtoupper(trim($request->input('sku')));
+
+        if (Item::where('sku', $sku)->exists()) {
+            return back()->withInput()->with('error', "SKU '{$sku}' sudah terdaftar dalam sistem. Gunakan opsi Restock Barang Existing.");
+        }
+
+        $defaultPlaceholder = 'https://placehold.co/100x100/1e293b/06b6d4?text=' . urlencode(trim($request->input('name')));
+
+        $item = Item::create([
+            'sku' => $sku,
+            'qr_code_payload' => 'QR-' . $sku,
+            'name' => trim($request->input('name')),
+            'location_bin' => trim($request->input('location_bin')),
+            'available_stock' => (int) $request->input('quantity'),
+            'minimum_stock' => (int) $request->input('minimum_stock'),
+            'image_url' => $uploadedImageUrl ?: $defaultPlaceholder,
+        ]);
+
+        return redirect()->route('admin.stock.input')
+            ->with('success', "Barang baru '{$item->name}' (SKU: {$item->sku}) berhasil ditambahkan ke inventaris dengan stok awal {$item->available_stock} unit.");
+    }
+
+    /**
+     * Display Deteksi Barang Menipis (Low Stock Detector).
+     */
+    public function lowStockDetector()
+    {
+        $allLowStockItems = Item::whereColumn('available_stock', '<=', 'minimum_stock')
+            ->orderBy('available_stock', 'asc')
+            ->get();
+
+        $outOfStockItems = $allLowStockItems->where('available_stock', '<=', 0);
+        $lowStockItems = $allLowStockItems->where('available_stock', '>', 0);
+
+        // Pending requisitions map
+        $pendingRequisitions = ItemRequisition::where('status', 'pending')
+            ->pluck('item_id')
+            ->filter()
+            ->toArray();
+
+        return view('admin.low_stock', [
+            'allLowStockItems' => $allLowStockItems,
+            'outOfStockItems' => $outOfStockItems,
+            'lowStockItems' => $lowStockItems,
+            'pendingRequisitions' => $pendingRequisitions,
+        ]);
+    }
+}

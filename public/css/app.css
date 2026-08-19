@@ -1,0 +1,156 @@
+/* Custom Application CSS - Inventory Control System */
+
+:root {
+    --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-heading: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Strict 3-Color System Tokens (Solid Single Colors Only) */
+    --color-blue: #0284c7;       /* 1. Biru */
+    --color-pink: #ec4899;       /* 2. Pink */
+    --color-white: #ffffff;      /* 3. Putih */
+
+    /* Fixed Status Colors (Paten) */
+    --color-success: #10b981;   /* Hijau (Submit / Selesai / Restocked) */
+    --color-warning: #f59e0b;   /* Kuning / Amber (Pending / Low Stock) */
+    --color-danger: #ef4444;    /* Merah (Danger / Rejected / Hapus) */
+}
+
+/* Light Theme Variables (Tampilan Siang) */
+html:not(.dark) {
+    --bg-main: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-panel: #ffffff;
+    --border-color: #cbd5e1;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --card-shadow: 0 10px 25px -5px rgba(2, 132, 199, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+}
+
+/* Dark Theme Variables (Tampilan Malam) */
+html.dark {
+    --bg-main: #030712;
+    --bg-card: #0f172a;
+    --bg-panel: #0f172a;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --card-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Enforce unified font family for titles, subtitles, text, buttons, inputs, etc. */
+body, h1, h2, h3, h4, h5, h6, input, select, textarea, button, p, span, div, a, td, th, label, .font-heading {
+    font-family: var(--font-sans);
+}
+
+/* Preserve FontAwesome Icon Font Families & Weights */
+.fa-solid, .fas {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900 !important;
+}
+.fa-regular, .far {
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 400 !important;
+}
+.fa-brands, .fab {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Glassmorphism Components with Light/Dark Theme Support */
+.glass-panel {
+    background-color: var(--bg-panel);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+}
+
+.glass-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+}
+
+/* SweetAlert2 Glassmorphism Styling (Solid Biru + Pink Accent + Fixed Status Icons) */
+.swal2-popup {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 1.5rem !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    color: var(--text-main) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4) !important;
+    font-family: var(--font-sans) !important;
+    padding: 1.75rem !important;
+}
+
+.swal2-title {
+    color: var(--text-main) !important;
+    font-weight: 800 !important;
+    font-size: 1.25rem !important;
+    letter-spacing: -0.01em;
+}
+
+.swal2-html-container {
+    color: var(--text-muted) !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+}
+
+.swal2-confirm {
+    background-color: #0284c7 !important;
+    color: #ffffff !important;
+    border-radius: 0.85rem !important;
+    padding: 0.65rem 1.5rem !important;
+    font-weight: 700 !important;
+    font-size: 0.8rem !important;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35) !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal2-confirm:hover {
+    background-color: #0369a1 !important;
+    transform: translateY(-1px);
+}
+
+.swal2-cancel {
+    background: rgba(148, 163, 184, 0.2) !important;
+    color: var(--text-main) !important;
+    border-radius: 0.85rem !important;
+    padding: 0.65rem 1.5rem !important;
+    font-weight: 700 !important;
+    font-size: 0.8rem !important;
+    border: 1px solid var(--border-color) !important;
+    transition: all 0.2s ease !important;
+}
+
+.swal2-cancel:hover {
+    background: rgba(148, 163, 184, 0.35) !important;
+}
+
+.swal2-icon {
+    border-width: 3px !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(2, 132, 199, 0.3);
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(236, 72, 153, 0.5);
+}
