@@ -433,6 +433,7 @@
                         <th class="px-4 py-3.5 text-center cursor-pointer sorting">Stok Available</th>
                         <th class="px-4 py-3.5 text-center cursor-pointer sorting">Min Threshold</th>
                         <th class="px-4 py-3.5 text-center cursor-pointer sorting">Status Stok</th>
+                        <th class="px-4 py-3.5 text-center no-sort">Aksi QR Code</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
@@ -466,6 +467,11 @@
                                     <span class="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 uppercase tracking-wider shadow-sm">IN STOCK</span>
                                 @endif
                             </td>
+                            <td class="px-4 py-3 text-center">
+                                <button type="button" onclick="openQrModal('{{ $item->name }}', '{{ $item->sku }}', '{{ $item->qr_code_payload }}', '{{ $item->location_bin }}')" class="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-bold text-xs rounded-xl border border-cyan-500/30 transition flex items-center justify-center mx-auto shadow-sm">
+                                    <i class="fa-solid fa-qrcode mr-1.5"></i> Terbitkan QR
+                                </button>
+                            </td>
                         </tr>
                     @empty
                         <tr>
@@ -474,6 +480,41 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Terbitkan QR Code untuk Operator -->
+<div id="admin-qr-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-slate-300 dark:border-slate-700 space-y-4 shadow-2xl text-center">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center">
+                <i class="fa-solid fa-qrcode text-cyan-600 dark:text-cyan-400 mr-2"></i> Penerbitan QR Code Barang
+            </h3>
+            <button onclick="closeQrModal()" type="button" class="text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-inner inline-block mx-auto">
+            <img id="qr-modal-image" src="" alt="QR Code Barang" class="w-48 h-48 mx-auto object-contain">
+        </div>
+
+        <div>
+            <h4 id="qr-modal-title" class="font-extrabold text-slate-900 dark:text-white text-base"></h4>
+            <div id="qr-modal-sku" class="text-xs font-mono text-cyan-600 dark:text-cyan-400 font-bold mt-0.5"></div>
+            <div id="qr-modal-bin" class="text-xs text-slate-500 dark:text-slate-400 mt-1"></div>
+        </div>
+
+        <div class="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 text-[11px] text-cyan-700 dark:text-cyan-300 text-left">
+            <i class="fa-solid fa-circle-info mr-1"></i> Tampilkan layar ini atau cetak QR Code ini untuk di-scan oleh Operator pada modul pengambilan barang.
+        </div>
+
+        <div class="flex space-x-2 pt-2">
+            <button onclick="closeQrModal()" type="button" class="flex-1 py-2.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition">Tutup</button>
+            <button onclick="printQrCode()" type="button" class="flex-1 py-2.5 bg-sky-600 text-white rounded-xl text-xs font-bold hover:bg-sky-500 transition shadow">
+                <i class="fa-solid fa-print mr-1"></i> Cetak QR
+            </button>
         </div>
     </div>
 </div>
@@ -583,6 +624,54 @@
 
         function refreshTables() {
             window.location.reload();
+        }
+
+        function openQrModal(name, sku, payload, bin) {
+            document.getElementById('qr-modal-title').innerText = name;
+            document.getElementById('qr-modal-sku').innerText = 'SKU: ' + sku;
+            document.getElementById('qr-modal-bin').innerText = 'Lokasi Rak: ' + bin;
+            
+            var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(payload);
+            document.getElementById('qr-modal-image').src = qrUrl;
+
+            document.getElementById('admin-qr-modal').classList.remove('hidden');
+        }
+
+        function closeQrModal() {
+            document.getElementById('admin-qr-modal').classList.add('hidden');
+        }
+
+        function printQrCode() {
+            var printWin = window.open('', '_blank');
+            var imgUrl = document.getElementById('qr-modal-image').src;
+            var title = document.getElementById('qr-modal-title').innerText;
+            var sku = document.getElementById('qr-modal-sku').innerText;
+            var bin = document.getElementById('qr-modal-bin').innerText;
+
+            printWin.document.write(`
+                <html>
+                <head>
+                    <title>Cetak QR Code - ${sku}</title>
+                    <style>
+                        body { font-family: sans-serif; text-align: center; padding: 40px; }
+                        .qr-card { border: 2px dashed #333; padding: 25px; display: inline-block; border-radius: 16px; }
+                        img { width: 220px; height: 220px; }
+                        h2 { margin: 10px 0 5px; font-size: 20px; }
+                        p { margin: 3px 0; font-size: 14px; color: #555; }
+                        .sku { font-weight: bold; font-family: monospace; color: #0284c7; }
+                    </style>
+                </head>
+                <body onload="window.print(); window.close();">
+                    <div class="qr-card">
+                        <img src="${imgUrl}">
+                        <h2>${title}</h2>
+                        <p class="sku">${sku}</p>
+                        <p>${bin}</p>
+                    </div>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
         }
     </script>
 @endpush
