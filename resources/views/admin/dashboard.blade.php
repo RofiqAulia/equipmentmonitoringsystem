@@ -338,7 +338,7 @@
                         <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition">
                             <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap">
                                 <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
-                                <div class="text-[10px] text-slate-400">{{ $retrieval->created_at->format('d M Y, H:i') }}</div>
+                                <div class="text-[10px] text-slate-400">{{ optional($retrieval->picked_at ?? $retrieval->created_at)->format('d M Y, H:i') ?: '-' }}</div>
                             </td>
                             <td class="px-4 py-3 break-words max-w-[150px]">
                                 <div class="font-semibold text-slate-900 dark:text-white leading-snug">{{ $retrieval->user->name ?? 'Operator' }}</div>
@@ -354,7 +354,7 @@
                                 <div class="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">{{ $retrieval->item->sku ?? '-' }}</div>
                             </td>
                             <td class="px-4 py-3 text-center font-black text-rose-500 text-sm whitespace-nowrap">
-                                -{{ $retrieval->quantity_taken }} unit
+                                -{{ $retrieval->quantity_picked }} unit
                             </td>
                             <td class="px-4 py-3 break-words max-w-[130px] font-medium text-slate-700 dark:text-slate-300">
                                 {{ $retrieval->item->location_bin ?? '-' }}
