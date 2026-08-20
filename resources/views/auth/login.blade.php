@@ -283,25 +283,6 @@
                     <span>Single Sign-On (Google OAuth 2.0)</span>
                 </a>
 
-                <!-- Quick Demo Credentials Box -->
-                <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800/80 text-xs text-slate-600 dark:text-slate-400 bg-slate-100/80 dark:bg-slate-950/40 p-3.5 rounded-2xl">
-                    <div class="font-bold text-slate-800 dark:text-slate-300 mb-1 flex items-center">
-                        <i class="fa-solid fa-circle-info text-cyan-600 dark:text-cyan-400 mr-1.5"></i> Demo Quick Login Credentials:
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-[11px] font-mono mt-2">
-                        <div class="p-2 bg-white dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <span class="text-cyan-600 dark:text-cyan-400 font-bold">Admin:</span><br>
-                            User: <code class="text-slate-800 dark:text-slate-200 font-bold">admin</code><br>
-                            Pass: <code class="text-slate-800 dark:text-slate-200">password123</code>
-                        </div>
-                        <div class="p-2 bg-white dark:bg-slate-900/80 rounded-xl border border-slate-200 dark:border-slate-800">
-                            <span class="text-emerald-600 dark:text-emerald-400 font-bold">Operator:</span><br>
-                            User: <code class="text-slate-800 dark:text-slate-200 font-bold">op_mikaela</code><br>
-                            Pass: <code class="text-slate-800 dark:text-slate-200">password123</code>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
