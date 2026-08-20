@@ -52,7 +52,8 @@ class AdminDashboardController extends Controller
             'supervisor:id,name,email,avatar',
             'item:id,sku,name,location_bin',
         ])
-            ->latest('picked_at')
+            ->orderBy('picked_at', 'desc')
+            ->orderBy('id', 'desc')
             ->take(15)
             ->get();
 
