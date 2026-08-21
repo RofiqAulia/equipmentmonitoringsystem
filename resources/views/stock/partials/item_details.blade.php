@@ -23,6 +23,12 @@
                 <p id="item-location" class="text-xs text-slate-500 dark:text-slate-400 flex items-center">
                     <i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Lokasi Rak Gudang: <span class="font-bold text-slate-800 dark:text-slate-200 ml-1"></span>
                 </p>
+                <div class="pt-2">
+                    <button type="button" onclick="openItemModal()" class="w-full py-1.5 px-3 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 font-bold text-xs rounded-xl border border-cyan-500/30 transition flex items-center justify-center space-x-1.5">
+                        <i class="fa-solid fa-window-restore text-xs"></i>
+                        <span>Buka Modal Pop-Up Form</span>
+                    </button>
+                </div>
             </div>
         </div>
 
