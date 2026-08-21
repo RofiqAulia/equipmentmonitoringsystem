@@ -13,11 +13,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        return Auth::user()->isAdmin() 
+            ? redirect()->route('admin.dashboard') 
+            : redirect()->route('stock.retrieval');
+    }
     return redirect()->route('login');
 });
 
 // Authentication Routes
 Route::get('/login', function () {
+    if (Auth::check()) {
+        return Auth::user()->isAdmin() 
+            ? redirect()->route('admin.dashboard') 
+            : redirect()->route('stock.retrieval');
+    }
     return view('auth.login');
 })->name('login');
 

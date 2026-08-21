@@ -42,7 +42,7 @@
         <div class="max-w-7xl mx-auto h-full flex items-center justify-between">
             <!-- Brand Logo & Mobile Sidebar Toggle -->
             <div class="flex items-center space-x-3">
-                @if(Auth::user()->isAdmin())
+                @if(Auth::user()->isAdmin() && !request()->routeIs('stock.retrieval'))
                     <button onclick="toggleSidebar()" type="button" class="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition border border-slate-200 dark:border-slate-700">
                         <i class="fa-solid fa-bars text-base"></i>
                     </button>
@@ -59,6 +59,11 @@
 
             <!-- Top Header Right Controls -->
             <div class="flex items-center space-x-3 sm:space-x-4">
+                @if(Auth::user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition {{ request()->routeIs('admin.*') ? 'bg-sky-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                        <i class="fa-solid fa-gauge-high mr-1.5"></i> Admin Panel
+                    </a>
+                @endif
                 <a href="{{ route('stock.retrieval') }}" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition {{ request()->routeIs('stock.retrieval') ? 'bg-sky-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                     <i class="fa-solid fa-qrcode mr-1.5"></i> Ambil Barang
                 </a>
@@ -124,7 +129,7 @@
         <!-- Layout Body -->
         <div class="flex-1 w-full max-w-7xl mx-auto px-4 py-6 relative">
             @auth
-                @if(Auth::user()->isAdmin())
+                @if(Auth::user()->isAdmin() && !request()->routeIs('stock.retrieval'))
                     <div class="relative w-full">
                         
                         <!-- 2. FIXED SIDEBAR NAVIGATION (Tidak Menutup Footer & Pas dengan Tema) -->
