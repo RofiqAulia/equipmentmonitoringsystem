@@ -2,6 +2,179 @@
 
 let currentScannedItem = null;
 let html5QrScannerInstance = null;
+let toastTimeout = null;
+
+// Toast Alert Display Function
+function showToast(title, message, type = 'info') {
+    const toast = document.getElementById('toast-alert');
+    const toastIconBg = document.getElementById('toast-icon-bg');
+    const toastIcon = document.getElementById('toast-icon');
+    const toastTitle = document.getElementById('toast-title');
+    const toastMsg = document.getElementById('toast-message');
+
+    if (!toast) return;
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+
+    if (toastTitle) toastTitle.textContent = title;
+    if (toastMsg) toastMsg.textContent = message;
+
+    toast.className = 'p-4 rounded-2xl border transition-all duration-300 transform scale-100 shadow-xl flex items-center justify-between ';
+    
+    if (type === 'success') {
+        toast.className += 'bg-emerald-500/10 border-emerald-500/30 text-emerald-900 dark:text-emerald-200';
+        if (toastIconBg) toastIconBg.className = 'w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400';
+        if (toastIcon) toastIcon.className = 'fa-solid fa-circle-check';
+    } else if (type === 'error') {
+        toast.className += 'bg-rose-500/10 border-rose-500/30 text-rose-900 dark:text-rose-200';
+        if (toastIconBg) toastIconBg.className = 'w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold bg-rose-500/20 text-rose-600 dark:text-rose-400';
+        if (toastIcon) toastIcon.className = 'fa-solid fa-circle-xmark';
+    } else if (type === 'warning') {
+        toast.className += 'bg-amber-500/10 border-amber-500/30 text-amber-900 dark:text-amber-200';
+        if (toastIconBg) toastIconBg.className = 'w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold bg-amber-500/20 text-amber-600 dark:text-amber-400';
+        if (toastIcon) toastIcon.className = 'fa-solid fa-triangle-exclamation';
+    } else {
+        toast.className += 'bg-cyan-500/10 border-cyan-500/30 text-cyan-900 dark:text-cyan-200';
+        if (toastIconBg) toastIconBg.className = 'w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold bg-cyan-500/20 text-cyan-600 dark:text-cyan-400';
+        if (toastIcon) toastIcon.className = 'fa-solid fa-circle-info';
+    }
+
+    toast.classList.remove('hidden');
+
+    toastTimeout = setTimeout(() => {
+        closeToast();
+    }, 6000);
+}
+
+function closeToast() {
+    const toast = document.getElementById('toast-alert');
+    if (toast) {
+        toast.classList.add('hidden');
+    }
+}
+
+/* Kamera Scanner HTML5 Handler */
+async function startCameraScanner() {
+    const modal = document.getElementById('camera-modal');
+    if (modal) modal.classList.remove('hidden');
+
+    if (typeof Html5Qrcode === 'undefined') {
+        showToast('Library Belum Terload', 'Scanner kamera memerlukan script HTML5 QR Code library. Pastikan perangkat terhubung ke internet.', 'error');
+        return;
+    }
+
+    try {
+        if (!html5QrScannerInstance) {
+            html5QrScannerInstance = new Html5Qrcode("qr-reader");
+        }
+
+        if (html5QrScannerInstance.isScanning) {
+            return;
+        }
+
+        const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            stopCameraScanner();
+            autoScanPayload(decodedText);
+            showToast('QR Code Terdeteksi!', `Payload QR: ${decodedText}`, 'success');
+        };
+
+        const config = {
+            fps: 10,
+            qrbox: { width: 220, height: 220 },
+            aspectRatio: 1.0
+        };
+
+        // Try environment (rear) camera first
+        try {
+            await html5QrScannerInstance.start({ facingMode: "environment" }, config, qrCodeSuccessCallback, () => {});
+        } catch (envErr) {
+            console.warn("Environment camera failed, attempting camera fallback...", envErr);
+            const devices = await Html5Qrcode.getCameras();
+            if (devices && devices.length > 0) {
+                const cameraId = devices[0].id;
+                await html5QrScannerInstance.start(cameraId, config, qrCodeSuccessCallback, () => {});
+            } else {
+                await html5QrScannerInstance.start({ facingMode: "user" }, config, qrCodeSuccessCallback, () => {});
+            }
+        }
+    } catch (err) {
+        console.error("Camera Access Error:", err);
+        showToast('Akses Kamera Gagal', 'Pastikan izin kamera (Camera Permission) diizinkan di browser Anda.', 'error');
+        stopCameraScanner();
+    }
+}
+
+function stopCameraScanner() {
+    const modal = document.getElementById('camera-modal');
+    if (modal) modal.classList.add('hidden');
+
+    if (html5QrScannerInstance) {
+        try {
+            if (html5QrScannerInstance.isScanning) {
+                html5QrScannerInstance.stop().then(() => {
+                    console.log("Camera Scanner Stopped.");
+                }).catch(err => console.error("Stop scanner error:", err));
+            }
+        } catch (e) {
+            console.error("Camera stop error:", e);
+        }
+    }
+}
+
+async function handleScanItem(e) {
+    if (e) e.preventDefault();
+    const payloadInput = document.getElementById('qr_payload');
+    const feedback = document.getElementById('scan-feedback');
+    const scanRoute = window.RETRIEVAL_ROUTES ? window.RETRIEVAL_ROUTES.scan : '/stock/scan';
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    if (!payloadInput || !payloadInput.value.trim()) {
+        showToast('Input Kosong', 'Harap masukkan payload QR Code atau Kode SKU terlebih dahulu.', 'warning');
+        return;
+    }
+
+    const payload = payloadInput.value.trim();
+
+    if (feedback) {
+        feedback.className = 'p-3 rounded-xl text-xs font-medium bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20';
+        feedback.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Memproses pencarian data barang ke database...';
+        feedback.classList.remove('hidden');
+    }
+
+    try {
+        const response = await fetch(scanRoute, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify({ payload: payload })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.item) {
+            if (feedback) feedback.classList.add('hidden');
+            currentScannedItem = data.item;
+            renderItemDetail(data.item);
+            showToast('Barang Ditemukan!', `[${data.item.sku}] ${data.item.name} - Stok: ${data.item.available_stock} unit`, 'success');
+        } else {
+            if (feedback) {
+                feedback.className = 'p-3 rounded-xl text-xs font-medium bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> ${data.message || 'Barang tidak ditemukan'}`;
+            }
+            showToast('Pencarian Gagal', data.message || 'Barang tidak ditemukan', 'error');
+        }
+    } catch (err) {
+        console.error("Scan API Error:", err);
+        if (feedback) {
+            feedback.className = 'p-3 rounded-xl text-xs font-medium bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20';
+            feedback.innerHTML = '<i class="fa-solid fa-circle-exclamation mr-1"></i> Terjadi kesalahan jaringan saat menghubungi server.';
+        }
+        showToast('Kesalahan Sistem', 'Tidak dapat terhubung ke server database gudang.', 'error');
+    }
+}
 
 function autoScanPayload(payload) {
     const input = document.getElementById('qr_payload');
@@ -134,12 +307,16 @@ function renderItemDetail(item) {
         }
     }
 
-    // Direct Popup Modal for Immediate User-Friendly Action (No page scrolling)
+    // Direct Popup Modal for Immediate User-Friendly Action
     openItemModal();
+
+    if (detailCard) {
+        detailCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 }
 
 async function handleConfirmRetrieval(e) {
-    e.preventDefault();
+    if (e) e.preventDefault();
 
     const selectedSupervisorId = window.SELECTED_SPV_ID;
     const confirmRoute = window.RETRIEVAL_ROUTES ? window.RETRIEVAL_ROUTES.confirm : '/stock/confirm';
@@ -246,4 +423,3 @@ async function saveSelectedSpv() {
         showToast('Gagal Menyimpan SPV', 'Terjadi kesalahan sistem.', 'error');
     }
 }
-
