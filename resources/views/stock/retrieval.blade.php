@@ -40,5 +40,5 @@
         selectSpv: "{{ route('user.select-spv') }}"
     };
 </script>
-<script src="{{ asset('js/retrieval.js') }}"></script>
+<script src="{{ asset('js/retrieval.js') }}?v={{ time() }}"></script>
 @endpush

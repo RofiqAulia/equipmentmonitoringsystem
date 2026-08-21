@@ -31,12 +31,18 @@ function adjustModalQty(delta) {
 
 function openItemModal() {
     const modal = document.getElementById('item-modal');
-    if (modal) modal.classList.remove('hidden');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
 }
 
 function closeItemModal() {
     const modal = document.getElementById('item-modal');
-    if (modal) modal.classList.add('hidden');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
 }
 
 function renderItemDetail(item) {
@@ -128,13 +134,8 @@ function renderItemDetail(item) {
         }
     }
 
-    // Direct Popup Modal for Immediate User-Friendly Action
+    // Direct Popup Modal for Immediate User-Friendly Action (No page scrolling)
     openItemModal();
-
-    // Smooth Scroll to Card area as well
-    if (detailCard) {
-        detailCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
 }
 
 async function handleConfirmRetrieval(e) {
