@@ -38,63 +38,59 @@
 
     <!-- 1. FIXED TOP NAVIGATION HEADER (Warna Terang Siang / Gelap Malam) -->
     @auth
-    <nav class="fixed top-0 left-0 right-0 z-50 h-16 border-b border-slate-200 dark:border-slate-800/80 px-4 py-3 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md transition-colors duration-300 shadow-sm">
-        <div class="max-w-7xl mx-auto h-full flex items-center justify-between">
+    <nav class="fixed top-0 left-0 right-0 z-50 h-16 border-b border-slate-200/80 dark:border-slate-800/80 px-3 sm:px-6 py-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl transition-all duration-300 shadow-sm">
+        <div class="max-w-7xl mx-auto h-full flex items-center justify-between gap-2">
             <!-- Brand Logo & Mobile Sidebar Toggle -->
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 sm:space-x-3">
                 @if(Auth::user()->isAdmin() && !request()->routeIs('stock.retrieval'))
-                    <button onclick="toggleSidebar()" type="button" class="lg:hidden p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition border border-slate-200 dark:border-slate-700">
-                        <i class="fa-solid fa-bars text-base"></i>
+                    <button onclick="toggleSidebar()" type="button" class="lg:hidden p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 active:scale-95 transition border border-slate-200 dark:border-slate-700" title="Buka Sidebar Navigasi">
+                        <i class="fa-solid fa-bars-staggered text-base"></i>
                     </button>
                 @endif
 
-                <div class="w-10 h-10 rounded-xl bg-sky-600 flex items-center justify-center shadow-lg shadow-sky-600/20 shrink-0">
-                    <i class="fa-solid fa-boxes-stacked text-white text-lg"></i>
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-cyan-500 flex items-center justify-center shadow-md shadow-sky-600/25 shrink-0">
+                    <i class="fa-solid fa-boxes-stacked text-white text-base sm:text-lg"></i>
                 </div>
                 <div>
-                    <span class="font-heading font-bold text-base sm:text-lg tracking-wide text-slate-900 dark:text-white block leading-none">INVENTORY<span class="text-sky-600 dark:text-sky-400">CONTROL</span></span>
-                    <span class="text-[10px] tracking-wider text-pink-600 dark:text-pink-400 font-bold uppercase">Stock Management System</span>
+                    <span class="font-heading font-black text-sm sm:text-lg tracking-wide text-slate-900 dark:text-white block leading-none">INVENTORY<span class="text-sky-600 dark:text-sky-400">CONTROL</span></span>
+                    <span class="text-[9px] sm:text-[10px] tracking-wider text-pink-600 dark:text-pink-400 font-extrabold uppercase block mt-0.5">Stock Management System</span>
                 </div>
             </div>
 
-            <!-- Top Header Right Controls -->
-            <div class="flex items-center space-x-3 sm:space-x-4">
+            <!-- Top Header Right Controls (Mobile-Optimized Dynamic Actions) -->
+            <div class="flex items-center space-x-1.5 sm:space-x-3">
                 @if(Auth::user()->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition {{ request()->routeIs('admin.*') ? 'bg-sky-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                        <i class="fa-solid fa-gauge-high mr-1.5"></i> Admin Panel
+                    <a href="{{ route('admin.dashboard') }}" title="Admin Panel Dashboard" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 {{ request()->routeIs('admin.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:text-pink-500 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                        <i class="fa-solid fa-gauge-high text-xs sm:text-sm"></i>
+                        <span class="hidden sm:inline">Admin Panel</span>
                     </a>
                 @endif
-                <a href="{{ route('stock.retrieval') }}" class="px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition {{ request()->routeIs('stock.retrieval') ? 'bg-sky-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                    <i class="fa-solid fa-qrcode mr-1.5"></i> Ambil Barang
+
+                <a href="{{ route('stock.retrieval') }}" title="Modul Ambil Barang" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 {{ request()->routeIs('stock.retrieval') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:text-pink-500 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                    <i class="fa-solid fa-qrcode text-xs sm:text-sm"></i>
+                    <span class="hidden sm:inline">Ambil Barang</span>
                 </a>
 
                 <!-- Theme Switcher Button -->
-                <button onclick="toggleTheme()" type="button" title="Ubah Tampilan Siang / Malam"
-                        class="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition flex items-center space-x-1.5 border border-slate-300 dark:border-slate-700">
-                    <i id="theme-toggle-icon" class="fa-solid fa-moon text-pink-500 dark:text-pink-400 text-sm"></i>
-                    <span id="theme-toggle-label" class="text-xs font-semibold hidden sm:inline">Mode: Malam</span>
+                <button onclick="toggleTheme()" type="button" title="Ubah Mode Siang / Malam"
+                        class="p-2 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition flex items-center space-x-1.5 border border-slate-300/80 dark:border-slate-700/80">
+                    <i id="theme-toggle-icon" class="fa-solid fa-moon text-pink-500 dark:text-pink-400 text-xs sm:text-sm"></i>
+                    <span id="theme-toggle-label" class="text-xs font-semibold hidden md:inline">Mode: Malam</span>
                 </button>
 
-                <!-- SPV Status Badge -->
-                <div id="active-spv-badge" class="hidden md:flex items-center bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700/60 rounded-full px-3 py-1 text-xs">
-                    <span class="text-slate-500 dark:text-slate-400 mr-1.5"><i class="fa-solid fa-user-shield text-indigo-500 mr-1"></i>SPV Aktif:</span>
-                    <span class="font-semibold text-emerald-600 dark:text-emerald-400">
-                        {{ Auth::user()->supervisor ? Auth::user()->supervisor->name : Auth::user()->name }}
-                    </span>
-                </div>
-
-                <!-- User Profile & Logout -->
-                <div class="flex items-center space-x-2 sm:space-x-3 pl-2 sm:pl-3 border-l border-slate-200 dark:border-slate-800">
+                <!-- User Profile Avatar & Header Logout -->
+                <div class="flex items-center space-x-2 sm:space-x-3 pl-1.5 sm:pl-3 border-l border-slate-200 dark:border-slate-800">
                     <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=0284c7&color=fff' }}" 
-                         alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full border border-pink-500/40">
+                         alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full border border-pink-500/40 object-cover">
+                    
                     <div class="hidden lg:block text-left">
-                        <div class="text-xs font-semibold text-slate-800 dark:text-slate-200">{{ Auth::user()->name }}</div>
-                        <div class="text-[10px] text-sky-600 dark:text-sky-400 uppercase tracking-wider font-bold">{{ Auth::user()->role }}</div>
+                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate max-w-[110px]">{{ Auth::user()->name }}</div>
+                        <div class="text-[9px] text-sky-600 dark:text-sky-400 uppercase tracking-wider font-extrabold">{{ Auth::user()->role }}</div>
                     </div>
 
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form action="{{ route('logout') }}" method="POST" class="inline-block">
                         @csrf
-                        <button type="submit" title="Logout" class="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-rose-500/20 hover:text-rose-500 dark:hover:text-rose-400 text-slate-600 dark:text-slate-400 transition flex items-center justify-center border border-slate-300 dark:border-slate-700/50">
+                        <button type="submit" title="Logout dari Sistem" class="w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-600 hover:text-white transition flex items-center justify-center border border-rose-500/20 shadow-sm active:scale-95">
                             <i class="fa-solid fa-right-from-bracket text-xs"></i>
                         </button>
                     </form>
@@ -132,25 +128,25 @@
                 @if(Auth::user()->isAdmin() && !request()->routeIs('stock.retrieval'))
                     <div class="relative w-full">
                         
-                        <!-- 2. FIXED SIDEBAR NAVIGATION (Tidak Menutup Footer & Pas dengan Tema) -->
-                        <aside id="admin-sidebar" class="fixed top-20 left-4 sm:left-6 lg:left-auto z-40 w-72 lg:w-64 h-[calc(100vh-8.5rem)] overflow-y-auto p-5 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-6 hidden lg:block bg-white dark:bg-slate-900 backdrop-blur-md shadow-xl dark:shadow-2xl transition-all duration-300">
+                        <!-- 2. FIXED SIDEBAR NAVIGATION (Dengan Logout & Mobile Slide Support) -->
+                        <aside id="admin-sidebar" class="fixed top-20 left-4 sm:left-6 lg:left-auto z-40 w-72 lg:w-64 h-[calc(100vh-8.5rem)] overflow-y-auto p-5 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-6 hidden lg:block bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl transition-all duration-300">
                             <!-- Sidebar Section Header -->
                             <div class="px-2 flex items-center justify-between">
                                 <div>
-                                    <div class="text-[10px] font-bold uppercase tracking-wider text-pink-500 mb-0.5">Navigation Menu</div>
+                                    <div class="text-[10px] font-extrabold uppercase tracking-wider text-pink-500 mb-0.5">Navigasi Utama</div>
                                     <div class="text-sm font-black text-slate-900 dark:text-white flex items-center">
                                         <i class="fa-solid fa-gauge-high text-sky-600 dark:text-sky-400 mr-2"></i> Admin Panel
                                     </div>
                                 </div>
-                                <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-slate-600 dark:hover:text-white">
+                                <button onclick="toggleSidebar()" class="lg:hidden p-1.5 text-slate-400 hover:text-rose-500 transition">
                                     <i class="fa-solid fa-xmark text-lg"></i>
                                 </button>
                             </div>
 
-                            <!-- Main Navigation Links (Solid Color System: 1. Biru, 2. Pink, 3. Putih) -->
+                            <!-- Main Navigation Links -->
                             <nav class="space-y-1.5">
                                 <!-- 1. Dashboard -->
-                                <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.dashboard') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
                                     <div class="flex items-center space-x-3">
                                         <i class="fa-solid fa-chart-pie text-sm"></i>
                                         <span>Dashboard Kontrol</span>
@@ -159,7 +155,7 @@
                                 </a>
 
                                 <!-- 2. Input / Restock Stok -->
-                                <a href="{{ route('admin.stock.input') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition {{ request()->routeIs('admin.stock.input') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                <a href="{{ route('admin.stock.input') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.stock.input') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
                                     <div class="flex items-center space-x-3">
                                         <i class="fa-solid fa-boxes-packing text-sm"></i>
                                         <span>Input / Restock Stok</span>
@@ -168,33 +164,33 @@
                                 </a>
 
                                 <!-- 3. Pengajuan Barang -->
-                                <a href="{{ route('admin.requisitions.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition {{ request()->routeIs('admin.requisitions.index') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                <a href="{{ route('admin.requisitions.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.requisitions.index') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
                                     <div class="flex items-center space-x-3">
                                         <i class="fa-solid fa-clipboard-list text-sm"></i>
                                         <span>Pengajuan Barang</span>
                                     </div>
                                     @if(($global_pending_req_count ?? 0) > 0)
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500 text-white animate-pulse">
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-500 text-white animate-pulse">
                                             {{ $global_pending_req_count }}
                                         </span>
                                     @endif
                                 </a>
 
                                 <!-- 4. Deteksi Barang Menipis -->
-                                <a href="{{ route('admin.low-stock') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition {{ request()->routeIs('admin.low-stock') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                <a href="{{ route('admin.low-stock') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.low-stock') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
                                     <div class="flex items-center space-x-3">
                                         <i class="fa-solid fa-triangle-exclamation text-sm text-pink-400"></i>
                                         <span>Deteksi Stok Menipis</span>
                                     </div>
                                     @if(($global_low_stock_count ?? 0) > 0)
-                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white animate-pulse">
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500 text-white animate-pulse">
                                             {{ $global_low_stock_count }}
                                         </span>
                                     @endif
                                 </a>
 
                                 <!-- 5. Pindai / Ambil Barang -->
-                                <a href="{{ route('stock.retrieval') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-semibold transition {{ request()->routeIs('stock.retrieval') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/20' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                <a href="{{ route('stock.retrieval') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('stock.retrieval') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
                                     <div class="flex items-center space-x-3">
                                         <i class="fa-solid fa-qrcode text-sm"></i>
                                         <span>Pindai / Ambil Barang</span>
@@ -205,31 +201,43 @@
 
                             <!-- Low Stock Warning Box in Sidebar -->
                             @if(($global_low_stock_count ?? 0) > 0)
-                                <div class="p-4 rounded-2xl bg-pink-500/10 border border-pink-500/20 space-y-2">
+                                <div class="p-3.5 rounded-2xl bg-pink-500/10 border border-pink-500/20 space-y-2">
                                     <div class="flex items-center justify-between text-xs font-bold text-rose-600 dark:text-rose-400">
                                         <span><i class="fa-solid fa-bell mr-1"></i> Perhatian Stok!</span>
                                         <span class="px-1.5 py-0.5 rounded bg-rose-500 text-white text-[10px]">{{ $global_low_stock_count }}</span>
                                     </div>
                                     <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-snug">
-                                        Terdapat <strong class="text-rose-600 dark:text-rose-400">{{ $global_low_stock_count }} item</strong> dengan stok mendekati/di bawah batas minimum.
+                                        Terdapat <strong class="text-rose-600 dark:text-rose-400">{{ $global_low_stock_count }} item</strong> stok menipis.
                                     </p>
                                     <a href="{{ route('admin.low-stock') }}" class="inline-block w-full text-center px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-bold rounded-xl transition shadow-md shadow-rose-600/20">
                                         Buka Deteksi Stok
                                     </a>
                                 </div>
-                            @else
-                                <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center space-x-3">
-                                    <i class="fa-solid fa-shield-check text-emerald-500 text-lg"></i>
-                                    <div class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
-                                        Semua stok gudang dalam kondisi aman.
-                                    </div>
-                                </div>
                             @endif
 
-                            <!-- System Info & Footer -->
-                            <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-400 space-y-1">
-                                <div>Port 3307 &bull; MySQL Active</div>
-                                <div>System Version 1.2 LTS</div>
+                            <!-- Sidebar User Profile Card & Dedicated Logout Button -->
+                            <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
+                                <div class="flex items-center space-x-3 px-1">
+                                    <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=0284c7&color=fff' }}" 
+                                         alt="{{ Auth::user()->name }}" class="w-9 h-9 rounded-xl border border-sky-500/40 object-cover shadow-sm">
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ Auth::user()->name }}</div>
+                                        <div class="text-[10px] text-sky-600 dark:text-sky-400 font-extrabold uppercase tracking-wider">{{ Auth::user()->role }}</div>
+                                    </div>
+                                </div>
+
+                                <form action="{{ route('logout') }}" method="POST" class="w-full">
+                                    @csrf
+                                    <button type="submit" class="w-full py-2.5 px-3.5 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-600 hover:text-white border border-rose-500/20 font-bold text-xs transition-all duration-200 flex items-center justify-center space-x-2 shadow-sm group">
+                                        <i class="fa-solid fa-right-from-bracket text-xs transition-transform group-hover:-translate-x-0.5"></i>
+                                        <span>Keluar / Logout System</span>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <!-- System Info -->
+                            <div class="pt-2 text-[10px] text-slate-400 text-center">
+                                System Version 1.2 LTS &bull; MySQL Active
                             </div>
                         </aside>
 
