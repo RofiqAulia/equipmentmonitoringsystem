@@ -3,7 +3,7 @@
 @section('title', 'Ambil Barang Gudang - Inventory Control System')
 
 @section('content')
-<div class="max-w-5xl mx-auto space-y-6">
+<div class="max-w-7xl mx-auto space-y-6">
     
     <!-- Page Header & Active SPV Banner -->
     @include('stock.partials.header_spv')
@@ -12,18 +12,14 @@
     @include('stock.partials.toast_alert')
 
     <!-- Quick Sample Barcode / SKU Test Shortcuts -->
-    @include('stock.partials.shortcuts')
+    {{-- @include('stock.partials.shortcuts') --}}
 
-    <!-- Scanner Input & Transaction Card Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Scanner Input & Transaction Card Grid (3 Equal Columns Side by Side) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+        @include('stock.partials.scanner_section')
 
-        <!-- Left Column: Camera Scanner & Input Form -->
-        <div class="lg:col-span-5">
-            @include('stock.partials.scanner_section')
-        </div>
-
-        <!-- Right Column: Scanned Item Preview & Retrieval Form -->
-        <div class="lg:col-span-7">
+        <!-- Column 3: Scanned Item Preview & Retrieval Form -->
+        <div class="h-full">
             @include('stock.partials.item_details')
         </div>
     </div>

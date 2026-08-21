@@ -70,15 +70,13 @@
                     <span id="theme-toggle-label" class="text-xs font-semibold hidden sm:inline">Mode: Malam</span>
                 </button>
 
-                <!-- SPV Status Badge if Operator -->
-                @if(Auth::user()->isUser())
-                    <div id="active-spv-badge" class="hidden md:flex items-center bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700/60 rounded-full px-3 py-1 text-xs">
-                        <span class="text-slate-500 dark:text-slate-400 mr-1.5">SPV:</span>
-                        <span class="font-semibold text-emerald-600 dark:text-emerald-400">
-                            {{ Auth::user()->supervisor ? Auth::user()->supervisor->name : 'Belum Dipilih' }}
-                        </span>
-                    </div>
-                @endif
+                <!-- SPV Status Badge -->
+                <div id="active-spv-badge" class="hidden md:flex items-center bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700/60 rounded-full px-3 py-1 text-xs">
+                    <span class="text-slate-500 dark:text-slate-400 mr-1.5"><i class="fa-solid fa-user-shield text-indigo-500 mr-1"></i>SPV Aktif:</span>
+                    <span class="font-semibold text-emerald-600 dark:text-emerald-400">
+                        {{ Auth::user()->supervisor ? Auth::user()->supervisor->name : Auth::user()->name }}
+                    </span>
+                </div>
 
                 <!-- User Profile & Logout -->
                 <div class="flex items-center space-x-2 sm:space-x-3 pl-2 sm:pl-3 border-l border-slate-200 dark:border-slate-800">

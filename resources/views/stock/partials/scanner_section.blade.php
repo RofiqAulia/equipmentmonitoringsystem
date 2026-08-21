@@ -1,8 +1,6 @@
-<!-- Left Column: Camera Scanner & Input Form -->
-<div class="space-y-6">
-    
-    <!-- Live Camera Scan Trigger Panel -->
-    <div class="glass-panel p-6 rounded-3xl space-y-4 text-center border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 via-transparent to-transparent">
+<!-- Column 1: Live Camera Scan Trigger Panel -->
+<div class="glass-panel p-6 rounded-3xl space-y-4 text-center border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 via-transparent to-transparent flex flex-col justify-between h-full">
+    <div class="space-y-4">
         <div class="w-14 h-14 rounded-2xl bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mx-auto text-2xl shadow-lg shadow-cyan-500/10">
             <i class="fa-solid fa-camera"></i>
         </div>
@@ -10,15 +8,17 @@
             <h3 class="text-base font-bold text-slate-900 dark:text-white">Pindai dengan Kamera Device / HP</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Arahkan kamera ke QR Code yang telah diterbitkan oleh Admin gudang.</p>
         </div>
-        
-        <button type="button" onclick="startCameraScanner()" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-cyan-600/25 transition transform active:scale-95 flex items-center justify-center space-x-2">
-            <i class="fa-solid fa-qrcode text-sm"></i>
-            <span>Buka Kamera QR Scanner</span>
-        </button>
     </div>
+    
+    <button type="button" onclick="startCameraScanner()" class="w-full py-3 bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white font-extrabold rounded-xl text-xs shadow-lg shadow-cyan-600/25 transition transform active:scale-95 flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-qrcode text-sm"></i>
+        <span>Buka Kamera QR Scanner</span>
+    </button>
+</div>
 
-    <!-- Manual Input SKU / Payload Form -->
-    <div class="glass-panel p-6 rounded-3xl space-y-4">
+<!-- Column 2: Manual Input SKU / Payload Form -->
+<div class="glass-panel p-6 rounded-3xl space-y-4 flex flex-col justify-between h-full">
+    <div class="space-y-4">
         <h2 class="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider flex items-center">
             <i class="fa-solid fa-barcode text-cyan-600 dark:text-cyan-400 mr-2"></i> Input Manual / Select Barang
         </h2>

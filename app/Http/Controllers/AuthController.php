@@ -52,27 +52,27 @@ class AuthController extends Controller
     }
 
     /**
-     * Quick Operator Single-Click / Quick Auth with SPV Selection.
+     * Direct SPV Authentication for Stock Retrieval (No Operator Account needed).
      */
     public function quickUserAuth(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'supervisor_id' => 'required|exists:users,id',
         ]);
 
-        $user = User::findOrFail($request->user_id);
-        $user->supervisor_id = $request->supervisor_id;
-        $user->save();
+        $supervisor = User::findOrFail($request->supervisor_id);
+        $supervisor->supervisor_id = $supervisor->id;
+        $supervisor->save();
 
-        Auth::login($user);
+        Auth::login($supervisor);
         $request->session()->regenerate();
 
         if ($request->wantsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Autentikasi cepat operator berhasil.',
-                'user' => $user->load('supervisor'),
+                'message' => 'Autentikasi SPV penanggung jawab berhasil.',
+                'user' => $supervisor,
+                'redirect' => '/stock/retrieval',
             ]);
         }
 

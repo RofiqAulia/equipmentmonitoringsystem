@@ -15,7 +15,7 @@
         <div>
             <div class="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-semibold">Supervisor Penanggung Jawab:</div>
             <div id="spv-display-name" class="text-sm font-bold text-emerald-600 dark:text-emerald-400">
-                {{ Auth::user()->supervisor ? Auth::user()->supervisor->name : 'Belum Terhubung' }}
+                {{ Auth::user()->supervisor ? Auth::user()->supervisor->name : (Auth::user()->name ?? 'Belum Terhubung') }}
             </div>
         </div>
         <button onclick="openSpvModal()" type="button" class="ml-2 px-3 py-1.5 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-xs font-semibold text-cyan-600 dark:text-cyan-400 rounded-xl border border-cyan-500/30 transition">

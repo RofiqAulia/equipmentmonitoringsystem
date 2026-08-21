@@ -1,16 +1,16 @@
-<!-- Right Column: Scanned Item Preview & Retrieval Form -->
-<div>
+<!-- Column 3: Scanned Item Preview & Retrieval Form -->
+<div class="h-full flex flex-col justify-between">
     <!-- Empty State Placeholder -->
-    <div id="empty-state" class="glass-panel p-10 rounded-3xl text-center space-y-3">
+    <div id="empty-state" class="glass-panel p-6 sm:p-8 rounded-3xl text-center space-y-3 h-full flex flex-col items-center justify-center min-h-[320px]">
         <div class="w-16 h-16 rounded-2xl bg-slate-200 dark:bg-slate-800/80 text-slate-400 dark:text-slate-500 flex items-center justify-center mx-auto text-2xl border border-slate-300 dark:border-slate-700/50">
             <i class="fa-solid fa-box-open"></i>
         </div>
         <h3 class="text-base font-bold text-slate-800 dark:text-slate-300">Belum Ada Barang Dipindai</h3>
-        <p class="text-slate-500 dark:text-slate-400 text-xs max-w-sm mx-auto">Gunakan kamera atau pilih barang dari dropdown di sebelah kiri untuk menampilkan detail stok & memproses transaksi pengambilan.</p>
+        <p class="text-slate-500 dark:text-slate-400 text-xs max-w-sm mx-auto leading-relaxed">Gunakan kamera atau pilih barang dari dropdown di sebelah kiri untuk menampilkan detail stok & memproses transaksi pengambilan.</p>
     </div>
 
     <!-- Item Detail & Retrieval Form Container (Hidden initially) -->
-    <div id="item-detail-card" class="hidden glass-panel p-6 rounded-3xl space-y-6">
+    <div id="item-detail-card" class="hidden glass-panel p-6 rounded-3xl space-y-6 h-full flex flex-col justify-between">
         <!-- Item Info Header -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 pb-6 border-b border-slate-200 dark:border-slate-800">
             <img id="item-image" src="" alt="Foto Barang" class="w-24 h-24 rounded-2xl object-cover bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 shadow-md">

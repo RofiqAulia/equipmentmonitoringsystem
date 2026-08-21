@@ -195,7 +195,7 @@
                     </button>
                     <button id="tab-quick-btn" onclick="switchAuthTab('quick')" 
                             class="flex-1 py-2.5 rounded-lg text-xs sm:text-sm font-extrabold transition text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
-                        <i class="fa-solid fa-user-gear mr-1.5"></i> Quick Operator (SPV)
+                        <i class="fa-solid fa-user-shield mr-1.5"></i> Pengambilan (Pilih SPV)
                     </button>
                 </div>
 
@@ -235,33 +235,30 @@
                     </form>
                 </div>
 
-                <!-- Tab 2: Quick Operator Auth + Dynamic SPV Selection -->
+                <!-- Tab 2: Direct SPV Selection for Stock Retrieval (No Operator Account Needed) -->
                 <div id="tab-quick" class="hidden space-y-5">
                     <form action="{{ route('user.quick-auth') }}" method="POST" class="space-y-4">
                         @csrf
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Pilih Akun Operator Gudang</label>
-                            <select name="user_id" required class="w-full px-3.5 py-3 bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-cyan-500 transition shadow-sm">
-                                <option value="">-- Pilih Operator Gudang --</option>
-                                @foreach(\App\Models\User::where('role', 'user')->get() as $operator)
-                                    <option value="{{ $operator->id }}">{{ $operator->name }} ({{ $operator->email }})</option>
-                                @endforeach
-                            </select>
+                        <div class="p-3.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-xs text-cyan-700 dark:text-cyan-300 flex items-start space-x-2.5">
+                            <i class="fa-solid fa-circle-info text-base shrink-0 mt-0.5"></i>
+                            <div class="leading-relaxed">
+                                <strong>Modul Pengambilan Barang:</strong> Tidak memerlukan akun operator terpisah. Cukup pilih <strong>Supervisor (SPV) Penanggung Jawab</strong> yang bertugas.
+                            </div>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Hubungkan ke Supervisor (SPV)</label>
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Pilih Supervisor (SPV) Penanggung Jawab *</label>
                             <select name="supervisor_id" required class="w-full px-3.5 py-3 bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-cyan-500 transition shadow-sm">
                                 <option value="">-- Pilih SPV Penanggung Jawab --</option>
                                 @foreach(\App\Models\User::where('role', 'admin')->get() as $spv)
-                                    <option value="{{ $spv->id }}">{{ $spv->name }}</option>
+                                    <option value="{{ $spv->id }}">{{ $spv->name }} ({{ $spv->email }})</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white font-extrabold rounded-xl text-sm shadow-lg shadow-cyan-600/25 transition transform active:scale-[0.98] flex items-center justify-center space-x-2">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <span>Autentikasi Cepat & Mulai Ambil Barang</span>
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                            <span>Masuk & Mulai Pengambilan Barang</span>
                         </button>
                     </form>
                 </div>
