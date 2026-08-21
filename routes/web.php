@@ -23,10 +23,8 @@ Route::get('/', function () {
 
 // Authentication Routes
 Route::get('/login', function () {
-    if (Auth::check()) {
-        return Auth::user()->isAdmin() 
-            ? redirect()->route('admin.dashboard') 
-            : redirect()->route('stock.retrieval');
+    if (Auth::check() && Auth::user()->isAdmin()) {
+        return redirect()->route('admin.dashboard');
     }
     return view('auth.login');
 })->name('login');

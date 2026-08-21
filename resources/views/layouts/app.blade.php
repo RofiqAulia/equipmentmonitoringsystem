@@ -59,9 +59,14 @@
 
             <!-- Top Header Right Controls (Mobile-Optimized Dynamic Actions) -->
             <div class="flex items-center space-x-1.5 sm:space-x-3">
-                @if(Auth::user()->isAdmin())
+                @if(Auth::check() && Auth::user()->isAdmin())
                     <a href="{{ route('admin.dashboard') }}" title="Admin Panel Dashboard" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 {{ request()->routeIs('admin.*') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:text-pink-500 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         <i class="fa-solid fa-gauge-high text-xs sm:text-sm"></i>
+                        <span class="hidden sm:inline">Admin Panel</span>
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" title="Login ke Admin Panel" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center space-x-1.5 text-slate-700 dark:text-slate-300 hover:text-sky-600 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <i class="fa-solid fa-lock text-xs sm:text-sm text-amber-500"></i>
                         <span class="hidden sm:inline">Admin Panel</span>
                     </a>
                 @endif

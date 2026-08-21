@@ -24,11 +24,7 @@ class EnsureUserIsAdmin
                 ], Response::HTTP_FORBIDDEN);
             }
 
-            if (Auth::check()) {
-                return redirect()->route('stock.retrieval')->with('warning', 'Akses Panel Admin dibatasi. Anda berada di Modul Pengambilan Barang.');
-            }
-
-            return redirect()->route('login')->with('error', 'Akses ditolak. Silakan login terlebih dahulu.');
+            return redirect()->route('login')->with('error', 'Akses Panel Admin dibatasi. Silakan login sebagai Admin terlebih dahulu.');
         }
 
         return $next($request);
