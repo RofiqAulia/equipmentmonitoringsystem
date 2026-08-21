@@ -91,15 +91,15 @@
 
             <div>
                 <label for="modal_quantity_picked" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Jumlah Pengambilan Barang (Unit) *</label>
-                <div class="flex items-center space-x-2">
-                    <button type="button" onclick="adjustModalQty(-1)" class="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-black text-lg flex items-center justify-center transition">
+                <div class="flex items-stretch w-full rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden focus-within:border-cyan-500 focus-within:ring-1 focus-within:ring-cyan-500 transition shadow-sm">
+                    <button type="button" onclick="adjustModalQty(-1)" class="px-4 sm:px-5 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-black text-base transition flex items-center justify-center shrink-0 border-r border-slate-200 dark:border-slate-800 active:scale-95">
                         <i class="fa-solid fa-minus"></i>
                     </button>
                     
                     <input type="number" id="modal_quantity_picked" min="1" required value="1"
-                           class="flex-1 px-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-center text-xl font-black text-cyan-600 dark:text-cyan-400 focus:outline-none focus:border-cyan-500 transition shadow-inner">
+                           class="flex-1 min-w-0 px-2 py-3 bg-transparent border-0 text-center text-xl font-black text-cyan-600 dark:text-cyan-400 focus:outline-none focus:ring-0">
                     
-                    <button type="button" onclick="adjustModalQty(1)" class="w-12 h-12 rounded-xl bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-black text-lg flex items-center justify-center transition">
+                    <button type="button" onclick="adjustModalQty(1)" class="px-4 sm:px-5 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-black text-base transition flex items-center justify-center shrink-0 border-l border-slate-200 dark:border-slate-800 active:scale-95">
                         <i class="fa-solid fa-plus"></i>
                     </button>
                 </div>
