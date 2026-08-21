@@ -7,7 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -52,7 +51,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Direct SPV Authentication for Stock Retrieval (No Operator Account needed).
+     * Direct Operator Authentication under SPV for Stock Retrieval.
      */
     public function quickUserAuth(Request $request)
     {
@@ -61,22 +60,36 @@ class AuthController extends Controller
         ]);
 
         $supervisor = User::findOrFail($request->supervisor_id);
-        $supervisor->supervisor_id = $supervisor->id;
-        $supervisor->save();
 
-        Auth::login($supervisor);
+        // Get or create dedicated operator account for retrieval under this SPV
+        $operator = User::firstOrCreate(
+            ['username' => 'op_spv_' . $supervisor->id],
+            [
+                'name' => 'Operator ' . $supervisor->name,
+                'email' => 'operator_spv_' . $supervisor->id . '@inventory.com',
+                'password' => Hash::make('password123'),
+                'role' => 'user',
+                'supervisor_id' => $supervisor->id,
+                'avatar' => 'https://ui-avatars.com/api/?name=Operator+' . urlencode($supervisor->name) . '&background=0284c7&color=fff',
+            ]
+        );
+
+        $operator->supervisor_id = $supervisor->id;
+        $operator->save();
+
+        Auth::login($operator);
         $request->session()->regenerate();
 
         if ($request->wantsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Autentikasi SPV penanggung jawab berhasil.',
-                'user' => $supervisor,
+                'message' => 'Autentikasi Operator (SPV Penanggung Jawab) berhasil.',
+                'user' => $operator,
                 'redirect' => '/stock/retrieval',
             ]);
         }
 
-        return redirect()->intended('/stock/retrieval');
+        return redirect('/stock/retrieval');
     }
 
     /**
@@ -103,50 +116,6 @@ class AuthController extends Controller
             'message' => 'Supervisor penanggung jawab berhasil diperbarui.',
             'supervisor' => User::find($request->supervisor_id),
         ]);
-    }
-
-    /**
-     * Redirect to Google OAuth.
-     */
-    public function redirectToGoogle()
-    {
-        return Socialite::driver('google')->redirect();
-    }
-
-    /**
-     * Handle Google OAuth Callback.
-     */
-    public function handleGoogleCallback()
-    {
-        try {
-            $googleUser = Socialite::driver('google')->user();
-
-            $user = User::where('google_id', $googleUser->id)
-                ->orWhere('email', $googleUser->email)
-                ->first();
-
-            if (! $user) {
-                $user = User::create([
-                    'name' => $googleUser->name,
-                    'email' => $googleUser->email,
-                    'google_id' => $googleUser->id,
-                    'avatar' => $googleUser->avatar,
-                    'role' => 'user',
-                ]);
-            } else {
-                $user->update([
-                    'google_id' => $googleUser->id,
-                    'avatar' => $googleUser->avatar ?? $user->avatar,
-                ]);
-            }
-
-            Auth::login($user);
-            request()->session()->regenerate();
-
-            return redirect()->intended($user->isAdmin() ? '/admin/dashboard' : '/stock/retrieval');
-        } catch (\Exception $e) {
-            return redirect('/login')->with('error', 'Gagal login via Google: '.$e->getMessage());
-        }
     }
 
     /**

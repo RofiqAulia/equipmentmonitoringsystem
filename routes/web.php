@@ -34,10 +34,6 @@ Route::get('/login', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Google OAuth Routes
-Route::get('/auth/google', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
-Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback']);
-
 // Operator Quick Auth & SPV Selection
 Route::post('/user/quick-auth', [AuthController::class, 'quickUserAuth'])->name('user.quick-auth');
 Route::post('/user/select-supervisor', [AuthController::class, 'selectSupervisor'])->name('user.select-spv');
