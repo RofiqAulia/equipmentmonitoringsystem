@@ -68,21 +68,15 @@
                 </div>
                 <h4 id="modal-item-name" class="text-base font-bold text-slate-900 dark:text-white truncate"></h4>
                 <p id="modal-item-location" class="text-xs text-slate-500 dark:text-slate-400 flex items-center justify-center sm:justify-start">
-                    <i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Lokasi Rak: <span class="font-bold text-slate-800 dark:text-slate-200 ml-1"></span>
+                    <i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Lokasi Gudang/Rak: <span class="font-bold text-slate-800 dark:text-slate-200 ml-1"></span>
                 </p>
             </div>
         </div>
 
-        <!-- Stok KPI Indicators -->
-        <div class="grid grid-cols-2 gap-3">
-            <div class="bg-emerald-500/10 p-3.5 rounded-2xl border border-emerald-500/30 text-center">
-                <div class="text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold">Stok Tersedia</div>
-                <div id="modal-item-available-stock" class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-0.5">0</div>
-            </div>
-            <div class="bg-amber-500/10 p-3.5 rounded-2xl border border-amber-500/30 text-center">
-                <div class="text-[11px] text-amber-800 dark:text-amber-300 font-semibold">Ambang Minimum</div>
-                <div id="modal-item-minimum-stock" class="text-2xl font-black text-amber-500 dark:text-amber-400 mt-0.5">0</div>
-            </div>
+        <!-- Stok KPI Indicator -->
+        <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/30 text-center">
+            <div class="text-xs text-emerald-800 dark:text-emerald-300 font-extrabold uppercase tracking-wider">Stok Tersedia Saat Ini</div>
+            <div id="modal-item-available-stock" class="text-3xl font-black text-emerald-600 dark:text-emerald-400 mt-1">0</div>
         </div>
 
         <!-- Form Pengambilan Transaksi Modal -->

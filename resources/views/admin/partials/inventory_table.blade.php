@@ -17,7 +17,7 @@
                 </label>
                 <select id="group-inventory-select" class="px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 shadow-sm cursor-pointer">
                     <option value="-1">Tanpa Grouping</option>
-                    <option value="3">Group per Lokasi Rak</option>
+                    <option value="3">Group per Lokasi Gudang/Rak</option>
                     <option value="6">Group per Status Stok</option>
                 </select>
             </div>
@@ -54,7 +54,7 @@
                     <th class="px-4 py-3.5 w-14 no-sort">Foto</th>
                     <th class="px-4 py-3.5 cursor-pointer sorting">SKU / QR Payload</th>
                     <th class="px-4 py-3.5 min-w-[200px] cursor-pointer sorting">Nama Barang</th>
-                    <th class="px-4 py-3.5 cursor-pointer sorting">Lokasi Rak</th>
+                    <th class="px-4 py-3.5 cursor-pointer sorting">Lokasi Gudang/Rak</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Stok Available</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Min Threshold</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Status Stok</th>

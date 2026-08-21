@@ -26,7 +26,7 @@ class ItemFactory extends Factory
             'sku' => 'SKU-'.$code,
             'qr_code_payload' => 'QR-'.$code.'-'.rand(100, 999),
             'name' => $this->faker->words(3, true),
-            'location_bin' => 'AISLE '.rand(1, 8).', BIN '.chr(rand(65, 70)).'-0'.rand(1, 9),
+            'location_bin' => 'Gudang '.chr(rand(65, 70)).'/'.rand(1, 20),
             'available_stock' => rand(10, 100),
             'minimum_stock' => 5,
             'image_url' => 'https://placehold.co/300x300/1e293b/06b6d4?text='.urlencode('Item '.$code),

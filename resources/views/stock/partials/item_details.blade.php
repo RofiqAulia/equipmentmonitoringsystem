@@ -21,7 +21,7 @@
                 </div>
                 <h3 id="item-name" class="text-lg font-bold text-slate-900 dark:text-white"></h3>
                 <p id="item-location" class="text-xs text-slate-500 dark:text-slate-400 flex items-center">
-                    <i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Lokasi Rak Gudang: <span class="font-bold text-slate-800 dark:text-slate-200 ml-1"></span>
+                    <i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Lokasi Gudang/Rak: <span class="font-bold text-slate-800 dark:text-slate-200 ml-1"></span>
                 </p>
                 <div class="pt-2">
                     <button type="button" onclick="openItemModal()" class="w-full py-1.5 px-3 bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500/20 font-bold text-xs rounded-xl border border-cyan-500/30 transition flex items-center justify-center space-x-1.5">
@@ -33,15 +33,9 @@
         </div>
 
         <!-- Stock Counter KPI -->
-        <div class="grid grid-cols-2 gap-4">
-            <div class="bg-slate-100 dark:bg-slate-900/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
-                <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Stok Tersedia Saat Ini</div>
-                <div id="item-available-stock" class="text-3xl font-black text-slate-900 dark:text-white mt-1">0</div>
-            </div>
-            <div class="bg-slate-100 dark:bg-slate-900/80 p-4 rounded-2xl border border-slate-200 dark:border-slate-800">
-                <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">Ambang Minimum Stok</div>
-                <div id="item-minimum-stock" class="text-3xl font-black text-amber-500 dark:text-amber-400 mt-1">0</div>
-            </div>
+        <div class="bg-gradient-to-br from-emerald-500/10 via-cyan-500/10 to-transparent p-4 rounded-2xl border border-emerald-500/30 text-center shadow-inner">
+            <div class="text-xs text-emerald-700 dark:text-emerald-300 font-extrabold uppercase tracking-wider">Stok Tersedia Saat Ini</div>
+            <div id="item-available-stock" class="text-3xl sm:text-4xl font-black text-emerald-600 dark:text-emerald-400 mt-1">0</div>
         </div>
 
         <!-- Retrieval Confirmation Form -->
