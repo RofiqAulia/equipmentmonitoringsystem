@@ -199,7 +199,16 @@
                                     @endif
                                 </a>
 
-                                <!-- 5. Pindai / Ambil Barang -->
+                                <!-- 5. Manajemen User -->
+                                <a href="{{ route('admin.users.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.users.index') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fa-solid fa-users-gear text-sm"></i>
+                                        <span>Manajemen User</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right text-[10px] opacity-70"></i>
+                                </a>
+
+                                <!-- 6. Pindai / Ambil Barang -->
                                 <a href="{{ route('stock.retrieval') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('stock.retrieval') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
                                     <div class="flex items-center space-x-3">
                                         <i class="fa-solid fa-qrcode text-sm"></i>

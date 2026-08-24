@@ -286,8 +286,8 @@
                             <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Pilih Supervisor (SPV) Penanggung Jawab *</label>
                             <select name="supervisor_id" required class="w-full px-3.5 py-3 bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-cyan-500 transition shadow-sm">
                                 <option value="">-- Pilih SPV Penanggung Jawab --</option>
-                                @foreach(\App\Models\User::where('role', 'admin')->get() as $spv)
-                                    <option value="{{ $spv->id }}">{{ $spv->name }} ({{ $spv->email }})</option>
+                                @foreach(\App\Models\User::whereIn('role', ['spv', 'admin'])->orderBy('name', 'asc')->get() as $spv)
+                                    <option value="{{ $spv->id }}">{{ $spv->name }} ({{ $spv->email }}) [{{ strtoupper($spv->role) }}]</option>
                                 @endforeach
                             </select>
                         </div>

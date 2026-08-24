@@ -56,11 +56,19 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is Admin.
+     * Check if user has Admin access (admin or spv).
      */
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'spv']);
+    }
+
+    /**
+     * Check if user is Supervisor (SPV).
+     */
+    public function isSpv(): bool
+    {
+        return in_array($this->role, ['spv', 'admin']);
     }
 
     /**

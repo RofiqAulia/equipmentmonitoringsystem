@@ -219,8 +219,9 @@ class AuthController extends Controller
      */
     public function getSupervisors(): JsonResponse
     {
-        $supervisors = User::where('role', 'admin')
-            ->select('id', 'name', 'email', 'avatar', 'username')
+        $supervisors = User::whereIn('role', ['spv', 'admin'])
+            ->select('id', 'name', 'email', 'avatar', 'username', 'role')
+            ->orderBy('name', 'asc')
             ->get();
 
         return response()->json([

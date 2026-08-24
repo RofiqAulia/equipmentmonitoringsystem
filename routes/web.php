@@ -50,11 +50,18 @@ Route::middleware('auth')->group(function () {
 
 use App\Http\Controllers\AdminStockController;
 use App\Http\Controllers\ItemRequisitionController;
+use App\Http\Controllers\UserController;
 
 // Admin Dashboard & Management Routes
 Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
     
+    // User Management (Manajemen User & Akun System)
+    Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');
+    Route::post('/admin/users', [UserController::class, 'store'])->name('admin.users.store');
+    Route::put('/admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
     // Stock Input & Restock Barang
     Route::get('/admin/stock/input', [AdminStockController::class, 'inputForm'])->name('admin.stock.input');
     Route::post('/admin/stock/input', [AdminStockController::class, 'storeStock'])->name('admin.stock.store');
