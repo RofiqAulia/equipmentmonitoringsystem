@@ -159,23 +159,23 @@ body {
    Responsive Utilities & All Device Layouts
    ========================================== */
 
-/* Responsive reCAPTCHA Container (Fixes Overflow on Mobile Devices - iPhone, Samsung, Pixel, Foldables) */
+/* Responsive reCAPTCHA Container (Fixes Overflow & Left Clipping on All Mobile Devices) */
 .recaptcha-responsive-container {
     width: 100% !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
     overflow: hidden !important;
-    padding: 4px 0 !important;
+    padding: 6px 0 !important;
 }
 
 .recaptcha-responsive-wrapper {
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
-    width: 304px;
-    max-width: 100% !important;
+    position: relative !important;
+    display: block !important;
+    overflow: hidden !important;
     margin: 0 auto !important;
+    width: 304px;
+    height: 78px;
 }
 
 .g-recaptcha,
@@ -188,34 +188,34 @@ body {
 /* Scaling break-points for all mobile viewports */
 @media screen and (max-width: 480px) {
     .recaptcha-responsive-wrapper {
-        width: 240px !important;
-        height: 62px !important;
+        width: 249px !important;
+        height: 64px !important;
     }
     .recaptcha-responsive-wrapper .g-recaptcha {
-        transform: scale(0.78) !important;
-        -webkit-transform: scale(0.78) !important;
+        transform: scale(0.82) !important;
+        -webkit-transform: scale(0.82) !important;
     }
 }
 
-@media screen and (max-width: 370px) {
+@media screen and (max-width: 380px) {
     .recaptcha-responsive-wrapper {
-        width: 218px !important;
-        height: 56px !important;
+        width: 228px !important;
+        height: 59px !important;
     }
     .recaptcha-responsive-wrapper .g-recaptcha {
-        transform: scale(0.71) !important;
-        -webkit-transform: scale(0.71) !important;
+        transform: scale(0.75) !important;
+        -webkit-transform: scale(0.75) !important;
     }
 }
 
 @media screen and (max-width: 330px) {
     .recaptcha-responsive-wrapper {
-        width: 194px !important;
-        height: 50px !important;
+        width: 206px !important;
+        height: 53px !important;
     }
     .recaptcha-responsive-wrapper .g-recaptcha {
-        transform: scale(0.63) !important;
-        -webkit-transform: scale(0.63) !important;
+        transform: scale(0.68) !important;
+        -webkit-transform: scale(0.68) !important;
     }
 }
 
