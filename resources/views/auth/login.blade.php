@@ -343,7 +343,7 @@
             if (!box) return;
             box.innerText = "Memuat...";
             try {
-                const res = await fetch("{{ route('captcha.refresh') }}");
+                const res = await fetch("{{ url('/captcha/refresh') }}");
                 const data = await res.json();
                 if (data.success) {
                     box.innerText = data.question;
