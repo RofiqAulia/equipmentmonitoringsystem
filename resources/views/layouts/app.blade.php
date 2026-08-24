@@ -274,10 +274,10 @@
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between">
             <div>&copy; {{ date('Y') }} Inventory Control & Stock Retrieval System</div>
             <div class="mt-2 sm:mt-0 flex items-center space-x-3">
-                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                <!-- <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 mr-1.5 animate-pulse"></span> MySQL Port 3307 Connected
-                </span>
-                <span>Laravel 11 LTS</span>
+                </span> -->
+                <!-- <span>Laravel 11 LTS</span> -->
             </div>
         </div>
     </footer>
