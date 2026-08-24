@@ -65,6 +65,9 @@
 @endpush
 
 @section('content')
+@php
+    $recaptchaSiteKey = config('services.recaptcha.site_key') ?: env('RECAPTCHA_SITE_KEY');
+@endphp
 <div class="min-h-[85vh] flex items-center justify-center py-6 px-2 sm:px-4">
     <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
         
@@ -228,6 +231,35 @@
                             </div>
                         </div>
 
+                        <!-- Security Anti-Bot CAPTCHA Protection -->
+                        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center">
+                                    <i class="fa-solid fa-shield-halved text-cyan-500 mr-1.5"></i> Verifikasi Anti-Bot (Security CAPTCHA)
+                                </label>
+                                @if(!$recaptchaSiteKey)
+                                    <button type="button" onclick="refreshCaptcha('captcha-box-1', 'captcha-input-1')" class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Acak Soal
+                                    </button>
+                                @endif
+                            </div>
+
+                            @if($recaptchaSiteKey)
+                                <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+                            @else
+                                <div class="flex items-center space-x-3">
+                                    <div id="captcha-box-1" class="px-4 py-2.5 bg-slate-950 text-cyan-400 font-mono font-black text-xs rounded-xl border border-cyan-500/40 select-none tracking-wider">
+                                        Memuat CAPTCHA...
+                                    </div>
+                                    <input type="number" name="captcha_answer" id="captcha-input-1" required placeholder="Jawaban Angka"
+                                           class="flex-1 px-3.5 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500">
+                                </div>
+                            @endif
+                            @error('captcha_answer')
+                                <p class="text-rose-600 dark:text-rose-400 text-[11px] font-bold mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-500 hover:to-cyan-500 text-white font-extrabold rounded-xl text-sm shadow-lg shadow-sky-600/25 transition transform active:scale-[0.98] flex items-center justify-center space-x-2">
                             <span>Masuk Sistem Admin</span>
                             <i class="fa-solid fa-arrow-right"></i>
@@ -256,6 +288,35 @@
                             </select>
                         </div>
 
+                        <!-- Security Anti-Bot CAPTCHA Protection -->
+                        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center">
+                                    <i class="fa-solid fa-shield-halved text-cyan-500 mr-1.5"></i> Verifikasi Anti-Bot (Security CAPTCHA)
+                                </label>
+                                @if(!$recaptchaSiteKey)
+                                    <button type="button" onclick="refreshCaptcha('captcha-box-2', 'captcha-input-2')" class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center">
+                                        <i class="fa-solid fa-arrows-rotate mr-1"></i> Acak Soal
+                                    </button>
+                                @endif
+                            </div>
+
+                            @if($recaptchaSiteKey)
+                                <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+                            @else
+                                <div class="flex items-center space-x-3">
+                                    <div id="captcha-box-2" class="px-4 py-2.5 bg-slate-950 text-cyan-400 font-mono font-black text-xs rounded-xl border border-cyan-500/40 select-none tracking-wider">
+                                        Memuat CAPTCHA...
+                                    </div>
+                                    <input type="number" name="captcha_answer" id="captcha-input-2" required placeholder="Jawaban Angka"
+                                           class="flex-1 px-3.5 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500">
+                                </div>
+                            @endif
+                            @error('captcha_answer')
+                                <p class="text-rose-600 dark:text-rose-400 text-[11px] font-bold mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <button type="submit" class="w-full py-3.5 px-4 bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white font-extrabold rounded-xl text-sm shadow-lg shadow-cyan-600/25 transition transform active:scale-[0.98] flex items-center justify-center space-x-2">
                             <i class="fa-solid fa-right-to-bracket"></i>
                             <span>Masuk & Mulai Pengambilan Barang</span>
@@ -271,5 +332,30 @@
 @endsection
 
 @push('scripts')
+    @if($recaptchaSiteKey)
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    @endif
     <script src="{{ asset('js/auth.js') }}"></script>
+    <script>
+        async function refreshCaptcha(boxId, inputId) {
+            const box = document.getElementById(boxId);
+            const input = document.getElementById(inputId);
+            if (!box) return;
+            box.innerText = "Memuat...";
+            try {
+                const res = await fetch("{{ route('captcha.refresh') }}");
+                const data = await res.json();
+                if (data.success) {
+                    box.innerText = data.question;
+                    if (input) input.value = '';
+                }
+            } catch(e) {
+                box.innerText = "Captcha Error";
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshCaptcha('captcha-box-1', 'captcha-input-1');
+            refreshCaptcha('captcha-box-2', 'captcha-input-2');
+        });
+    </script>
 @endpush

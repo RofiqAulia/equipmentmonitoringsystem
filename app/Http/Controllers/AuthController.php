@@ -6,10 +6,80 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
+    /**
+     * Generate dynamic Security CAPTCHA challenge.
+     */
+    public function generateCaptcha(): JsonResponse
+    {
+        $operators = ['+', '-'];
+        $op = $operators[array_rand($operators)];
+
+        if ($op === '+') {
+            $num1 = rand(3, 15);
+            $num2 = rand(2, 12);
+            $ans = $num1 + $num2;
+        } else {
+            $num1 = rand(10, 25);
+            $num2 = rand(1, $num1 - 1);
+            $ans = $num1 - $num2;
+        }
+
+        session(['captcha_answer' => (string) $ans]);
+
+        return response()->json([
+            'success' => true,
+            'question' => "Berapa hasil {$num1} {$op} {$num2} ?",
+            'num1' => $num1,
+            'operator' => $op,
+            'num2' => $num2,
+        ]);
+    }
+
+    /**
+     * Verify Captcha token or session math answer.
+     */
+    protected function verifyCaptcha(Request $request): bool
+    {
+        // 1. If Google reCAPTCHA secret key is configured in .env or config/services.php
+        $recaptchaSecret = config('services.recaptcha.secret_key') ?: env('RECAPTCHA_SECRET_KEY');
+        $gRecaptchaResponse = $request->input('g-recaptcha-response');
+
+        if (! empty($recaptchaSecret) && ! empty($gRecaptchaResponse)) {
+            try {
+                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                    'secret' => $recaptchaSecret,
+                    'response' => $gRecaptchaResponse,
+                    'remoteip' => $request->ip(),
+                ]);
+
+                if ((bool) $response->json('success')) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                // fallback to session captcha if network request fails
+            }
+        }
+
+        // 2. Built-in Security CAPTCHA verification
+        $userAnswer = trim((string) $request->input('captcha_answer'));
+        $sessionAnswer = (string) session('captcha_answer');
+
+        if (empty($sessionAnswer) || empty($userAnswer)) {
+            return false;
+        }
+
+        // Clear captcha answer after single check
+        session()->forget('captcha_answer');
+
+        return $userAnswer === $sessionAnswer;
+    }
+
     /**
      * Classic Login (Username/Email & Password).
      */
@@ -19,6 +89,19 @@ class AuthController extends Controller
             'login' => 'required|string',
             'password' => 'required|string',
         ]);
+
+        if (! $this->verifyCaptcha($request)) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Verifikasi Captcha Keamanan Gagal. Jawab Captcha dengan benar untuk membuktikan Anda bukan bot.',
+                ], 422);
+            }
+
+            return back()->withInput()->withErrors([
+                'captcha_answer' => 'Verifikasi Captcha Gagal! Silakan hitung & isi jawaban Captcha dengan benar.',
+            ]);
+        }
 
         $fieldType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
@@ -58,6 +141,19 @@ class AuthController extends Controller
         $request->validate([
             'supervisor_id' => 'required|exists:users,id',
         ]);
+
+        if (! $this->verifyCaptcha($request)) {
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Verifikasi Captcha Keamanan Gagal. Jawab Captcha dengan benar untuk membuktikan Anda bukan bot.',
+                ], 422);
+            }
+
+            return back()->withInput()->withErrors([
+                'captcha_answer' => 'Verifikasi Captcha Gagal! Silakan hitung & isi jawaban Captcha dengan benar.',
+            ]);
+        }
 
         $supervisor = User::findOrFail($request->supervisor_id);
 
