@@ -1,6 +1,6 @@
 <!-- Modal Terbitkan QR Code untuk Operator -->
-<div id="admin-qr-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-slate-300 dark:border-slate-700 space-y-4 shadow-2xl text-center">
+<div id="admin-qr-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="glass-panel max-w-sm w-full p-6 rounded-3xl border border-slate-300 dark:border-slate-700 space-y-4 shadow-2xl text-center my-auto max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center">
                 <i class="fa-solid fa-qrcode text-cyan-600 dark:text-cyan-400 mr-2"></i> Penerbitan QR Code Barang

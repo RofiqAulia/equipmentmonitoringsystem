@@ -171,7 +171,7 @@
         <div class="lg:col-span-6 space-y-6 order-1 lg:order-2">
             
             <!-- Brand Logo Header -->
-            <div class="text-center lg:text-left">
+            <!-- <div class="text-center lg:text-left">
                 <div class="inline-flex items-center space-x-3 mb-2">
                     <div class="w-12 h-12 rounded-2xl bg-sky-600 shadow-xl shadow-sky-600/30 flex items-center justify-center border border-sky-400/40">
                         <i class="fa-solid fa-boxes-stacked text-2xl text-white"></i>
@@ -183,7 +183,7 @@
                         <span class="text-[11px] text-slate-500 dark:text-slate-400 font-semibold">Gudang Monitoring & Retrieval System</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Card Auth Form Container -->
             <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-slate-200 dark:border-slate-800">
@@ -232,27 +232,31 @@
                         </div>
 
                         <!-- Security Anti-Bot CAPTCHA Protection -->
-                        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 space-y-2">
-                            <div class="flex items-center justify-between">
+                        <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
                                 <label class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center">
                                     <i class="fa-solid fa-shield-halved text-cyan-500 mr-1.5"></i> Verifikasi Anti-Bot (Security CAPTCHA)
                                 </label>
                                 @if(!$recaptchaSiteKey)
-                                    <button type="button" onclick="refreshCaptcha('captcha-box-1', 'captcha-input-1')" class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center">
+                                    <button type="button" onclick="refreshCaptcha('captcha-box-1', 'captcha-input-1')" class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center shrink-0">
                                         <i class="fa-solid fa-arrows-rotate mr-1"></i> Acak Soal
                                     </button>
                                 @endif
                             </div>
 
                             @if($recaptchaSiteKey)
-                                <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+                                <div class="recaptcha-responsive-container">
+                                    <div class="recaptcha-responsive-wrapper">
+                                        <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+                                    </div>
+                                </div>
                             @else
-                                <div class="flex items-center space-x-3">
-                                    <div id="captcha-box-1" class="px-4 py-2.5 bg-slate-950 text-cyan-400 font-mono font-black text-xs rounded-xl border border-cyan-500/40 select-none tracking-wider">
+                                <div class="flex items-center space-x-2 sm:space-x-3">
+                                    <div id="captcha-box-1" class="px-3 sm:px-4 py-2.5 bg-slate-950 text-cyan-400 font-mono font-black text-xs rounded-xl border border-cyan-500/40 select-none tracking-wider shrink-0">
                                         Memuat CAPTCHA...
                                     </div>
                                     <input type="number" name="captcha_answer" id="captcha-input-1" required placeholder="Jawaban Angka"
-                                           class="flex-1 px-3.5 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500">
+                                           class="flex-1 min-w-0 px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500">
                                 </div>
                             @endif
                             @error('captcha_answer')
@@ -289,27 +293,31 @@
                         </div>
 
                         <!-- Security Anti-Bot CAPTCHA Protection -->
-                        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 space-y-2">
-                            <div class="flex items-center justify-between">
+                        <div class="p-3.5 sm:p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
                                 <label class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center">
                                     <i class="fa-solid fa-shield-halved text-cyan-500 mr-1.5"></i> Verifikasi Anti-Bot (Security CAPTCHA)
                                 </label>
                                 @if(!$recaptchaSiteKey)
-                                    <button type="button" onclick="refreshCaptcha('captcha-box-2', 'captcha-input-2')" class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center">
+                                    <button type="button" onclick="refreshCaptcha('captcha-box-2', 'captcha-input-2')" class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 hover:underline flex items-center shrink-0">
                                         <i class="fa-solid fa-arrows-rotate mr-1"></i> Acak Soal
                                     </button>
                                 @endif
                             </div>
 
                             @if($recaptchaSiteKey)
-                                <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+                                <div class="recaptcha-responsive-container">
+                                    <div class="recaptcha-responsive-wrapper">
+                                        <div class="g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"></div>
+                                    </div>
+                                </div>
                             @else
-                                <div class="flex items-center space-x-3">
-                                    <div id="captcha-box-2" class="px-4 py-2.5 bg-slate-950 text-cyan-400 font-mono font-black text-xs rounded-xl border border-cyan-500/40 select-none tracking-wider">
+                                <div class="flex items-center space-x-2 sm:space-x-3">
+                                    <div id="captcha-box-2" class="px-3 sm:px-4 py-2.5 bg-slate-950 text-cyan-400 font-mono font-black text-xs rounded-xl border border-cyan-500/40 select-none tracking-wider shrink-0">
                                         Memuat CAPTCHA...
                                     </div>
                                     <input type="number" name="captcha_answer" id="captcha-input-2" required placeholder="Jawaban Angka"
-                                           class="flex-1 px-3.5 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500">
+                                           class="flex-1 min-w-0 px-3 py-2 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500">
                                 </div>
                             @endif
                             @error('captcha_answer')

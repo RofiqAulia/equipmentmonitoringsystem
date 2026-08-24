@@ -100,7 +100,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-4 py-6 text-center text-slate-500">Tidak ada data barang inventaris yang sesuai.</td>
+                        <td colspan="8" class="px-4 py-6 text-center text-slate-500">Tidak ada data barang inventaris yang sesuai.</td>
                     </tr>
                 @endforelse
             </tbody>

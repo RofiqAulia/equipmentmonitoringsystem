@@ -191,8 +191,8 @@
 </div>
 
 <!-- Modal Form Pengajuan Barang -->
-<div id="modal-requisition" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden">
-    <div class="w-full max-w-lg glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 shadow-2xl">
+<div id="modal-requisition" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden overflow-y-auto">
+    <div class="w-full max-w-lg glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4 shadow-2xl my-auto max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center">
                 <i class="fa-solid fa-circle-plus text-amber-500 mr-2"></i> Form Buat Pengajuan Barang

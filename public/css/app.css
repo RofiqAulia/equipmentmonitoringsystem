@@ -154,3 +154,73 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     background: rgba(236, 72, 153, 0.5);
 }
+
+/* ==========================================
+   Responsive Utilities & All Device Layouts
+   ========================================== */
+
+/* Responsive reCAPTCHA Container (Fixes Overflow on Mobile Devices) */
+.recaptcha-responsive-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 2px 0;
+}
+
+.recaptcha-responsive-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 304px;
+    max-width: 100%;
+}
+
+.g-recaptcha {
+    transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+}
+
+/* Dynamic scale scaling for smaller screens (Mobile & Foldable) */
+@media screen and (max-width: 410px) {
+    .recaptcha-responsive-wrapper {
+        width: 258px;
+        height: 66px;
+    }
+    .recaptcha-responsive-wrapper .g-recaptcha {
+        transform: scale(0.84);
+        -webkit-transform: scale(0.84);
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .recaptcha-responsive-wrapper {
+        width: 226px;
+        height: 58px;
+    }
+    .recaptcha-responsive-wrapper .g-recaptcha {
+        transform: scale(0.74);
+        -webkit-transform: scale(0.74);
+    }
+}
+
+/* Responsive Table Wrappers & Touch Scroll */
+.dataTables_wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive-touch {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Responsive Image Prevention */
+img {
+    max-width: 100%;
+    height: auto;
+}
+

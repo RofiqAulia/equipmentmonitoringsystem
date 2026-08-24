@@ -1,6 +1,6 @@
 <!-- Modal Camera QR Scanner Live Viewport -->
-<div id="camera-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="glass-panel max-w-md w-full p-6 rounded-3xl border border-slate-300 dark:border-slate-700 space-y-4 shadow-2xl text-center">
+<div id="camera-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="glass-panel max-w-md w-full p-6 rounded-3xl border border-slate-300 dark:border-slate-700 space-y-4 shadow-2xl text-center my-auto max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center">
                 <i class="fa-solid fa-camera text-cyan-600 dark:text-cyan-400 mr-2"></i> Kamera QR Scanner Active
@@ -21,8 +21,8 @@
 </div>
 
 <!-- Modal Dialog Update SPV Penanggung Jawab -->
-<div id="spv-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center p-4">
-    <div class="glass-panel max-w-md w-full p-6 rounded-3xl border border-slate-300 dark:border-slate-700 space-y-4 shadow-2xl">
+<div id="spv-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="glass-panel max-w-md w-full p-6 rounded-3xl border border-slate-300 dark:border-slate-700 space-y-4 shadow-2xl my-auto max-h-[90vh] overflow-y-auto">
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <h3 class="text-base font-bold text-slate-900 dark:text-white flex items-center"><i class="fa-solid fa-user-shield text-cyan-600 dark:text-cyan-400 mr-2"></i> Pilih SPV Penanggung Jawab</h3>
             <button onclick="closeSpvModal()" type="button" class="text-slate-400 hover:text-slate-900 dark:hover:text-white"><i class="fa-solid fa-xmark"></i></button>
@@ -46,7 +46,7 @@
 
 <!-- Modal Dialog Form Pengambilan Barang Ditemukan (Direct Popup On Scan) -->
 <div id="item-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
-    <div class="glass-panel max-w-lg w-full p-6 sm:p-7 rounded-3xl border border-cyan-500/40 bg-white dark:bg-slate-900 space-y-5 shadow-2xl relative my-auto">
+    <div class="glass-panel max-w-lg w-full p-6 sm:p-7 rounded-3xl border border-cyan-500/40 bg-white dark:bg-slate-900 space-y-5 shadow-2xl relative my-auto max-h-[90vh] overflow-y-auto">
         
         <!-- Header Modal -->
         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">

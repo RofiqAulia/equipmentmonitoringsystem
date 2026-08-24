@@ -139,7 +139,7 @@
                     <div class="relative w-full">
                         
                         <!-- 2. FIXED SIDEBAR NAVIGATION (Dengan Logout & Mobile Slide Support) -->
-                        <aside id="admin-sidebar" class="fixed top-20 left-4 sm:left-6 lg:left-auto z-40 w-72 lg:w-64 h-[calc(100vh-8.5rem)] overflow-y-auto p-5 border border-slate-200 dark:border-slate-800 rounded-3xl space-y-6 hidden lg:block bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl transition-all duration-300">
+                        <aside id="admin-sidebar" class="fixed top-16 left-0 lg:left-auto lg:top-20 z-40 w-72 lg:w-64 h-[calc(100vh-4rem)] lg:h-[calc(100vh-8.5rem)] overflow-y-auto p-5 border-r lg:border border-slate-200 dark:border-slate-800 rounded-r-3xl lg:rounded-3xl space-y-6 hidden lg:block bg-white/95 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl transition-all duration-300">
                             <!-- Sidebar Section Header -->
                             <div class="px-2 flex items-center justify-between">
                                 <div>
