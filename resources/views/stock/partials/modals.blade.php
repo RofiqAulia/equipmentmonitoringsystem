@@ -31,8 +31,8 @@
         <div>
             <label class="block text-xs text-slate-600 dark:text-slate-300 mb-2">Pilih Supervisor aktif yang menyetujui transaksi ini:</label>
             <select id="spv-select-option" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500">
-                @foreach(\App\Models\User::whereIn('role', ['spv', 'admin'])->orderBy('name', 'asc')->get() as $spv)
-                    <option value="{{ $spv->id }}" {{ Auth::user()->supervisor_id == $spv->id ? 'selected' : '' }}>{{ $spv->name }} ({{ $spv->email }}) [{{ strtoupper($spv->role) }}]</option>
+                @foreach(\App\Models\User::where('role', 'spv')->orderBy('name', 'asc')->get() as $spv)
+                    <option value="{{ $spv->id }}" {{ Auth::user()->supervisor_id == $spv->id ? 'selected' : '' }}>{{ $spv->name }} ({{ $spv->email }})</option>
                 @endforeach
             </select>
         </div>

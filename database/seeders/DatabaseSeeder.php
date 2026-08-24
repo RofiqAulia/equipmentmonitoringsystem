@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'spv_budi',
             'email' => 'budi@inventory.com',
             'password' => Hash::make('password123'),
-            'role' => 'admin',
+            'role' => 'spv',
             'avatar' => 'https://ui-avatars.com/api/?name=Budi+Santoso&background=0D8ABC&color=fff',
         ]);
 
@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
             'username' => 'spv_siti',
             'email' => 'siti@inventory.com',
             'password' => Hash::make('password123'),
-            'role' => 'admin',
+            'role' => 'spv',
             'avatar' => 'https://ui-avatars.com/api/?name=Siti+Rahma&background=E91E63&color=fff',
         ]);
 
