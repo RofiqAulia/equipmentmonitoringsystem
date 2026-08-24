@@ -353,9 +353,11 @@
                 box.innerText = "Captcha Error";
             }
         }
+        @if(!$recaptchaSiteKey)
         document.addEventListener('DOMContentLoaded', function() {
             refreshCaptcha('captcha-box-1', 'captcha-input-1');
             refreshCaptcha('captcha-box-2', 'captcha-input-2');
         });
+        @endif
     </script>
 @endpush

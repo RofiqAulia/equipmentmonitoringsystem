@@ -52,7 +52,7 @@ class AuthController extends Controller
 
         if (! empty($recaptchaSecret) && ! empty($gRecaptchaResponse)) {
             try {
-                $response = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
+                $response = Http::timeout(3)->asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
                     'secret' => $recaptchaSecret,
                     'response' => $gRecaptchaResponse,
                     'remoteip' => $request->ip(),
