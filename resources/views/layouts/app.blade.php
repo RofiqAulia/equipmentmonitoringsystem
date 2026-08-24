@@ -6,6 +6,11 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Inventory Control & Stock Retrieval')</title>
     
+    <!-- Browser Favicon / Logo Peramban -->
+    <link rel="icon" type="image/png" href="{{ asset('images/LogoMieGacoan.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/LogoMieGacoan.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/LogoMieGacoan.png') }}">
+    
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
