@@ -186,19 +186,19 @@
             </div> -->
 
             <!-- Card Auth Form Container -->
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-slate-200 dark:border-slate-800">
+            <div class="glass-panel rounded-3xl p-4 sm:p-8 shadow-2xl relative overflow-hidden border border-slate-200 dark:border-slate-800">
                 <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
                 <!-- Auth Mode Switch Tabs -->
-                <div class="flex bg-slate-200/80 dark:bg-slate-900/90 p-1 rounded-xl mb-6 border border-slate-300 dark:border-slate-800" role="tablist">
+                <div class="flex bg-slate-200/80 dark:bg-slate-900/90 p-1 rounded-xl mb-6 border border-slate-300 dark:border-slate-800 text-center" role="tablist">
                     <button id="tab-classic-btn" onclick="switchAuthTab('classic')" 
-                            class="flex-1 py-2.5 rounded-lg text-xs sm:text-sm font-extrabold transition bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 shadow">
-                        <i class="fa-solid fa-key mr-1.5"></i> Admin / Classic
+                            class="flex-1 py-2.5 px-2 rounded-lg text-xs font-extrabold transition bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 shadow flex items-center justify-center min-w-0">
+                        <i class="fa-solid fa-key mr-1 shrink-0"></i> <span class="truncate">Admin / Classic</span>
                     </button>
                     <button id="tab-quick-btn" onclick="switchAuthTab('quick')" 
-                            class="flex-1 py-2.5 rounded-lg text-xs sm:text-sm font-extrabold transition text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
-                        <i class="fa-solid fa-user-shield mr-1.5"></i> Pengambilan (Pilih SPV)
+                            class="flex-1 py-2.5 px-2 rounded-lg text-xs font-extrabold transition text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center min-w-0">
+                        <i class="fa-solid fa-user-shield mr-1 shrink-0"></i> <span class="truncate">Pengambilan (SPV)</span>
                     </button>
                 </div>
 
