@@ -311,8 +311,7 @@ class AuthController extends Controller
             'username' => $user->username,
             'name' => $user->name,
             'email' => $user->email,
-            'reset_link' => $resetUrl,
-            'note' => 'Silakan cek inbox atau spam email Anda (' . $user->email . ') dan klik link reset password.',
+            'note' => 'Silakan cek inbox atau folder spam email Anda (' . $user->email . ') lalu klik link reset password yang dikirimkan.',
         ]);
     }
 

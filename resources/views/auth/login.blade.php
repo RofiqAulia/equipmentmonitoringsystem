@@ -384,11 +384,6 @@
                 <div class="text-[11px] text-slate-500 dark:text-slate-400 pt-2 border-t border-cyan-500/20 leading-relaxed">
                     <i class="fa-solid fa-envelope text-cyan-500 mr-1"></i> <span id="forgot-result-note"></span>
                 </div>
-                <div id="forgot-direct-link-container" class="pt-1">
-                    <a id="forgot-direct-link" href="" class="inline-flex items-center justify-center w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-extrabold text-xs shadow transition">
-                        <i class="fa-solid fa-paper-plane mr-1.5"></i> Buka Link Reset Password
-                    </a>
-                </div>
             </div>
 
             <!-- Box Pesan Error Email -->
@@ -462,9 +457,6 @@
                     document.getElementById('forgot-result-name').innerText = data.name;
                     document.getElementById('forgot-result-username').innerText = data.username;
                     document.getElementById('forgot-result-note').innerText = data.note;
-                    if (data.reset_link) {
-                        document.getElementById('forgot-direct-link').href = data.reset_link;
-                    }
                     resultBox.classList.remove('hidden');
                 } else {
                     document.getElementById('forgot-error-text').innerText = data.message || 'Alamat email tidak ditemukan dalam database.';

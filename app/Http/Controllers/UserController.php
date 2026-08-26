@@ -110,11 +110,15 @@ class UserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([
+            'username' => 'required|string|max:255|alpha_dash|unique:users,username,' . $user->id,
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
             'role' => 'required|in:admin,spv,user',
             'password' => 'nullable|string|min:6',
         ], [
+            'username.required' => 'User / Akun (Username) wajib diisi.',
+            'username.unique' => 'User / Akun ini sudah digunakan oleh akun lain.',
+            'username.alpha_dash' => 'User / Akun hanya boleh berisi huruf, angka, strip, dan garis bawah.',
             'name.required' => 'Nama lengkap wajib diisi.',
             'email.required' => 'Email wajib diisi.',
             'email.email' => 'Format email tidak valid.',
@@ -124,6 +128,7 @@ class UserController extends Controller
             'password.min' => 'Password minimal harus 6 karakter.',
         ]);
 
+        $user->username = Str::slug($validated['username'], '_');
         $user->name = $validated['name'];
         $user->email = $validated['email'];
         $user->role = $validated['role'];

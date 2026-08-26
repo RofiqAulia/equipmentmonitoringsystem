@@ -302,7 +302,19 @@
             @csrf
             @method('PUT')
 
-            <!-- 1. Nama Lengkap -->
+            <!-- 1. User / Akun (Username) -->
+            <div>
+                <label for="edit_username" class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">User / Akun (Username Login) *</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <i class="fa-solid fa-at text-xs"></i>
+                    </span>
+                    <input type="text" name="username" id="edit_username" required placeholder="contoh: rofiq_admin"
+                           class="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 shadow-sm">
+                </div>
+            </div>
+
+            <!-- 2. Nama Lengkap -->
             <div>
                 <label for="edit_name" class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">Nama Lengkap *</label>
                 <div class="relative">
@@ -314,7 +326,7 @@
                 </div>
             </div>
 
-            <!-- 2. Email -->
+            <!-- 3. Email -->
             <div>
                 <label for="edit_email" class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">Email Akses *</label>
                 <div class="relative">
@@ -326,7 +338,7 @@
                 </div>
             </div>
 
-            <!-- 3. Role Selection -->
+            <!-- 4. Role Selection -->
             <div>
                 <label for="edit_role" class="block text-xs font-extrabold text-slate-700 dark:text-slate-300 mb-1.5">Role / Hak Akses *</label>
                 <div class="relative">
@@ -417,6 +429,7 @@
     function openEditUserModal(user) {
         let actionUrl = "{{ url('/admin/users') }}/" + user.id;
         $('#edit-user-form').attr('action', actionUrl);
+        $('#edit_username').val(user.username || '');
         $('#edit_name').val(user.name);
         $('#edit_email').val(user.email);
         $('#edit_role').val(user.role);
