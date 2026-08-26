@@ -389,23 +389,13 @@
                                 <div>
                                     <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo" style="max-height: 70px; width: auto; object-fit: contain;">
                                 </div>
-                                <div style="text-align: right; font-size: 11px; color: #334155; line-height: 1.5;">
-                                    <div style="font-weight: 800; font-size: 14px; color: #0f172a; text-transform: uppercase;">Inventory Control System</div>
-                                    <div>Jalan Kesejahteraan No. 1G-D</div>
-                                    <div>Malang, Jawa Timur, 65145</div>
-                                    <div>(0341) 954-23242 | support@inventory.co.id</div>
+                                <div style="text-align: right; font-size: 11px; color: #334155;">
                                     <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: #0f172a;">Malang, {{ now()->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}</div>
                                 </div>
                             </div>
-                            <h2 style="text-align: center; font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 15px 0; color: #0f172a;">Laporan Inventaris Gudang</h2>
                         `,
                         messageBottom: `
                             <div style="margin-top: 35px; display: flex; justify-content: space-between; font-size: 11px; color: #0f172a;">
-                                <div style="text-align: center; width: 200px;">
-                                    <div>Petugas / Operator Gudang</div>
-                                    <div style="height: 55px;"></div>
-                                    <div style="font-weight: bold;">( .................... )</div>
-                                </div>
                                 <div style="text-align: center; width: 200px;">
                                     <div>Disetujui oleh,</div>
                                     <div style="height: 55px;"></div>
