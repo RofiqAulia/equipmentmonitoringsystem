@@ -33,10 +33,19 @@ class ItemRequisitionController extends Controller
         // Low stock items for quick requisition dropdown
         $lowStockItems = Item::whereColumn('available_stock', '<=', 'minimum_stock')->get();
 
+        $selectedItemId = $request->query('item_id');
+        if ($selectedItemId && !$lowStockItems->contains('id', $selectedItemId)) {
+            $item = Item::find($selectedItemId);
+            if ($item) {
+                $lowStockItems->push($item);
+            }
+        }
+
         return view('admin.requisitions', [
             'requisitions' => $requisitions,
             'stats' => $stats,
             'lowStockItems' => $lowStockItems,
+            'selectedItemId' => $selectedItemId,
         ]);
     }
 

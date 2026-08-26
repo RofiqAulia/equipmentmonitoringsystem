@@ -31,11 +31,11 @@
         <div>
             <div class="flex items-center space-x-2">
                 <span class="px-3 py-1 bg-sky-500/10 text-sky-600 dark:text-sky-400 text-xs font-bold rounded-full border border-sky-500/30 uppercase tracking-wider">
-                    <i class="fa-solid fa-clipboard-list mr-1"></i> Procurement Requisition
+                    <i class="fa-solid fa-clipboard-list mr-1"></i> Pengadaan Barang
                 </span>
-                <span class="text-xs text-slate-500 dark:text-slate-400">Pengadaan & Pengajuan Restock Barang</span>
+                <span class="text-xs text-slate-500 dark:text-slate-400">Pengadaan & Restock Barang</span>
             </div>
-            <h1 class="text-2xl font-black text-slate-900 dark:text-white mt-1">Pengajuan Barang & Restock</h1>
+               <h1 class="text-2xl font-black text-slate-900 dark:text-white mt-1">Pengadaan Barang & Restock</h1>
         </div>
 
         <div class="flex items-center space-x-3">
@@ -210,7 +210,15 @@
                 <select name="item_id" id="req_item_id" onchange="onSelectReqItem(this)" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
                     <option value="">-- Pilih Barang Menipis / Manual --</option>
                     @foreach($lowStockItems as $lItem)
-                        <option value="{{ $lItem->id }}" data-name="{{ $lItem->name }}" data-sku="{{ $lItem->sku }}">
+                        @php
+                            $deficit = max(1, $lItem->minimum_stock - $lItem->available_stock);
+                            $isSelected = (string) request('item_id') === (string) $lItem->id;
+                        @endphp
+                        <option value="{{ $lItem->id }}" 
+                                data-name="{{ $lItem->name }}" 
+                                data-sku="{{ $lItem->sku }}"
+                                data-deficit="{{ $deficit }}"
+                                {{ $isSelected ? 'selected' : '' }}>
                             [{{ $lItem->sku }}] {{ $lItem->name }} (Sisa Stok: {{ $lItem->available_stock }})
                         </option>
                     @endforeach
@@ -229,13 +237,13 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Jumlah Unit Diajukan *</label>
-                    <input type="number" name="quantity_requested" min="1" value="10" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
+                    <input type="number" name="quantity_requested" id="req_qty" min="1" value="10" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
                 </div>
             </div>
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Alasan / Catatan Pengajuan *</label>
-                <textarea name="reason" rows="3" required placeholder="Jelaskan kebutuhan pengadaan stok barang ini..." class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"></textarea>
+                <textarea name="reason" id="req_reason" rows="3" required placeholder="Jelaskan kebutuhan pengadaan stok barang ini..." class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"></textarea>
             </div>
 
             <div class="pt-2 flex justify-end space-x-2">
@@ -273,6 +281,20 @@
                 responsive: true
             });
         }
+
+        // Auto open modal and populate form if item_id is passed in query string
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('item_id')) {
+            const select = document.getElementById('req_item_id');
+            if (select && select.value) {
+                onSelectReqItem(select);
+            }
+            toggleRequisitionModal();
+            setTimeout(() => {
+                const reasonField = document.getElementById('req_reason');
+                if (reasonField) reasonField.focus();
+            }, 300);
+        }
     });
 
     function confirmAction(form, actionText) {
@@ -301,8 +323,12 @@
         if (!opt || !opt.value) return;
         const name = opt.getAttribute('data-name');
         const sku = opt.getAttribute('data-sku');
+        const deficit = opt.getAttribute('data-deficit');
         if (name) document.getElementById('req_item_name').value = name;
         if (sku) document.getElementById('req_sku').value = sku;
+        if (deficit && document.getElementById('req_qty')) {
+            document.getElementById('req_qty').value = deficit;
+        }
     }
 </script>
 @endpush
