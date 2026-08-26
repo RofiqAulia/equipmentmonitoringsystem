@@ -5,6 +5,14 @@ let html5QrScannerInstance = null;
 let toastTimeout = null;
 
 // Toast Alert Display Function
+function setPresetNote(text, targetId = 'notes') {
+    const el = document.getElementById(targetId);
+    if (el) {
+        el.value = text;
+        el.focus();
+    }
+}
+
 function showToast(title, message, type = 'info') {
     const toast = document.getElementById('toast-alert');
     const toastIconBg = document.getElementById('toast-icon-bg');

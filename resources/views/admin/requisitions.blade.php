@@ -243,7 +243,14 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Alasan / Catatan Pengajuan *</label>
-                <textarea name="reason" id="req_reason" rows="3" required placeholder="Jelaskan kebutuhan pengadaan stok barang ini..." class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"></textarea>
+                <!-- Quick Preset Reason Chips -->
+                <div class="flex flex-wrap gap-1.5 mb-2">
+                    <button type="button" onclick="setReqPresetReason('Stok barang di gudang habis (Stok 0)')" class="px-2 py-0.5 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 text-[10px] font-semibold rounded-lg border border-rose-500/20 transition">🚨 Stok Habis (0)</button>
+                    <button type="button" onclick="setReqPresetReason('Stok menipis mendekati batas minimum')" class="px-2 py-0.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 text-[10px] font-semibold rounded-lg border border-amber-500/20 transition">⚠️ Stok Menipis</button>
+                    <button type="button" onclick="setReqPresetReason('Antisipasi lonjakan permintaan operasional')" class="px-2 py-0.5 bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 text-[10px] font-semibold rounded-lg border border-sky-500/20 transition">📈 Lonjakan Permintaan</button>
+                    <button type="button" onclick="setReqPresetReason('Cadangan / buffer stok operasional gudang')" class="px-2 py-0.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[10px] font-semibold rounded-lg border border-emerald-500/20 transition">📦 Buffer Stok</button>
+                </div>
+                <textarea name="reason" id="req_reason" rows="3" required placeholder="Pilih preset di atas atau ketik alasan kustom..." class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"></textarea>
             </div>
 
             <div class="pt-2 flex justify-end space-x-2">
@@ -343,6 +350,14 @@
 
         return false;
     };
+
+    function setReqPresetReason(text) {
+        const field = document.getElementById('req_reason');
+        if (field) {
+            field.value = text;
+            field.focus();
+        }
+    }
 
     function toggleRequisitionModal() {
         const modal = document.getElementById('modal-requisition');
