@@ -76,5 +76,10 @@ Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
 
     // Cetak Laporan Inventaris Gudang
     Route::get('/admin/stock/print', [AdminStockController::class, 'printReport'])->name('admin.stock.print');
+
+    // Edit & Hapus Barang Inventaris
+    Route::put('/admin/stock/{item}', [AdminStockController::class, 'updateItem'])->name('admin.stock.update');
+    Route::delete('/admin/stock/{item}', [AdminStockController::class, 'destroyItem'])->name('admin.stock.destroy');
 });
+
 

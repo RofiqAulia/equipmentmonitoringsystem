@@ -359,7 +359,7 @@
                 lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
                 order: [[1, 'asc']], // Default Sort by SKU ASC
                 columnDefs: [
-                    { orderable: false, targets: [0] }, // Photo column no sort
+                    { orderable: false, targets: [0, 7, 8] }, // Photo, Aksi QR & Aksi columns no sort
                     { orderable: true, targets: [1, 2, 3, 4, 5, 6] }
                 ],
                 dom: '<"flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 p-1"lBf>rt<"flex flex-col md:flex-row md:items-center justify-between gap-3 mt-4 p-1"ip>',

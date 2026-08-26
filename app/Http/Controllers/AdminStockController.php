@@ -171,5 +171,52 @@ class AdminStockController extends Controller
             'printedBy' => auth()->user()->name ?? 'Administrator',
         ]);
     }
+
+    /**
+     * Update stock item details.
+     */
+    public function updateItem(Request $request, Item $item)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location_bin' => 'required|string|max:100',
+            'available_stock' => 'required|integer|min:0',
+            'minimum_stock' => 'required|integer|min:0',
+            'image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
+        ]);
+
+        if ($request->hasFile('image_file')) {
+            $file = $request->file('image_file');
+            $uploadPath = public_path('uploads/items');
+            if (!file_exists($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+            $extension = strtolower($file->getClientOriginalExtension() ?: 'jpg');
+            $filename = time() . '_' . uniqid() . '.' . $extension;
+            $file->move($uploadPath, $filename);
+            $item->image_url = asset('uploads/items/' . $filename);
+        }
+
+        $item->name = trim($request->input('name'));
+        $item->location_bin = trim($request->input('location_bin'));
+        $item->available_stock = (int) $request->input('available_stock');
+        $item->minimum_stock = (int) $request->input('minimum_stock');
+        $item->save();
+
+        return redirect()->back()->with('success', "Barang '{$item->name}' (SKU: {$item->sku}) berhasil diperbarui.");
+    }
+
+    /**
+     * Delete a stock item.
+     */
+    public function destroyItem(Item $item)
+    {
+        $name = $item->name;
+        $sku = $item->sku;
+        $item->delete();
+
+        return redirect()->back()->with('success', "Barang '{$name}' (SKU: {$sku}) berhasil dihapus dari inventaris.");
+    }
 }
+
 
