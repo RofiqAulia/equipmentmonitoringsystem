@@ -373,12 +373,13 @@
                         extend: 'excelHtml5',
                         text: '<i class="fa-solid fa-file-excel mr-1.5"></i> Ekspor Excel',
                         title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10)
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
-                        title: 'Laporan Inventaris Gudang System'
                     }
+                    // ,
+                    // {
+                    //     extend: 'print',
+                    //     text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
+                    //     title: 'Laporan Inventaris Gudang System'
+                    // }
                 ],
                 language: {
                     search: "_INPUT_",
