@@ -383,10 +383,10 @@
                     {
                         extend: 'print',
                         text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
-                        timestamp: new Date().toISOString().slice(0,10),
                         title: 'Laporan Inventaris Gudang',
+                        messageTop: 'Tanggal & Waktu Cetak: {{ now()->setTimezone("Asia/Jakarta")->translatedFormat("d F Y, H:i") }} WIB | Oleh: {{ auth()->user()->name ?? "Administrator" }}',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6,]
+                            columns: [1, 2, 3, 4, 5, 6]
                         }
                     }
                 ],
