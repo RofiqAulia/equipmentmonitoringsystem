@@ -18,16 +18,18 @@ class AdminDashboardController extends Controller
     {
         // 1. System Health Metrics
         $totalUsers = User::count();
+        $adminsCount = User::where('role', 'admin')->count();
+        $spvsCount = User::where('role', 'spv')->count();
         $operatorsCount = User::where('role', 'user')->count();
-        $supervisorsCount = User::where('role', 'admin')->count();
         $totalItems = Item::count();
         $todayRetrievalsCount = RetrievalLog::whereDate('picked_at', today())->count();
         $todayRetrievalsUnits = (int) RetrievalLog::whereDate('picked_at', today())->sum('quantity_picked');
 
         $systemHealth = [
             'total_users' => $totalUsers,
+            'total_admins' => $adminsCount,
+            'total_spvs' => $spvsCount,
             'active_operators' => $operatorsCount,
-            'total_supervisors' => $supervisorsCount,
             'total_items' => $totalItems,
             'retrievals_today' => $todayRetrievalsCount,
             'total_qty_picked_today' => $todayRetrievalsUnits,
@@ -90,8 +92,10 @@ class AdminDashboardController extends Controller
 
         $data = [
             'totalUsers' => $totalUsers,
+            'adminsCount' => $adminsCount,
+            'spvsCount' => $spvsCount,
+            'supervisorsCount' => $spvsCount,
             'operatorsCount' => $operatorsCount,
-            'supervisorsCount' => $supervisorsCount,
             'totalItems' => $totalItems,
             'todayRetrievalsCount' => $todayRetrievalsCount,
             'todayRetrievalsUnits' => $todayRetrievalsUnits,
