@@ -221,7 +221,12 @@
                         </div>
 
                         <div>
-                            <label for="password" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="password" class="block text-xs font-bold text-slate-700 dark:text-slate-300">Password</label>
+                                <button type="button" onclick="openForgotModal()" class="text-[11px] font-extrabold text-cyan-600 dark:text-cyan-400 hover:underline">
+                                    Lupa Username / Password?
+                                </button>
+                            </div>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 dark:text-slate-500">
                                     <i class="fa-solid fa-lock text-sm"></i>
@@ -337,6 +342,76 @@
 
     </div>
 </div>
+
+<!-- Modal Lupa Username / Password -->
+<div id="forgot-account-modal" class="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-md hidden flex items-center justify-center p-4 overflow-y-auto">
+    <div class="glass-panel max-w-md w-full p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-5 shadow-2xl my-auto text-left relative overflow-hidden">
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <h3 class="text-base font-extrabold text-slate-900 dark:text-white flex items-center">
+                <i class="fa-solid fa-user-lock text-cyan-500 mr-2"></i> Pemulihan Akun / Lupa Password
+            </h3>
+            <button onclick="closeForgotModal()" type="button" class="text-slate-400 hover:text-slate-900 dark:hover:text-white transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+            Masukkan alamat email terdaftar pada akun Anda untuk mencari <strong>Username</strong> dan petunjuk pemulihan kata sandi.
+        </p>
+
+        <form id="forgot-account-form" onsubmit="submitForgotAccount(event)" class="space-y-4">
+            @csrf
+            <div>
+                <label for="forgot_email" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">Alamat Email Terdaftar *</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
+                        <i class="fa-solid fa-envelope text-sm"></i>
+                    </span>
+                    <input type="email" id="forgot_email" required placeholder="contoh: admin@inventory.com"
+                           class="w-full pl-10 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500 transition shadow-sm">
+                </div>
+            </div>
+
+            <!-- Box Hasil Pencarian Akun -->
+            <div id="forgot-result-box" class="hidden p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-xs space-y-2.5">
+                <div class="font-extrabold text-cyan-600 dark:text-cyan-400 flex items-center text-sm">
+                    <i class="fa-solid fa-circle-check mr-1.5"></i> <span id="forgot-result-title"></span>
+                </div>
+                <div class="space-y-1 text-slate-700 dark:text-slate-300 text-xs">
+                    <div>Nama Lengkap: <strong id="forgot-result-name" class="text-slate-900 dark:text-white"></strong></div>
+                    <div>Username Login: <span id="forgot-result-username" class="font-mono font-bold text-cyan-600 dark:text-cyan-400 px-2 py-0.5 bg-white dark:bg-slate-900 border border-cyan-500/30 rounded"></span></div>
+                </div>
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 pt-2 border-t border-cyan-500/20 leading-relaxed">
+                    <i class="fa-solid fa-envelope text-cyan-500 mr-1"></i> <span id="forgot-result-note"></span>
+                </div>
+                <div id="forgot-direct-link-container" class="pt-1">
+                    <a id="forgot-direct-link" href="" class="inline-flex items-center justify-center w-full py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-extrabold text-xs shadow transition">
+                        <i class="fa-solid fa-paper-plane mr-1.5"></i> Buka Link Reset Password
+                    </a>
+                </div>
+            </div>
+
+            <!-- Box Pesan Error Email -->
+            <div id="forgot-error-box" class="hidden p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-xs font-semibold text-rose-600 dark:text-rose-400 flex items-center">
+                <i class="fa-solid fa-triangle-exclamation mr-2 text-base"></i> <span id="forgot-error-text"></span>
+            </div>
+
+            <div class="flex space-x-2 pt-2">
+                <button type="button" onclick="closeForgotModal()" class="flex-1 py-2.5 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition">Batal</button>
+                <button type="submit" id="btn-submit-forgot" class="flex-1 py-2.5 bg-gradient-to-r from-cyan-600 to-sky-600 hover:from-cyan-500 hover:to-sky-500 text-white rounded-xl text-xs font-bold transition shadow flex items-center justify-center">
+                    <i class="fa-solid fa-magnifying-glass mr-1.5"></i> Cek Akun Saya
+                </button>
+            </div>
+        </form>
+
+        <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
+            <div class="font-bold text-slate-700 dark:text-slate-300 flex items-center">
+                <i class="fa-solid fa-headset text-cyan-500 mr-1.5"></i> Bantuan Tim IT / Superadmin:
+            </div>
+            <p class="leading-relaxed">Jika Anda perlu melakukan reset password instan, hubungi Administrator Utama Gudang atau Supervisor penanggung jawab Anda.</p>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -345,6 +420,65 @@
     @endif
     <script src="{{ asset('js/auth.js') }}"></script>
     <script>
+        function openForgotModal() {
+            document.getElementById('forgot-result-box').classList.add('hidden');
+            document.getElementById('forgot-error-box').classList.add('hidden');
+            document.getElementById('forgot_email').value = '';
+            document.getElementById('forgot-account-modal').classList.remove('hidden');
+        }
+
+        function closeForgotModal() {
+            document.getElementById('forgot-account-modal').classList.add('hidden');
+        }
+
+        async function submitForgotAccount(e) {
+            e.preventDefault();
+            const email = document.getElementById('forgot_email').value;
+            const btn = document.getElementById('btn-submit-forgot');
+            const resultBox = document.getElementById('forgot-result-box');
+            const errorBox = document.getElementById('forgot-error-box');
+
+            resultBox.classList.add('hidden');
+            errorBox.classList.add('hidden');
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1.5"></i> Memeriksa...';
+
+            try {
+                const response = await fetch("{{ route('forgot-password') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    document.getElementById('forgot-result-title').innerText = data.message;
+                    document.getElementById('forgot-result-name').innerText = data.name;
+                    document.getElementById('forgot-result-username').innerText = data.username;
+                    document.getElementById('forgot-result-note').innerText = data.note;
+                    if (data.reset_link) {
+                        document.getElementById('forgot-direct-link').href = data.reset_link;
+                    }
+                    resultBox.classList.remove('hidden');
+                } else {
+                    document.getElementById('forgot-error-text').innerText = data.message || 'Alamat email tidak ditemukan dalam database.';
+                    errorBox.classList.remove('hidden');
+                }
+            } catch(err) {
+                document.getElementById('forgot-error-text').innerText = 'Terjadi kesalahan jaringan, silakan coba lagi.';
+                errorBox.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-magnifying-glass mr-1.5"></i> Cek Akun Saya';
+            }
+        }
+
         async function refreshCaptcha(boxId, inputId) {
             const box = document.getElementById(boxId);
             const input = document.getElementById(inputId);

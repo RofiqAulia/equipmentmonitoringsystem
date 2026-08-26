@@ -115,23 +115,6 @@
         <!-- Sidebar Backdrop for Mobile -->
         <div id="sidebar-backdrop" onclick="toggleSidebar()" class="fixed inset-0 z-30 bg-slate-950/60 backdrop-blur-sm hidden lg:hidden transition-opacity"></div>
 
-        <!-- Flash Alert Messages -->
-        <div class="max-w-7xl mx-auto px-4 mt-4 w-full">
-            @if(session('success'))
-                <div class="p-4 mb-4 text-sm rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 flex items-center justify-between transition-opacity duration-200 shadow-sm">
-                    <div class="flex items-center"><i class="fa-solid fa-circle-check mr-2 text-lg"></i> {{ session('success') }}</div>
-                    <button onclick="dismissAlert(this)" class="text-emerald-700 dark:text-emerald-400 hover:opacity-75"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-            @endif
-
-            @if(session('error'))
-                <div class="p-4 mb-4 text-sm rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-400 flex items-center justify-between transition-opacity duration-200 shadow-sm">
-                    <div class="flex items-center"><i class="fa-solid fa-triangle-exclamation mr-2 text-lg"></i> {{ session('error') }}</div>
-                    <button onclick="dismissAlert(this)" class="text-rose-700 dark:text-rose-400 hover:opacity-75"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-            @endif
-        </div>
-
         <!-- Layout Body -->
         <div class="flex-1 w-full max-w-7xl mx-auto px-4 py-6 relative">
             @auth
@@ -355,10 +338,28 @@
                 icon: 'success',
                 title: 'Berhasil!',
                 text: @json(session('success')),
-                timer: 3500,
-                showConfirmButton: false,
-                toast: true,
-                position: 'top-end'
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#0284c7',
+                customClass: {
+                    popup: 'swal2-popup font-sans'
+                }
+            });
+        });
+    </script>
+    @endif
+
+    @if(session('status'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'info',
+                title: 'Notifikasi Sistem',
+                text: @json(session('status')),
+                confirmButtonText: 'Mengerti',
+                confirmButtonColor: '#0284c7',
+                customClass: {
+                    popup: 'swal2-popup font-sans'
+                }
             });
         });
     </script>
@@ -372,9 +373,9 @@
                 title: 'Terjadi Kesalahan',
                 text: @json(session('error')),
                 confirmButtonText: 'Mengerti',
+                confirmButtonColor: '#e11d48',
                 customClass: {
-                    popup: 'swal2-popup',
-                    confirmButton: 'swal2-confirm'
+                    popup: 'swal2-popup font-sans'
                 }
             });
         });
@@ -389,9 +390,33 @@
                 title: 'Peringatan Sistem',
                 text: @json(session('warning')),
                 confirmButtonText: 'Mengerti',
+                confirmButtonColor: '#f59e0b',
                 customClass: {
-                    popup: 'swal2-popup',
-                    confirmButton: 'swal2-confirm'
+                    popup: 'swal2-popup font-sans'
+                }
+            });
+        });
+    </script>
+    @endif
+
+    @if(isset($errors) && $errors->any())
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let errorList = @json($errors->all());
+            let htmlMsg = '<div style="text-align: left; font-size: 13px; line-height: 1.6;"><ul style="list-style-type: disc; padding-left: 20px;">';
+            errorList.forEach(function(err) {
+                htmlMsg += '<li>' + err + '</li>';
+            });
+            htmlMsg += '</ul></div>';
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Memproses Data',
+                html: htmlMsg,
+                confirmButtonText: 'Tutup & Perbaiki',
+                confirmButtonColor: '#e11d48',
+                customClass: {
+                    popup: 'swal2-popup font-sans'
                 }
             });
         });

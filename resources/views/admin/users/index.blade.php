@@ -22,45 +22,6 @@
         </button>
     </div>
 
-    <!-- Alert Flash Messages -->
-    @if(session('success'))
-        <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-bold flex items-center justify-between shadow-lg">
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-circle-check text-lg text-emerald-500"></i>
-                <span>{{ session('success') }}</span>
-            </div>
-            <button onclick="this.parentElement.remove()" class="text-emerald-500 hover:text-emerald-700">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center justify-between shadow-lg">
-            <div class="flex items-center space-x-3">
-                <i class="fa-solid fa-circle-exclamation text-lg text-rose-500"></i>
-                <span>{{ session('error') }}</span>
-            </div>
-            <button onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-700">
-                <i class="fa-solid fa-xmark text-sm"></i>
-            </button>
-        </div>
-    @endif
-
-    @if($errors->any())
-        <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs space-y-1 shadow-lg">
-            <div class="font-extrabold flex items-center space-x-2">
-                <i class="fa-solid fa-triangle-exclamation text-rose-500"></i>
-                <span>Gagal menyimpan data user:</span>
-            </div>
-            <ul class="list-disc list-inside pl-4 text-[11px] font-semibold space-y-0.5">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
     <!-- Statistics Overview Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Card 1: Total Users -->

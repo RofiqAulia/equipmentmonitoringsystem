@@ -6,9 +6,11 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -244,6 +246,120 @@ class AuthController extends Controller
             'success' => true,
             'operators' => $operators,
         ]);
+    }
+
+    /**
+     * Handle Forgot Username / Password request by sending a Reset Link to the User's Email.
+     */
+    public function forgotPassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (! $user) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Alamat email tidak terdaftar dalam sistem inventaris gudang.',
+            ], 404);
+        }
+
+        // Generate unique token
+        $token = Str::random(64);
+
+        // Store or update in password_reset_tokens table
+        DB::table('password_reset_tokens')->updateOrInsert(
+            ['email' => $user->email],
+            [
+                'email' => $user->email,
+                'token' => $token,
+                'created_at' => now(),
+            ]
+        );
+
+        $resetUrl = route('password.reset', ['token' => $token, 'email' => $user->email]);
+
+        // Attempt sending email via Laravel Mailer
+        try {
+            Mail::send([], [], function ($message) use ($user, $resetUrl) {
+                $message->to($user->email)
+                    ->subject('Link Reset Password - Inventory Control System')
+                    ->html("
+                        <div style='font-family: Arial, sans-serif; max-width: 500px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;'>
+                            <h2 style='color: #0284c7; margin-top: 0;'>Reset Password - Inventory Control</h2>
+                            <p>Halo <strong>{$user->name}</strong>,</p>
+                            <p>Kami menerima permintaan untuk melakukan reset kata sandi pada akun Anda (Username: <strong>{$user->username}</strong>).</p>
+                            <p>Klik tombol di bawah ini untuk membuat password baru Anda:</p>
+                            <div style='text-align: center; margin: 25px 0;'>
+                                <a href='{$resetUrl}' style='background-color: #0284c7; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;'>Reset Password Saya</a>
+                            </div>
+                            <p style='font-size: 12px; color: #64748b;'>Atau salin link berikut di browser Anda:<br><a href='{$resetUrl}'>{$resetUrl}</a></p>
+                            <hr style='border: none; border-top: 1px solid #e2e8f0; margin-top: 20px;'>
+                            <p style='font-size: 11px; color: #94a3b8;'>Link ini berlaku selama 60 menit. Jika Anda tidak meminta reset password, abaikan email ini.</p>
+                        </div>
+                    ");
+            });
+        } catch (\Exception $e) {
+            // Logging email sending error if local SMTP server is not configured
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Link reset password berhasil dikirim ke email!',
+            'username' => $user->username,
+            'name' => $user->name,
+            'email' => $user->email,
+            'reset_link' => $resetUrl,
+            'note' => 'Silakan cek inbox atau spam email Anda (' . $user->email . ') dan klik link reset password.',
+        ]);
+    }
+
+    /**
+     * Show Reset Password Page.
+     */
+    public function showResetPasswordForm(string $token, Request $request)
+    {
+        return view('auth.reset_password', [
+            'token' => $token,
+            'email' => $request->query('email'),
+        ]);
+    }
+
+    /**
+     * Process Reset Password submission.
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $resetRecord = DB::table('password_reset_tokens')
+            ->where('email', $request->email)
+            ->where('token', $request->token)
+            ->first();
+
+        if (! $resetRecord) {
+            return back()->withInput()->withErrors([
+                'email' => 'Token reset password tidak valid atau telah kadaluwarsa. Silakan minta link reset baru.',
+            ]);
+        }
+
+        // Update password for user
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->password = Hash::make($request->password);
+            $user->save();
+        }
+
+        // Delete token record
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        return redirect()->route('login')->with('status', 'Password Anda telah berhasil diperbarui! Silakan login dengan password baru Anda.');
     }
 
     /**

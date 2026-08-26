@@ -31,6 +31,9 @@ Route::get('/login', function () {
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgot-password');
+Route::get('/reset-password/{token}', [AuthController::class, 'showResetPasswordForm'])->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 Route::get('/captcha/refresh', [AuthController::class, 'generateCaptcha'])->name('captcha.refresh');
 
 // Operator Quick Auth & SPV Selection
