@@ -383,6 +383,7 @@
                     {
                         extend: 'print',
                         text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
+                        timestamp: new Date().toISOString().slice(0,10),
                         title: 'Laporan Inventaris Gudang',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6,]
