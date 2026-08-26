@@ -92,7 +92,7 @@
                             <div class="flex items-center justify-center gap-1.5">
                                 <!-- Lihat Detail (Modal Pop-up) -->
                                 <button type="button" onclick='openDetailModal(@json($item))' class="p-2 bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded-xl border border-sky-500/30 transition shadow-sm" title="Lihat Detail Barang">
-                                    <i class="fa-solid fa-eye text-xs"></i>
+                                    <i class="fa-solid fa-circle-info text-xs"></i>
                                 </button>
                                 <!-- Edit Barang (Modal Concept) -->
                                 <button type="button" onclick='openEditModal(@json($item))' class="p-2 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 rounded-xl border border-amber-500/30 transition shadow-sm" title="Edit Barang">
