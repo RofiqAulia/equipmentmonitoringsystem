@@ -367,19 +367,27 @@
                     {
                         extend: 'csvHtml5',
                         text: '<i class="fa-solid fa-file-csv mr-1.5"></i> Ekspor CSV',
-                        title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10)
+                        title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10),
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6] // Hanya kolom data terpilih (SKU, Nama, Rak, Stok, Min, Status)
+                        }
                     },
                     {
                         extend: 'excelHtml5',
                         text: '<i class="fa-solid fa-file-excel mr-1.5"></i> Ekspor Excel',
-                        title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10)
+                        title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10),
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6] // Exclude Foto (col 0) & Aksi QR (col 7)
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
+                        title: 'Laporan Inventaris Gudang System',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6,]
+                        }
                     }
-                    // ,
-                    // {
-                    //     extend: 'print',
-                    //     text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
-                    //     title: 'Laporan Inventaris Gudang System'
-                    // }
                 ],
                 language: {
                     search: "_INPUT_",
