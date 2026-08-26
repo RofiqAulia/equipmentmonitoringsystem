@@ -2,6 +2,86 @@
 
 @section('title', 'Manajemen User & Hak Akses - Inventory Control')
 
+@push('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<style>
+    /* DataTables Layout & Elements Styling */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 1.25rem !important;
+        font-size: 0.75rem !important;
+        font-weight: 700 !important;
+        color: #475569 !important;
+    }
+    .dark .dataTables_wrapper .dataTables_length,
+    .dark .dataTables_wrapper .dataTables_filter {
+        color: #cbd5e1 !important;
+    }
+    .dataTables_wrapper .dataTables_length select {
+        padding: 0.4rem 0.8rem !important;
+        border-radius: 0.75rem !important;
+        border: 1px solid #cbd5e1 !important;
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        font-weight: 700 !important;
+        font-size: 0.75rem !important;
+        outline: none !important;
+        margin: 0 0.5rem !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+    .dark .dataTables_wrapper .dataTables_length select {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        padding: 0.4rem 0.85rem !important;
+        border-radius: 0.75rem !important;
+        border: 1px solid #cbd5e1 !important;
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        font-weight: 600 !important;
+        font-size: 0.75rem !important;
+        outline: none !important;
+        margin-left: 0.5rem !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+        transition: all 0.2s !important;
+    }
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #0284c7 !important;
+        box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2) !important;
+    }
+    .dark .dataTables_wrapper .dataTables_filter input {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
+        color: #f8fafc !important;
+    }
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        margin-top: 1rem !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        color: #64748b !important;
+    }
+    .dark .dataTables_wrapper .dataTables_info,
+    .dark .dataTables_wrapper .dataTables_paginate {
+        color: #94a3b8 !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        border-radius: 0.5rem !important;
+        padding: 0.3rem 0.75rem !important;
+        font-weight: 700 !important;
+        border: 1px solid transparent !important;
+    }
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        background: #0284c7 !important;
+        color: #ffffff !important;
+        border-color: #0284c7 !important;
+        border-radius: 0.5rem !important;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="space-y-6">
     
@@ -160,22 +240,29 @@
                                 {{ $user->created_at ? $user->created_at->translatedFormat('d M Y, H:i') : '-' }}
                             </td>
 
-                            <!-- Actions -->
+                            <!-- Actions (Detail, Edit, Hapus) -->
                             <td class="py-3.5 px-4 text-center">
-                                <div class="flex items-center justify-center space-x-2">
+                                <div class="flex items-center justify-center space-x-1.5">
+                                    <!-- 1. Detail -->
+                                    <button onclick="openDetailUserModal({{ json_encode($user) }})" 
+                                            class="p-2 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 hover:bg-cyan-500 hover:text-white transition shadow-sm"
+                                            title="Lihat Detail User">
+                                        <i class="fa-solid fa-circle-info text-xs"></i>
+                                    </button>
+
+                                    <!-- 2. Edit -->
                                     <button onclick="openEditUserModal({{ json_encode($user) }})" 
-                                            class="p-2 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 hover:bg-sky-500 hover:text-white transition shadow-sm"
+                                            class="p-2 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500 hover:text-white transition shadow-sm"
                                             title="Edit User">
                                         <i class="fa-solid fa-pen-to-square text-xs"></i>
                                     </button>
 
-                                    @if(Auth::id() !== $user->id)
-                                        <button onclick="confirmDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}')" 
-                                                class="p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white transition shadow-sm"
-                                                title="Hapus User">
-                                            <i class="fa-solid fa-trash text-xs"></i>
-                                        </button>
-                                    @endif
+                                    <!-- 3. Hapus -->
+                                    <button onclick="confirmDeleteUser({{ $user->id }}, '{{ addslashes($user->name) }}', {{ Auth::id() === $user->id ? 'true' : 'false' }})" 
+                                            class="p-2 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 hover:bg-rose-500 hover:text-white transition shadow-sm"
+                                            title="Hapus User">
+                                        <i class="fa-solid fa-trash text-xs"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -385,6 +472,55 @@
     </div>
 </div>
 
+<!-- ==========================================
+     3. MODAL DETAIL USER
+     ========================================== -->
+<div id="modal-detail-user" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm hidden overflow-y-auto">
+    <div class="w-full max-w-md glass-panel p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-5 shadow-2xl my-auto">
+        
+        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <h3 class="text-sm font-black text-slate-900 dark:text-white flex items-center">
+                <i class="fa-solid fa-address-card text-cyan-500 mr-2"></i> Detail Informasi User
+            </h3>
+            <button onclick="closeDetailUserModal()" class="text-slate-400 hover:text-rose-500 transition">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+
+        <div class="space-y-4">
+            <div class="flex items-center space-x-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <img id="detail_avatar" src="" alt="" class="w-14 h-14 rounded-2xl object-cover border-2 border-cyan-500 shadow-md">
+                <div>
+                    <h4 id="detail_name" class="text-base font-extrabold text-slate-900 dark:text-white"></h4>
+                    <p id="detail_username" class="text-xs font-mono text-cyan-600 dark:text-cyan-400 font-bold"></p>
+                    <div id="detail_role_badge" class="mt-1"></div>
+                </div>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+                <div class="flex justify-between py-2 border-b border-slate-200 dark:border-slate-800">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium">Email Terdaftar:</span>
+                    <span id="detail_email" class="font-bold text-slate-900 dark:text-white font-mono"></span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-slate-200 dark:border-slate-800">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium">Role / Hak Akses:</span>
+                    <span id="detail_role" class="font-bold text-slate-900 dark:text-white capitalize"></span>
+                </div>
+                <div class="flex justify-between py-2 border-b border-slate-200 dark:border-slate-800">
+                    <span class="text-slate-500 dark:text-slate-400 font-medium">Tanggal Registrasi:</span>
+                    <span id="detail_created_at" class="font-bold text-slate-900 dark:text-white"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+            <button onclick="closeDetailUserModal()" class="px-5 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-300 transition">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- Hidden Delete Form -->
 <form id="delete-user-form" method="POST" class="hidden">
     @csrf
@@ -417,6 +553,36 @@
             order: [[3, 'desc']]
         });
     });
+
+    function openDetailUserModal(user) {
+        let avatarUrl = user.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name) + '&background=0284c7&color=fff';
+        $('#detail_avatar').attr('src', avatarUrl);
+        $('#detail_name').text(user.name);
+        $('#detail_username').text('@' + (user.username || 'user_' + user.id));
+        $('#detail_email').text(user.email);
+        
+        let roleText = 'Operator Gudang';
+        let roleBadgeHtml = '<span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"><i class="fa-solid fa-id-badge mr-1"></i> Operator</span>';
+        if (user.role === 'admin') {
+            roleText = 'Administrator System';
+            roleBadgeHtml = '<span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-black bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/30"><i class="fa-solid fa-shield-halved mr-1"></i> Admin</span>';
+        } else if (user.role === 'spv') {
+            roleText = 'Supervisor (SPV)';
+            roleBadgeHtml = '<span class="inline-flex items-center px-2 py-0.5 rounded-lg text-[10px] font-black bg-pink-500/10 text-pink-600 dark:text-pink-400 border border-pink-500/30"><i class="fa-solid fa-user-tie mr-1"></i> Supervisor</span>';
+        }
+        
+        $('#detail_role').text(roleText);
+        $('#detail_role_badge').html(roleBadgeHtml);
+
+        let createdAt = user.created_at ? new Date(user.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '-';
+        $('#detail_created_at').text(createdAt);
+
+        $('#modal-detail-user').removeClass('hidden');
+    }
+
+    function closeDetailUserModal() {
+        $('#modal-detail-user').addClass('hidden');
+    }
 
     function openCreateUserModal() {
         $('#modal-create-user').removeClass('hidden');
@@ -455,7 +621,20 @@
         }
     }
 
-    function confirmDeleteUser(userId, userName) {
+    function confirmDeleteUser(userId, userName, isSelf = false) {
+        if (isSelf) {
+            Swal.fire({
+                title: 'Akses Ditolak!',
+                text: 'Anda tidak dapat menghapus akun Anda sendiri yang sedang aktif digunakan!',
+                icon: 'error',
+                confirmButtonColor: '#0284c7',
+                customClass: {
+                    popup: 'rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800'
+                }
+            });
+            return;
+        }
+
         Swal.fire({
             title: 'Hapus User ini?',
             text: "User \"" + userName + "\" akan dihapus permanen dari sistem!",
