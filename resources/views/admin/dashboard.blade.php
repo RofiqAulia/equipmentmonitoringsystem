@@ -383,7 +383,7 @@
                     {
                         extend: 'print',
                         text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
-                        title: 'Laporan Inventaris Gudang System',
+                        title: 'Laporan Inventaris Gudang',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6,]
                         }
