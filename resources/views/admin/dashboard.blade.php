@@ -385,21 +385,21 @@
                         text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
                         title: '',
                         messageTop: `
-                            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #0f172a; padding-bottom: 12px; margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
                                 <div>
                                     <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo" style="max-height: 70px; width: auto; object-fit: contain;">
                                 </div>
-                                <div style="text-align: right; font-size: 11px; color: #334155;">
-                                    <div style="margin-top: 8px; font-weight: 700; font-size: 12px; color: #0f172a;">Malang, {{ now()->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}</div>
+                                <div style="text-align: right; font-weight: 700; font-size: 12px; color: #0f172a;">
+                                    Malang, {{ now()->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}
                                 </div>
                             </div>
                         `,
                         messageBottom: `
-                            <div style="margin-top: 35px; display: flex; justify-content: space-between; font-size: 11px; color: #0f172a;">
+                            <div style="margin-top: 35px; display: flex; justify-content: flex-end; font-size: 11px; color: #0f172a;">
                                 <div style="text-align: center; width: 200px;">
                                     <div>Disetujui oleh,</div>
                                     <div style="height: 55px;"></div>
-                                    <div style="font-weight: bold; text-decoration: underline;">{{ auth()->user()->name ?? 'Supervisor' }}</div>
+                                    <div style="font-weight: bold;">{{ auth()->user()->name ?? 'Supervisor' }}</div>
                                     <div style="font-size: 10px; color: #64748b;">Supervisor Gudang</div>
                                 </div>
                             </div>
