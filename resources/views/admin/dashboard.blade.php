@@ -384,7 +384,8 @@
                         extend: 'print',
                         text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
                         title: 'Laporan Inventaris Gudang',
-                        messageTop: 'Tanggal & Waktu Cetak: {{ now()->setTimezone("Asia/Jakarta")->translatedFormat("d F Y, H:i") }} WIB | Oleh: {{ auth()->user()->name ?? "Administrator" }}',
+                        messageTop: '<img src="{{ asset("logo/LogoMieGacoan.png") }}" alt="Logo" class="w-24 h-24">',
+                        messageBottom: 'Tanggal & Waktu Cetak: {{ now()->setTimezone("Asia/Jakarta")->translatedFormat("d F Y, H:i") }} WIB | Oleh: {{ auth()->user()->name ?? "Supervisor" }}',
                         exportOptions: {
                             columns: [1, 2, 3, 4, 5, 6]
                         }
