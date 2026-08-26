@@ -43,6 +43,11 @@
                     </a>
                 @endif
             </form>
+
+            <!-- Cetak Laporan Button -->
+            <a href="{{ route('admin.stock.print', ['status' => request('status'), 'search' => request('search'), 'auto_print' => 1]) }}" target="_blank" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center gap-1.5" title="Cetak Laporan Inventaris Gudang">
+                <i class="fa-solid fa-print"></i> Cetak Laporan
+            </a>
         </div>
     </div>
 

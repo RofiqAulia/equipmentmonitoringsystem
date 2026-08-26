@@ -124,4 +124,52 @@ class AdminStockController extends Controller
             'pendingRequisitions' => $pendingRequisitions,
         ]);
     }
+
+    /**
+     * Display printable view for Warehouse Inventory Report (Cetak Laporan Inventaris Gudang).
+     */
+    public function printReport(Request $request)
+    {
+        $query = Item::query();
+
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('location_bin', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $statusFilter = $request->input('status');
+            if ($statusFilter === 'out_of_stock') {
+                $query->where('available_stock', '<=', 0);
+            } elseif ($statusFilter === 'low_stock') {
+                $query->where('available_stock', '>', 0)
+                    ->whereColumn('available_stock', '<=', 'minimum_stock');
+            } elseif ($statusFilter === 'in_stock') {
+                $query->whereColumn('available_stock', '>', 'minimum_stock');
+            }
+        }
+
+        $items = $query->orderBy('name', 'asc')->get();
+
+        $summary = [
+            'total_items' => $items->count(),
+            'total_stock' => $items->sum('available_stock'),
+            'in_stock' => $items->filter(fn($i) => $i->available_stock > $i->minimum_stock)->count(),
+            'low_stock' => $items->filter(fn($i) => $i->available_stock > 0 && $i->available_stock <= $i->minimum_stock)->count(),
+            'out_of_stock' => $items->filter(fn($i) => $i->available_stock <= 0)->count(),
+        ];
+
+        return view('admin.reports.print_inventory', [
+            'items' => $items,
+            'summary' => $summary,
+            'filterStatus' => $request->input('status', 'all'),
+            'printedAt' => now()->translatedFormat('d F Y, H:i') . ' WIB',
+            'printedBy' => auth()->user()->name ?? 'Administrator',
+        ]);
+    }
 }
+

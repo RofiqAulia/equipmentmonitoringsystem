@@ -73,4 +73,8 @@ Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     
     // Deteksi Barang Menipis (Low Stock Detector)
     Route::get('/admin/low-stock', [AdminStockController::class, 'lowStockDetector'])->name('admin.low-stock');
+
+    // Cetak Laporan Inventaris Gudang
+    Route::get('/admin/stock/print', [AdminStockController::class, 'printReport'])->name('admin.stock.print');
 });
+
