@@ -204,7 +204,7 @@
                 <div>
                     <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">Total Pengguna</div>
                     <div class="text-3xl font-black text-slate-900 dark:text-white mt-1">{{ $totalUsers ?? $system_health['total_users'] ?? 0 }}</div>
-                    <div class="text-[10px] text-cyan-600 dark:text-cyan-400 font-bold mt-0.5">{{ $adminsCount ?? $system_health['total_admins'] ?? 0 }} Admin / {{ $operatorsCount ?? $system_health['active_operators'] ?? 0 }} Operator</div>
+                    <div class="text-[10px] text-cyan-600 dark:text-cyan-400 font-bold mt-0.5">{{ $adminsCount ?? $system_health['total_admins'] ?? 0 }} Admin / {{ $spvsCount ?? $supervisorsCount ?? $system_health['total_spvs'] ?? 0 }} SPV</div>
                 </div>
                 <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-xl">
                     <i class="fa-solid fa-users"></i>
