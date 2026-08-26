@@ -11,7 +11,7 @@
         <!-- Server Filter & Interactive Grouping Controls -->
         <div class="flex flex-wrap items-center gap-3">
             <!-- Dynamic Grouping Dropdown -->
-            <div class="flex items-center space-x-2">
+            <!-- <div class="flex items-center space-x-2">
                 <label class="text-xs font-bold text-slate-600 dark:text-slate-400 flex items-center">
                     <i class="fa-solid fa-layer-group text-cyan-500 mr-1.5"></i> Grouping:
                 </label>
@@ -20,7 +20,7 @@
                     <option value="3">Group per Lokasi Gudang/Rak</option>
                     <option value="6">Group per Status Stok</option>
                 </select>
-            </div>
+            </div> -->
 
             <form action="{{ route('admin.dashboard') }}" method="GET" class="flex flex-wrap items-center gap-2">
                 <select name="status" onchange="this.form.submit()" class="px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
