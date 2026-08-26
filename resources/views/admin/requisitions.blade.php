@@ -154,13 +154,13 @@
                             <td class="px-4 py-3 text-center whitespace-nowrap">
                                 @if($req->status === 'pending')
                                     <div class="flex items-center justify-center space-x-1.5">
-                                        <form action="{{ route('admin.requisitions.update-status', $req->id) }}" method="POST" class="inline" onsubmit="return confirmAction(this, 'menyetujui');">
+                                        <form action="{{ route('admin.requisitions.update-status', $req->id) }}" method="POST" class="inline" onsubmit="return confirmAction(this, 'menyetujui', 'approved');">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="approved">
                                             <button type="submit" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-[10px] font-bold transition shadow-sm">Setujui</button>
                                         </form>
-                                        <form action="{{ route('admin.requisitions.update-status', $req->id) }}" method="POST" class="inline" onsubmit="return confirmAction(this, 'menolak');">
+                                        <form action="{{ route('admin.requisitions.update-status', $req->id) }}" method="POST" class="inline" onsubmit="return confirmAction(this, 'menolak', 'rejected');">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="status" value="rejected">
@@ -168,7 +168,7 @@
                                         </form>
                                     </div>
                                 @elseif($req->status === 'approved')
-                                    <form action="{{ route('admin.requisitions.update-status', $req->id) }}" method="POST" class="inline" onsubmit="return confirmAction(this, 'menyelesaikan restock');">
+                                    <form action="{{ route('admin.requisitions.update-status', $req->id) }}" method="POST" class="inline" onsubmit="return confirmAction(this, 'menyelesaikan restock', 'completed');">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="completed">
@@ -262,6 +262,7 @@
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     $(document).ready(function() {
         if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
@@ -297,21 +298,51 @@
         }
     });
 
-    function confirmAction(form, actionText) {
-        if (typeof showConfirm === 'function') {
-            showConfirm(
-                'Konfirmasi Tindakan',
-                `Apakah Anda yakin ingin <strong>${actionText}</strong> pengajuan barang ini?`,
-                function() { form.submit(); },
-                'Ya, Proses'
-            );
-        } else {
-            if (confirm(`Apakah Anda yakin ingin ${actionText} pengajuan barang ini?`)) {
-                form.submit();
-            }
+    window.confirmAction = function(form, actionText, actionType = 'default') {
+        let title = 'Konfirmasi Tindakan';
+        let icon = 'question';
+        let confirmBtnColor = '#0284c7';
+        let confirmBtnText = 'Ya, Proses';
+
+        if (actionType === 'approved') {
+            title = 'Setujui Pengajuan Barang?';
+            icon = 'question';
+            confirmBtnColor = '#0284c7';
+            confirmBtnText = '<i class="fa-solid fa-thumbs-up mr-1"></i> Ya, Setujui';
+        } else if (actionType === 'rejected') {
+            title = 'Tolak Pengajuan Barang?';
+            icon = 'warning';
+            confirmBtnColor = '#e11d48';
+            confirmBtnText = '<i class="fa-solid fa-ban mr-1"></i> Ya, Tolak';
+        } else if (actionType === 'completed') {
+            title = 'Selesaikan & Tambah Stok?';
+            icon = 'success';
+            confirmBtnColor = '#10b981';
+            confirmBtnText = '<i class="fa-solid fa-circle-check mr-1"></i> Ya, Tandai Restocked';
         }
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                title: title,
+                html: `Apakah Anda yakin ingin <strong>${actionText}</strong> pengajuan barang ini?`,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonText: confirmBtnText,
+                cancelButtonText: 'Batal',
+                confirmButtonColor: confirmBtnColor,
+                cancelButtonColor: '#64748b',
+                customClass: {
+                    popup: 'swal2-popup font-sans rounded-3xl border border-slate-200 dark:border-slate-800'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+
         return false;
-    }
+    };
 
     function toggleRequisitionModal() {
         const modal = document.getElementById('modal-requisition');

@@ -159,15 +159,16 @@
                             </td>
                             <td class="px-4 py-3 text-center font-bold text-rose-500 text-xs" data-order="{{ $deficit }}">
                                 -{{ $deficit }} unit
-                            </td>
-                            <td class="px-4 py-3 text-center whitespace-nowrap">
+                                                         <td class="px-4 py-3 text-center whitespace-nowrap">
                                 <div class="flex items-center justify-center space-x-1.5">
                                     <a href="{{ route('admin.stock.input', ['item_id' => $item->id]) }}" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl text-[10px] transition shadow-sm flex items-center">
                                         <i class="fa-solid fa-plus mr-1"></i> Restock
                                     </a>
-                                    <a href="{{ route('admin.requisitions.index', ['item_id' => $item->id]) }}" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-[10px] transition shadow-sm flex items-center">
+                                    <button type="button" 
+                                            onclick="openQuickRequisitionModal({{ json_encode(['id' => $item->id, 'name' => $item->name, 'sku' => $item->sku, 'available_stock' => $item->available_stock]) }}, {{ $deficit }})"
+                                            class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-xl text-[10px] transition shadow-sm flex items-center">
                                         <i class="fa-solid fa-paper-plane mr-1"></i> Ajukan
-                                    </a>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -184,11 +185,22 @@
         </div>
     </div>
 </div>
+
+<!-- Hidden Quick Requisition Form -->
+<form id="quick-requisition-form" action="{{ route('admin.requisitions.store') }}" method="POST" class="hidden">
+    @csrf
+    <input type="hidden" name="item_id" id="quick_item_id">
+    <input type="hidden" name="item_name" id="quick_item_name">
+    <input type="hidden" name="sku" id="quick_sku">
+    <input type="hidden" name="quantity_requested" id="quick_qty">
+    <input type="hidden" name="reason" id="quick_reason">
+</form>
 @endsection
 
 @push('scripts')
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
             if ($('#lowStockTable').length) {
@@ -208,6 +220,78 @@
                     responsive: true
                 });
             }
+
+            @if($outOfStockItems->count() > 0)
+                setTimeout(() => {
+                    Swal.fire({
+                        title: 'Peringatan Stok Habis!',
+                        html: 'Terdapat <strong class="text-rose-500 dark:text-rose-400 font-black">{{ $outOfStockItems->count() }} SKU barang</strong> dalam kondisi <strong>Stok 0 (Habis)</strong>.<br><span class="text-xs text-slate-500 dark:text-slate-400 mt-1 block">Segera lakukan restock atau klik tombol "Ajukan" untuk membuat pengadaan barang.</span>',
+                        icon: 'warning',
+                        confirmButtonText: 'Mengerti & Review Data',
+                        confirmButtonColor: '#e11d48',
+                        customClass: {
+                            popup: 'swal2-popup font-sans rounded-3xl border border-slate-200 dark:border-slate-800'
+                        }
+                    });
+                }, 400);
+            @endif
         });
+
+        function openQuickRequisitionModal(item, deficitQty) {
+            const recommendedQty = deficitQty > 0 ? deficitQty : 10;
+            Swal.fire({
+                title: 'Ajukan Pengadaan Barang',
+                html: `
+                    <div class="text-left space-y-3 font-sans text-xs">
+                        <div class="p-3 bg-amber-500/10 border border-amber-500/30 rounded-2xl">
+                            <div class="font-black text-slate-900 dark:text-white text-sm">${item.name}</div>
+                            <div class="text-[11px] font-mono text-cyan-600 dark:text-cyan-400 mt-0.5">SKU: ${item.sku || '-'}</div>
+                            <div class="text-[11px] text-amber-600 dark:text-amber-400 font-extrabold mt-1">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Rekomendasi Restock Defisit: ${recommendedQty} unit
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Jumlah Unit Diajukan *</label>
+                            <input type="number" id="swal_req_qty" min="1" value="${recommendedQty}" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">Alasan / Catatan Pengajuan *</label>
+                            <textarea id="swal_req_reason" rows="3" placeholder="Contoh: Stok barang di gudang menipis/habis, butuh pengadaan restock segera..." class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500"></textarea>
+                        </div>
+                    </div>
+                `,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: '<i class="fa-solid fa-paper-plane mr-1"></i> Kirim Pengajuan',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#0284c7',
+                cancelButtonColor: '#64748b',
+                customClass: {
+                    popup: 'swal2-popup font-sans rounded-3xl border border-slate-200 dark:border-slate-800'
+                },
+                preConfirm: () => {
+                    const qty = document.getElementById('swal_req_qty').value;
+                    const reason = document.getElementById('swal_req_reason').value;
+                    if (!qty || qty < 1) {
+                        Swal.showValidationMessage('Jumlah unit diajukan minimal 1!');
+                        return false;
+                    }
+                    if (!reason || !reason.trim()) {
+                        Swal.showValidationMessage('Alasan pengajuan wajib diisi!');
+                        return false;
+                    }
+                    return { qty: parseInt(qty), reason: reason.trim() };
+                }
+            }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    document.getElementById('quick_item_id').value = item.id;
+                    document.getElementById('quick_item_name').value = item.name;
+                    document.getElementById('quick_sku').value = item.sku || '';
+                    document.getElementById('quick_qty').value = result.value.qty;
+                    document.getElementById('quick_reason').value = result.value.reason;
+                    document.getElementById('quick-requisition-form').submit();
+                }
+            });
+        }
     </script>
 @endpush
