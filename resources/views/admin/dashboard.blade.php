@@ -368,7 +368,10 @@
                                 return skuEl.text().trim();
                             }
                         }
-                        return data;
+                        if (node) {
+                            return $(node).text().trim().replace(/\s+/g, ' ');
+                        }
+                        return typeof data === 'string' ? data.replace(/<[^>]*>/g, '').trim() : data;
                     },
                     header: function (data, column) {
                         if (column === 0) {
