@@ -25,10 +25,12 @@
 
         <!-- Dropdown Select Barang Langsung -->
         <div>
-            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Atau Pilih Langsung Barang dari Database Gudang:</label>
-            <select onchange="if(this.value) autoScanPayload(this.value)" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition">
-                <option value="">-- Pilih Barang untuk Pengambilan --</option>
-                @foreach(\App\Models\Item::all() as $selectItem)
+            <label for="select-item-dropdown" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <i class="fa-solid fa-magnifying-glass text-cyan-600 dark:text-cyan-400 mr-1"></i> Cari & Pilih Barang dari Database Gudang:
+            </label>
+            <select id="select-item-dropdown" class="select2-searchable w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition">
+                <option value="">-- Cari atau Pilih Barang untuk Pengambilan --</option>
+                @foreach(\App\Models\Item::orderBy('name', 'asc')->get() as $selectItem)
                     <option value="{{ $selectItem->qr_code_payload }}">
                         [{{ $selectItem->sku }}] {{ $selectItem->name }} (Stok: {{ $selectItem->available_stock }} unit)
                     </option>

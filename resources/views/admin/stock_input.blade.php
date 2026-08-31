@@ -46,8 +46,8 @@
                 <div id="section-existing" class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Pilih Barang yang Akan Di-Restock *</label>
-                        <select name="item_id" id="item_id_select" onchange="onSelectItem(this)" class="w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500">
-                            <option value="">-- Pilih Barang dari Database Gudang --</option>
+                        <select name="item_id" id="item_id_select" onchange="onSelectItem(this)" class="select2-searchable w-full px-4 py-3 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500">
+                            <option value="">-- Cari atau Pilih Barang dari Database Gudang --</option>
                             @foreach($items as $item)
                                 <option value="{{ $item->id }}" 
                                         data-sku="{{ $item->sku }}"
@@ -308,6 +308,16 @@
             onSelectItem(select);
         } else {
             updatePreviewState();
+        }
+
+        if (typeof $.fn.select2 !== 'undefined' && $('#item_id_select').length) {
+            $('#item_id_select').select2({
+                placeholder: '-- Cari atau Pilih Barang dari Database Gudang --',
+                allowClear: true,
+                width: '100%'
+            }).on('change select2:select', function() {
+                onSelectItem(this);
+            });
         }
     });
 </script>

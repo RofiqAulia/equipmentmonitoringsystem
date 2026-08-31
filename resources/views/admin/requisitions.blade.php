@@ -203,8 +203,8 @@
 
             <div>
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Pilih dari Stok Menipis (Opsional)</label>
-                <select name="item_id" id="req_item_id" onchange="onSelectReqItem(this)" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
-                    <option value="">-- Pilih Barang Menipis / Manual --</option>
+                <select name="item_id" id="req_item_id" onchange="onSelectReqItem(this)" class="select2-searchable w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
+                    <option value="">-- Cari atau Pilih Barang Menipis / Manual --</option>
                     @foreach($lowStockItems as $lItem)
                         @php
                             $deficit = max(1, $lItem->minimum_stock - $lItem->available_stock);
@@ -297,6 +297,17 @@
                 const reasonField = document.getElementById('req_reason');
                 if (reasonField) reasonField.focus();
             }, 300);
+        }
+
+        if (typeof $.fn.select2 !== 'undefined' && $('#req_item_id').length) {
+            $('#req_item_id').select2({
+                placeholder: '-- Cari atau Pilih Barang Menipis / Manual --',
+                allowClear: true,
+                width: '100%',
+                dropdownParent: $('#modal-requisition')
+            }).on('change select2:select', function() {
+                onSelectReqItem(this);
+            });
         }
     });
 

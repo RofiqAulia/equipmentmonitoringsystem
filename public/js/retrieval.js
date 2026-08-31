@@ -431,3 +431,34 @@ async function saveSelectedSpv() {
         showToast('Gagal Menyimpan SPV', 'Terjadi kesalahan sistem.', 'error');
     }
 }
+
+/* Initialize Searchable Select2 Dropdowns */
+$(document).ready(function() {
+    if (typeof $.fn.select2 !== 'undefined') {
+        const $itemSelect = $('#select-item-dropdown');
+        if ($itemSelect.length) {
+            $itemSelect.select2({
+                placeholder: '-- Cari atau Pilih Barang untuk Pengambilan --',
+                allowClear: true,
+                width: '100%'
+            });
+
+            $itemSelect.on('change select2:select', function(e) {
+                const val = $(this).val();
+                if (val) {
+                    autoScanPayload(val);
+                }
+            });
+        }
+
+        const $spvSelect = $('#spv-select-option');
+        if ($spvSelect.length) {
+            $spvSelect.select2({
+                placeholder: '-- Pilih SPV Penanggung Jawab --',
+                width: '100%',
+                dropdownParent: $('#spv-modal')
+            });
+        }
+    }
+});
+
