@@ -10,7 +10,7 @@
 
         <!-- Server Filter & Interactive Controls -->
         <div class="flex flex-wrap items-center gap-3">
-            <form action="{{ route('admin.dashboard') }}" method="GET" class="flex flex-wrap items-center gap-2">
+            <form action="{{ request()->url() }}" method="GET" class="flex flex-wrap items-center gap-2">
                 <select name="status" onchange="this.form.submit()" class="px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
                     <option value="">Semua Status Stok</option>
                     <option value="in_stock" {{ request('status') == 'in_stock' ? 'selected' : '' }}>In Stock (Aman)</option>
@@ -19,7 +19,7 @@
                 </select>
 
                 @if(request('search') || request('status'))
-                    <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition" title="Reset Filter">
+                    <a href="{{ request()->url() }}" class="px-3 py-2 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition" title="Reset Filter">
                         <i class="fa-solid fa-xmark mr-1"></i> Reset
                     </a>
                 @endif

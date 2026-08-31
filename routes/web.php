@@ -58,6 +58,7 @@ use App\Http\Controllers\UserController;
 // Admin Dashboard & Management Routes
 Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/master-data', [AdminDashboardController::class, 'masterData'])->name('admin.master-data');
     
     // User Management (Manajemen User & Akun System)
     Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users.index');

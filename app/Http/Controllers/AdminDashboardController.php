@@ -159,4 +159,50 @@ class AdminDashboardController extends Controller
 
         return view('admin.dashboard', $data);
     }
+
+    /**
+     * GET /admin/master-data
+     * Display Master Data Inventaris Gudang.
+     */
+    public function masterData(Request $request)
+    {
+        $query = Item::query();
+
+        if ($request->filled('search')) {
+            $search = trim($request->input('search'));
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('sku', 'like', "%{$search}%")
+                    ->orWhere('location_bin', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('status')) {
+            $statusFilter = $request->input('status');
+            if ($statusFilter === 'out_of_stock') {
+                $query->where('available_stock', '<=', 0);
+            } elseif ($statusFilter === 'low_stock') {
+                $query->where('available_stock', '>', 0)
+                    ->whereColumn('available_stock', '<=', 'minimum_stock');
+            } elseif ($statusFilter === 'in_stock') {
+                $query->whereColumn('available_stock', '>', 'minimum_stock');
+            }
+        }
+
+        $items = $query->latest('updated_at')->get();
+
+        $itemsCollection = Item::all();
+        $totalItems = $itemsCollection->count();
+        $inStockCount = $itemsCollection->filter(function($i) { return $i->available_stock > $i->minimum_stock; })->count();
+        $lowStockCount = $itemsCollection->filter(function($i) { return $i->available_stock > 0 && $i->available_stock <= $i->minimum_stock; })->count();
+        $outOfStockCount = $itemsCollection->filter(function($i) { return $i->available_stock <= 0; })->count();
+
+        return view('admin.master_data', [
+            'items' => $items,
+            'totalItems' => $totalItems,
+            'inStockCount' => $inStockCount,
+            'lowStockCount' => $lowStockCount,
+            'outOfStockCount' => $outOfStockCount,
+        ]);
+    }
 }

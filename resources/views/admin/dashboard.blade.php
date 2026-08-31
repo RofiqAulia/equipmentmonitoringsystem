@@ -258,45 +258,6 @@
             <span class="text-[11px] font-semibold text-slate-400">Real-time Data Chart</span>
         </div>
 
-        <!-- Summary KPI Cards Row -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="{{ route('admin.dashboard', ['status' => 'in_stock']) }}" class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500 hover:border-emerald-500 transition group block">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">In Stock (Aman)</div>
-                        <div class="text-2xl font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-emerald-500 transition">{{ $inStockCount ?? $inventory_summary['in_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
-                    </div>
-                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base">
-                        <i class="fa-solid fa-circle-check"></i>
-                    </div>
-                </div>
-            </a>
-
-            <a href="{{ route('admin.low-stock') }}" class="glass-card p-4 rounded-2xl border-l-4 border-l-amber-500 hover:border-amber-500 transition group block">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Low Stock (Tipis)</div>
-                        <div class="text-2xl font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-amber-500 transition">{{ $lowStockCount ?? $inventory_summary['low_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
-                    </div>
-                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-                </div>
-            </a>
-
-            <a href="{{ route('admin.low-stock') }}" class="glass-card p-4 rounded-2xl border-l-4 border-l-rose-500 hover:border-rose-500 transition group block">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="text-[11px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">Out of Stock (Habis)</div>
-                        <div class="text-2xl font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-rose-500 transition">{{ $outOfStockCount ?? $inventory_summary['out_of_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
-                    </div>
-                    <div class="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-base">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    </div>
-                </div>
-            </a>
-        </div>
-
         <!-- Dynamic Charts Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Chart 1: Stock Status Distribution (Donut / Pie Chart) -->
@@ -384,9 +345,6 @@
 
     <!-- DataTables Table 1: Activity Log Table -->
     @include('admin.partials.activity_log')
-
-    <!-- DataTables Table 2: Inventory Master Table -->
-    @include('admin.partials.inventory_table')
 </div>
 
 <!-- Modal Terbitkan QR Code untuk Operator -->
@@ -443,108 +401,6 @@
                     activityTable.rowGroup().dataSrc(colIdx).draw();
                 } else {
                     activityTable.rowGroup().disable().draw();
-                }
-            });
-
-            // 2. Inventory Master Table with Dynamic Row Grouping & Column ASC/DESC Filtering
-            var inventoryExportOptions = {
-                columns: [1, 2, 3, 4, 5, 6],
-                format: {
-                    body: function (data, row, column, node) {
-                        if (column === 0 && node) {
-                            var skuEl = $(node).find('.item-sku-text');
-                            if (skuEl.length) {
-                                return skuEl.text().trim();
-                            }
-                        }
-                        if (node) {
-                            return $(node).text().trim().replace(/\s+/g, ' ');
-                        }
-                        return typeof data === 'string' ? data.replace(/<[^>]*>/g, '').trim() : data;
-                    },
-                    header: function (data, column) {
-                        if (column === 0) {
-                            return 'Kode SKU';
-                        }
-                        return data;
-                    }
-                }
-            };
-
-            var inventoryTable = $('#inventoryTable').DataTable({
-                pageLength: -1,
-                lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
-                order: [[1, 'asc']], // Default Sort by SKU ASC
-                columnDefs: [
-                    { orderable: false, targets: [0, 7, 8] }, // Photo, Aksi QR & Aksi columns no sort
-                    { orderable: true, targets: [1, 2, 3, 4, 5, 6] }
-                ],
-                dom: '<"flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 p-1"lBf>rt<"flex flex-col md:flex-row md:items-center justify-between gap-3 mt-4 p-1"ip>',
-                buttons: [
-                    {
-                        extend: 'csvHtml5',
-                        text: '<i class="fa-solid fa-file-csv mr-1.5"></i> Ekspor CSV',
-                        title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10),
-                        exportOptions: inventoryExportOptions
-                    },
-                    {
-                        extend: 'excelHtml5',
-                        text: '<i class="fa-solid fa-file-excel mr-1.5"></i> Ekspor Excel',
-                        title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10),
-                        exportOptions: inventoryExportOptions
-                    },
-                    {
-                        extend: 'print',
-                        text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
-                        title: '',
-                        messageTop: `
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
-                                <div>
-                                    <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo" style="max-height: 70px; width: auto; object-fit: contain;">
-                                </div>
-                                <div style="text-align: right; font-weight: 700; font-size: 12px; color: #0f172a;">
-                                    Malang, {{ now()->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}
-                                </div>
-                            </div>
-                        `,
-                        messageBottom: `
-                            <div style="margin-top: 35px; display: flex; justify-content: flex-end; font-size: 11px; color: #0f172a;">
-                                <div style="text-align: center; width: 200px;">
-                                    <div>Disetujui oleh,</div>
-                                    <div style="height: 55px;"></div>
-                                    <div style="font-weight: bold;">{{ auth()->user()->name ?? 'Supervisor' }}</div>
-                                    <div style="font-size: 10px; color: #64748b;">Supervisor Gudang</div>
-                                </div>
-                            </div>
-                        `,
-                        exportOptions: inventoryExportOptions
-                    }
-                ],
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Cari SKU, Nama Barang, atau Rak...",
-                    lengthMenu: "Tampilkan _MENU_ data",
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data barang",
-                    infoEmpty: "Menampilkan 0 data",
-                    infoFiltered: "(disaring dari _MAX_ total data barang)",
-                    zeroRecords: "Tidak ada data barang yang ditemukan",
-                    paginate: {
-                        first: "Pertama",
-                        previous: "« Prev",
-                        next: "Next »",
-                        last: "Terakhir"
-                    }
-                },
-                responsive: true
-            });
-
-            // Inventory Grouping Handler
-            $('#group-inventory-select').on('change', function() {
-                var colIdx = parseInt($(this).val());
-                if (colIdx >= 0) {
-                    inventoryTable.rowGroup().dataSrc(colIdx).draw();
-                } else {
-                    inventoryTable.rowGroup().disable().draw();
                 }
             });
         });

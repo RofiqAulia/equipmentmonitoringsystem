@@ -148,6 +148,15 @@
                                     <i class="fa-solid fa-chevron-right text-[10px] opacity-70"></i>
                                 </a>
 
+                                <!-- 2. Master Data Inventaris -->
+                                <a href="{{ route('admin.master-data') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.master-data') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fa-solid fa-boxes-stacked text-sm"></i>
+                                        <span>Master Data</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right text-[10px] opacity-70"></i>
+                                </a>
+
                                 <!-- 2. Input / Restock Stok -->
                                 <a href="{{ route('admin.stock.input') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.stock.input') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
                                     <div class="flex items-center space-x-3">
