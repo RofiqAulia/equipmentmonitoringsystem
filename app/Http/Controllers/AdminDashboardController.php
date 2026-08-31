@@ -90,6 +90,45 @@ class AdminDashboardController extends Controller
             $items = $query->latest('updated_at')->paginate($perPage > 0 ? $perPage : 10)->withQueryString();
         }
 
+        // 3. Retrieval Categorization (4 Standard Preset Types + 1 Custom / Lainnya)
+        $allRetrievals = RetrievalLog::all();
+        $retrievalCategoryCounts = [
+            'rutin' => 0,
+            'maintenance' => 0,
+            'refill' => 0,
+            'rusak' => 0,
+            'lainnya' => 0,
+        ];
+        $retrievalCategoryQty = [
+            'rutin' => 0,
+            'maintenance' => 0,
+            'refill' => 0,
+            'rusak' => 0,
+            'lainnya' => 0,
+        ];
+
+        foreach ($allRetrievals as $log) {
+            $note = strtolower(trim($log->notes ?? ''));
+            $qty = (int) $log->quantity_picked;
+
+            if (str_contains($note, 'rutin') || str_contains($note, 'operasional')) {
+                $retrievalCategoryCounts['rutin']++;
+                $retrievalCategoryQty['rutin'] += $qty;
+            } elseif (str_contains($note, 'perbaikan') || str_contains($note, 'maintenance') || str_contains($note, 'repair')) {
+                $retrievalCategoryCounts['maintenance']++;
+                $retrievalCategoryQty['maintenance'] += $qty;
+            } elseif (str_contains($note, 'refill') || str_contains($note, 'pengisian')) {
+                $retrievalCategoryCounts['refill']++;
+                $retrievalCategoryQty['refill'] += $qty;
+            } elseif (str_contains($note, 'rusak') || str_contains($note, 'defect')) {
+                $retrievalCategoryCounts['rusak']++;
+                $retrievalCategoryQty['rusak'] += $qty;
+            } else {
+                $retrievalCategoryCounts['lainnya']++;
+                $retrievalCategoryQty['lainnya'] += $qty;
+            }
+        }
+
         $data = [
             'totalUsers' => $totalUsers,
             'adminsCount' => $adminsCount,
@@ -105,6 +144,8 @@ class AdminDashboardController extends Controller
             'recentRetrievals' => $recentRetrievals,
             'system_health' => $systemHealth,
             'inventory_summary' => $inventorySummary,
+            'retrievalCategoryCounts' => $retrievalCategoryCounts,
+            'retrievalCategoryQty' => $retrievalCategoryQty,
             'activity_logs' => $recentRetrievals,
             'items' => $items,
         ];

@@ -249,50 +249,136 @@
         </div>
     </div>
 
-    <!-- Inventory Summary Section -->
-    <div class="space-y-3">
-        <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center">
-            <i class="fa-solid fa-boxes-stacked text-cyan-500 mr-2"></i> Inventory Summary
-        </h2>
+    <!-- Inventory Analytics & Charts Section -->
+    <div class="space-y-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center">
+                <i class="fa-solid fa-chart-pie text-cyan-500 mr-2"></i> Visualisasi Analytics & Grafik Gudang
+            </h2>
+            <span class="text-[11px] font-semibold text-slate-400">Real-time Data Chart</span>
+        </div>
+
+        <!-- Summary KPI Cards Row -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="{{ route('admin.dashboard', ['status' => 'in_stock']) }}" class="glass-card p-5 rounded-2xl border-l-4 border-l-emerald-500 hover:border-emerald-500 transition group block">
+            <a href="{{ route('admin.dashboard', ['status' => 'in_stock']) }}" class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500 hover:border-emerald-500 transition group block">
                 <div class="flex items-center justify-between">
                     <div>
-                        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">In Stock (Aman)</div>
-                        <div class="text-3xl font-black text-slate-900 dark:text-white mt-1 group-hover:text-emerald-500 transition">{{ $inStockCount ?? $inventory_summary['in_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Klik untuk memfilter barang stok cukup</p>
+                        <div class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">In Stock (Aman)</div>
+                        <div class="text-2xl font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-emerald-500 transition">{{ $inStockCount ?? $inventory_summary['in_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
                     </div>
-                    <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-base">
                         <i class="fa-solid fa-circle-check"></i>
                     </div>
                 </div>
             </a>
 
-            <a href="{{ route('admin.low-stock') }}" class="glass-card p-5 rounded-2xl border-l-4 border-l-amber-500 hover:border-amber-500 transition group block">
+            <a href="{{ route('admin.low-stock') }}" class="glass-card p-4 rounded-2xl border-l-4 border-l-amber-500 hover:border-amber-500 transition group block">
                 <div class="flex items-center justify-between">
                     <div>
-                        <div class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Low Stock (Peringatan)</div>
-                        <div class="text-3xl font-black text-slate-900 dark:text-white mt-1 group-hover:text-amber-500 transition">{{ $lowStockCount ?? $inventory_summary['low_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Klik untuk memfilter barang mendekati batas minimum</p>
+                        <div class="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Low Stock (Tipis)</div>
+                        <div class="text-2xl font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-amber-500 transition">{{ $lowStockCount ?? $inventory_summary['low_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
                     </div>
-                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center text-base">
                         <i class="fa-solid fa-triangle-exclamation"></i>
                     </div>
                 </div>
             </a>
 
-            <a href="{{ route('admin.low-stock') }}" class="glass-card p-5 rounded-2xl border-l-4 border-l-rose-500 hover:border-rose-500 transition group block">
+            <a href="{{ route('admin.low-stock') }}" class="glass-card p-4 rounded-2xl border-l-4 border-l-rose-500 hover:border-rose-500 transition group block">
                 <div class="flex items-center justify-between">
                     <div>
-                        <div class="text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">Out of Stock (Kritis)</div>
-                        <div class="text-3xl font-black text-slate-900 dark:text-white mt-1 group-hover:text-rose-500 transition">{{ $outOfStockCount ?? $inventory_summary['out_of_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
-                        <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Klik untuk memfilter barang stok habis</p>
+                        <div class="text-[11px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">Out of Stock (Habis)</div>
+                        <div class="text-2xl font-black text-slate-900 dark:text-white mt-0.5 group-hover:text-rose-500 transition">{{ $outOfStockCount ?? $inventory_summary['out_of_stock'] ?? 0 }} <span class="text-xs text-slate-400 font-normal">Item</span></div>
                     </div>
-                    <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-lg">
+                    <div class="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center text-base">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </div>
                 </div>
             </a>
+        </div>
+
+        <!-- Dynamic Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Chart 1: Stock Status Distribution (Donut / Pie Chart) -->
+            <div class="glass-panel p-6 rounded-3xl space-y-4 flex flex-col justify-between">
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center">
+                            <i class="fa-solid fa-chart-pie text-emerald-500 mr-2"></i> Diagram Ratio Status Stok Barang
+                        </h3>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Proporsi item Aman, Tipis, dan Habis dalam gudang</p>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <button type="button" onclick="toggleStockChartType()" class="px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold text-[11px] rounded-lg border border-slate-300 dark:border-slate-700 transition flex items-center">
+                            <i class="fa-solid fa-rotate mr-1 text-xs"></i> Switch Pie/Doughnut
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-center min-h-[240px] max-h-[280px]">
+                    <canvas id="stockStatusChart"></canvas>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 pt-2 border-t border-slate-200 dark:border-slate-800 text-center">
+                    <div class="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                        <div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase">Stok Aman</div>
+                        <div class="text-sm font-black text-slate-900 dark:text-white">{{ $inStockCount }} Item</div>
+                    </div>
+                    <div class="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                        <div class="text-[10px] font-bold text-amber-600 dark:text-amber-400 uppercase">Stok Tipis</div>
+                        <div class="text-sm font-black text-slate-900 dark:text-white">{{ $lowStockCount }} Item</div>
+                    </div>
+                    <div class="p-2 rounded-xl bg-rose-500/10 border border-rose-500/20">
+                        <div class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase">Stok Habis</div>
+                        <div class="text-sm font-black text-slate-900 dark:text-white">{{ $outOfStockCount }} Item</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart 2: Retrieval Types Categorization (Bar Chart / Pie Chart) -->
+            <div class="glass-panel p-6 rounded-3xl space-y-4 flex flex-col justify-between">
+                <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center">
+                            <i class="fa-solid fa-chart-column text-cyan-500 mr-2"></i> Diagram Jenis Pengambilan Barang
+                        </h3>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">4 Kategori utama + 1 Custom (Lainnya)</p>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <button type="button" onclick="toggleRetrievalChartType()" class="px-2.5 py-1 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-bold text-[11px] rounded-lg border border-cyan-500/30 transition flex items-center">
+                            <i class="fa-solid fa-chart-simple mr-1 text-xs"></i> <span id="retrievalChartToggleLabel">Switch to Pie</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative flex items-center justify-center min-h-[240px] max-h-[280px]">
+                    <canvas id="retrievalCategoryChart"></canvas>
+                </div>
+
+                <!-- Category Breakdown Stats -->
+                <div class="grid grid-cols-5 gap-1.5 pt-2 border-t border-slate-200 dark:border-slate-800 text-center">
+                    <div class="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/20">
+                        <div class="text-[9px] font-bold text-cyan-600 dark:text-cyan-400 truncate">Rutin</div>
+                        <div class="text-xs font-black text-slate-900 dark:text-white mt-0.5">{{ $retrievalCategoryQty['rutin'] ?? 0 }} <span class="text-[9px] font-normal text-slate-400">Unit</span></div>
+                    </div>
+                    <div class="p-1.5 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                        <div class="text-[9px] font-bold text-yellow-600 dark:text-yellow-400 truncate">Repair</div>
+                        <div class="text-xs font-black text-slate-900 dark:text-white mt-0.5">{{ $retrievalCategoryQty['maintenance'] ?? 0 }} <span class="text-[9px] font-normal text-slate-400">Unit</span></div>
+                    </div>
+                    <div class="p-1.5 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                        <div class="text-[9px] font-bold text-blue-600 dark:text-blue-400 truncate">Refill</div>
+                        <div class="text-xs font-black text-slate-900 dark:text-white mt-0.5">{{ $retrievalCategoryQty['refill'] ?? 0 }} <span class="text-[9px] font-normal text-slate-400">Unit</span></div>
+                    </div>
+                    <div class="p-1.5 rounded-lg bg-red-500/10 border border-red-500/20">
+                        <div class="text-[9px] font-bold text-red-600 dark:text-red-400 truncate">Rusak</div>
+                        <div class="text-xs font-black text-slate-900 dark:text-white mt-0.5">{{ $retrievalCategoryQty['rusak'] ?? 0 }} <span class="text-[9px] font-normal text-slate-400">Unit</span></div>
+                    </div>
+                    <div class="p-1.5 rounded-lg bg-purple-500/10 border border-purple-500/20">
+                        <div class="text-[9px] font-bold text-purple-600 dark:text-purple-400 truncate">Lainnya</div>
+                        <div class="text-xs font-black text-slate-900 dark:text-white mt-0.5">{{ $retrievalCategoryQty['lainnya'] ?? 0 }} <span class="text-[9px] font-normal text-slate-400">Unit</span></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -308,6 +394,9 @@
 @endsection
 
 @push('scripts')
+    <!-- Chart.js CDN for Interactive Dashboard Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
     <!-- DataTables Core + Export Extensions + RowGroup -->
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
@@ -510,6 +599,187 @@
                 </html>
             `);
             printWin.document.close();
+        }
+
+        // ==========================================
+        // Interactive Dashboard Visualizations (Chart.js)
+        // ==========================================
+        var stockChartInstance = null;
+        var stockChartType = 'doughnut';
+
+        var retrievalChartInstance = null;
+        var retrievalChartType = 'bar';
+
+        $(document).ready(function() {
+            initStockStatusChart();
+            initRetrievalCategoryChart();
+        });
+
+        // 1. Chart Ratio Status Stok Barang (Pie / Doughnut Chart)
+        function initStockStatusChart() {
+            var ctx = document.getElementById('stockStatusChart');
+            if (!ctx) return;
+
+            var inStock = {{ $inStockCount ?? 0 }};
+            var lowStock = {{ $lowStockCount ?? 0 }};
+            var outOfStock = {{ $outOfStockCount ?? 0 }};
+
+            if (stockChartInstance) {
+                stockChartInstance.destroy();
+            }
+
+            stockChartInstance = new Chart(ctx, {
+                type: stockChartType,
+                data: {
+                    labels: ['Stok Aman (In Stock)', 'Stok Tipis (Low Stock)', 'Stok Habis (Out of Stock)'],
+                    datasets: [{
+                        data: [inStock, lowStock, outOfStock],
+                        backgroundColor: [
+                            '#10b981', // Emerald
+                            '#f59e0b', // Amber
+                            '#f43f5e'  // Rose
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#0f172a',
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#94a3b8',
+                                font: { size: 11, weight: '600' },
+                                padding: 14,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var label = context.label || '';
+                                    var val = context.raw || 0;
+                                    var total = inStock + lowStock + outOfStock;
+                                    var pct = total > 0 ? ((val / total) * 100).toFixed(1) : 0;
+                                    return ' ' + label + ': ' + val + ' item (' + pct + '%)';
+                                }
+                            }
+                        }
+                    },
+                    cutout: stockChartType === 'doughnut' ? '68%' : '0%'
+                }
+            });
+        }
+
+        function toggleStockChartType() {
+            stockChartType = stockChartType === 'doughnut' ? 'pie' : 'doughnut';
+            initStockStatusChart();
+        }
+
+        // 2. Chart Jenis Pengambilan Barang (4 Preset + 1 Custom / Lainnya)
+        function initRetrievalCategoryChart() {
+            var ctx = document.getElementById('retrievalCategoryChart');
+            if (!ctx) return;
+
+            var rutinQty = {{ $retrievalCategoryQty['rutin'] ?? 0 }};
+            var maintQty = {{ $retrievalCategoryQty['maintenance'] ?? 0 }};
+            var refillQty = {{ $retrievalCategoryQty['refill'] ?? 0 }};
+            var rusakQty = {{ $retrievalCategoryQty['rusak'] ?? 0 }};
+            var lainnyaQty = {{ $retrievalCategoryQty['lainnya'] ?? 0 }};
+
+            var rutinCount = {{ $retrievalCategoryCounts['rutin'] ?? 0 }};
+            var maintCount = {{ $retrievalCategoryCounts['maintenance'] ?? 0 }};
+            var refillCount = {{ $retrievalCategoryCounts['refill'] ?? 0 }};
+            var rusakCount = {{ $retrievalCategoryCounts['rusak'] ?? 0 }};
+            var lainnyaCount = {{ $retrievalCategoryCounts['lainnya'] ?? 0 }};
+
+            var categoryLabels = [
+                '🛠️ Rutin Operasional',
+                '⚡ Repair / Maintenance',
+                '📦 Refill Area Kerja',
+                '⚠️ Barang Rusak',
+                '🧩 Lainnya (Custom)'
+            ];
+
+            var bgColors = [
+                '#06b6d4', // Cyan
+                '#eab308', // Yellow
+                '#3b82f6', // Blue
+                '#ef4444', // Red
+                '#a855f7'  // Purple
+            ];
+
+            if (retrievalChartInstance) {
+                retrievalChartInstance.destroy();
+            }
+
+            var isBar = retrievalChartType === 'bar';
+
+            retrievalChartInstance = new Chart(ctx, {
+                type: retrievalChartType,
+                data: {
+                    labels: categoryLabels,
+                    datasets: [{
+                        label: 'Total Unit Barang Diambil',
+                        data: [rutinQty, maintQty, refillQty, rusakQty, lainnyaQty],
+                        backgroundColor: bgColors,
+                        borderRadius: isBar ? 8 : 0,
+                        borderWidth: isBar ? 0 : 2,
+                        borderColor: '#0f172a',
+                        hoverOffset: isBar ? 0 : 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: isBar ? {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8', font: { size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#94a3b8', font: { size: 10, weight: '600' } }
+                        }
+                    } : {},
+                    plugins: {
+                        legend: {
+                            display: !isBar,
+                            position: 'bottom',
+                            labels: {
+                                color: '#94a3b8',
+                                font: { size: 10, weight: '600' },
+                                padding: 10,
+                                usePointStyle: true
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    var idx = context.dataIndex;
+                                    var qty = context.raw || 0;
+                                    var countsMap = [rutinCount, maintCount, refillCount, rusakCount, lainnyaCount];
+                                    var count = countsMap[idx] || 0;
+                                    return ' ' + qty + ' Unit diambil (' + count + ' x Transaksi)';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleRetrievalChartType() {
+            retrievalChartType = retrievalChartType === 'bar' ? 'pie' : 'bar';
+            var btnLabel = document.getElementById('retrievalChartToggleLabel');
+            if (btnLabel) {
+                btnLabel.innerText = retrievalChartType === 'bar' ? 'Switch to Pie' : 'Switch to Bar';
+            }
+            initRetrievalCategoryChart();
         }
     </script>
 @endpush
