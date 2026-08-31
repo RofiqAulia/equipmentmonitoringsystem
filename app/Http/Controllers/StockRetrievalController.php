@@ -76,14 +76,15 @@ class StockRetrievalController extends Controller
             ], 401);
         }
 
-        // Determine supervisor_id from request input or from user's current session setting
+        // Determine supervisor_id from request input, session user, or smart fallback
         $supervisorId = $request->input('supervisor_id') ?? $user->supervisor_id;
 
         if (! $supervisorId) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Silakan pilih Supervisor (SPV) penanggung jawab terlebih dahulu sebelum mengambil barang.',
-            ], 422);
+            if ($user->role === 'admin' || $user->role === 'spv') {
+                $supervisorId = $user->id;
+            } else {
+                $supervisorId = User::whereIn('role', ['spv', 'admin'])->value('id') ?? $user->id;
+            }
         }
 
         $itemId = $request->input('item_id');

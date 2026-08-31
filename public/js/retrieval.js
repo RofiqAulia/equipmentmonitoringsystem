@@ -226,7 +226,8 @@ function closeItemModal() {
     }
 }
 
-function renderItemDetail(item) {
+function renderItemDetail(item, openModal = true) {
+    currentScannedItem = item;
     const emptyState = document.getElementById('empty-state');
     const detailCard = document.getElementById('item-detail-card');
     if (emptyState) emptyState.classList.add('hidden');
@@ -315,8 +316,9 @@ function renderItemDetail(item) {
         }
     }
 
-    // Direct Popup Modal for Immediate User-Friendly Action
-    openItemModal();
+    if (openModal) {
+        openItemModal();
+    }
 
     if (detailCard) {
         detailCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -326,24 +328,56 @@ function renderItemDetail(item) {
 async function handleConfirmRetrieval(e) {
     if (e) e.preventDefault();
 
-    const selectedSupervisorId = window.SELECTED_SPV_ID;
+    let selectedSupervisorId = window.SELECTED_SPV_ID;
+    if (!selectedSupervisorId) {
+        const spvSelect = document.getElementById('spv-select-option');
+        if (spvSelect && spvSelect.value) {
+            selectedSupervisorId = spvSelect.value;
+            window.SELECTED_SPV_ID = selectedSupervisorId;
+        }
+    }
+
     const confirmRoute = window.RETRIEVAL_ROUTES ? window.RETRIEVAL_ROUTES.confirm : '/stock/confirm';
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
-    if (!selectedSupervisorId) {
-        showToast('Supervisor Belum Dipilih', 'Silakan pilih Supervisor (SPV) penanggung jawab terlebih dahulu sebelum mengambil barang!', 'warning');
-        openSpvModal();
+    const itemId = document.getElementById('modal-retrieval-item-id')?.value 
+                || document.getElementById('retrieval-item-id')?.value 
+                || (currentScannedItem ? currentScannedItem.id : null);
+
+    if (!itemId) {
+        showToast('Barang Belum Dipilih', 'Harap pilih atau pindai barang terlebih dahulu sebelum memproses pengambilan.', 'warning');
         return;
     }
 
-    const itemId = document.getElementById('modal-retrieval-item-id')?.value || document.getElementById('retrieval-item-id')?.value;
     const modalQty = document.getElementById('modal_quantity_picked')?.value;
     const cardQty = document.getElementById('quantity_picked')?.value;
     const quantityPicked = parseInt(modalQty || cardQty || 1);
 
+    if (isNaN(quantityPicked) || quantityPicked < 1) {
+        showToast('Jumlah Tidak Valid', 'Jumlah unit pengambilan minimal 1 unit.', 'warning');
+        return;
+    }
+
+    if (currentScannedItem && quantityPicked > currentScannedItem.available_stock) {
+        showToast('Stok Tidak Mencukupi', `Stok barang hanya tersedia ${currentScannedItem.available_stock} unit.`, 'warning');
+        return;
+    }
+
     const modalNotes = document.getElementById('modal_notes')?.value;
     const cardNotes = document.getElementById('notes')?.value;
-    const notes = modalNotes || cardNotes || '';
+    const notes = (modalNotes && modalNotes.trim() !== '') ? modalNotes : (cardNotes || '');
+
+    // Set Loading State on Confirm Buttons
+    const confirmBtn = document.getElementById('btn-confirm-retrieval');
+    const modalConfirmBtn = document.getElementById('modal-btn-confirm-retrieval');
+    if (confirmBtn) {
+        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memproses ke Database...';
+    }
+    if (modalConfirmBtn) {
+        modalConfirmBtn.disabled = true;
+        modalConfirmBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memproses...';
+    }
 
     try {
         const response = await fetch(confirmRoute, {
@@ -363,31 +397,55 @@ async function handleConfirmRetrieval(e) {
 
         const data = await response.json();
 
-        if (data.success) {
+        if (data.success && data.data && data.data.item) {
             closeItemModal();
-            let msg = `Stok dikurangi ${quantityPicked} unit. Sisa stok: ${data.data.remaining_stock} unit.`;
-            showToast('Transaksi Pengambilan Berhasil!', msg, 'success');
-
-            if (data.data && data.data.low_stock_alert) {
-                setTimeout(() => {
-                    showToast('PERINGATAN STOK MENIPIS!', data.data.warning_message, 'warning');
-                }, 2000);
-            }
-
-            if (data.data && data.data.item) {
-                currentScannedItem = data.data.item;
-                renderItemDetail(data.data.item);
-                closeItemModal(); // Keep modal closed after post-confirm refresh
-            }
+            currentScannedItem = data.data.item;
+            renderItemDetail(data.data.item, false);
 
             const modalNotesInput = document.getElementById('modal_notes');
             if (modalNotesInput) modalNotesInput.value = '';
             const notesInput = document.getElementById('notes');
             if (notesInput) notesInput.value = '';
+
+            const itemName = data.data.item.name;
+            const remainingStock = data.data.remaining_stock;
+
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Transaksi Pengambilan Berhasil!',
+                    html: `
+                        <div class="text-left space-y-2 font-sans text-xs">
+                            <p>Pengambilan <strong class="text-sky-600 dark:text-sky-400 font-bold">${quantityPicked} unit</strong> barang <strong>${itemName}</strong> telah sukses dicatat ke database.</p>
+                            <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center justify-between">
+                                <span class="text-slate-600 dark:text-slate-300 font-medium">Sisa Stok Gudang Saat Ini:</span>
+                                <span class="text-base font-black text-emerald-600 dark:text-emerald-400">${remainingStock} unit</span>
+                            </div>
+                        </div>
+                    `,
+                    icon: 'success',
+                    confirmButtonText: 'Selesai & Lanjutkan',
+                    confirmButtonColor: '#0284c7',
+                    customClass: {
+                        popup: 'swal2-popup font-sans rounded-3xl border border-slate-200 dark:border-slate-800'
+                    }
+                });
+            } else {
+                showToast('Transaksi Pengambilan Berhasil!', `Stok dikurangi ${quantityPicked} unit. Sisa stok: ${remainingStock} unit.`, 'success');
+            }
+
+            if (data.data.low_stock_alert) {
+                setTimeout(() => {
+                    showToast('PERINGATAN STOK MENIPIS!', data.data.warning_message, 'warning');
+                }, 2000);
+            }
         } else {
-            showToast('Transaksi Gagal', data.message, 'error');
+            // Restore confirm buttons state
+            renderItemDetail(currentScannedItem || { id: itemId, available_stock: 1 }, false);
+            showToast('Transaksi Gagal', data.message || 'Gagal memproses transaksi ke database.', 'error');
         }
     } catch (err) {
+        console.error("Confirm Retrieval Error:", err);
+        renderItemDetail(currentScannedItem || { id: itemId, available_stock: 1 }, false);
         showToast('Kesalahan Jaringan', 'Gagal memproses transaksi pengambilan barang ke server.', 'error');
     }
 }
