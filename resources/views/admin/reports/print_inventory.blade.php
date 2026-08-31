@@ -81,6 +81,18 @@
             margin-bottom: 20px;
         }
 
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-title img {
+            height: 46px;
+            width: auto;
+            object-fit: contain;
+        }
+
         .header-title h1 {
             margin: 0;
             font-size: 20px;
@@ -250,6 +262,7 @@
         <!-- Kop / Header Laporan -->
         <div class="report-header">
             <div class="header-title">
+                <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo Mie Gacoan">
                 <h1>Laporan Inventaris Gudang</h1>
             </div>
             <div class="header-meta">
