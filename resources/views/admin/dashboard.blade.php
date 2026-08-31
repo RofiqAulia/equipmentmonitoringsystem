@@ -358,6 +358,27 @@
             });
 
             // 2. Inventory Master Table with Dynamic Row Grouping & Column ASC/DESC Filtering
+            var inventoryExportOptions = {
+                columns: [1, 2, 3, 4, 5, 6],
+                format: {
+                    body: function (data, row, column, node) {
+                        if (column === 0 && node) {
+                            var skuEl = $(node).find('.item-sku-text');
+                            if (skuEl.length) {
+                                return skuEl.text().trim();
+                            }
+                        }
+                        return data;
+                    },
+                    header: function (data, column) {
+                        if (column === 0) {
+                            return 'Kode SKU';
+                        }
+                        return data;
+                    }
+                }
+            };
+
             var inventoryTable = $('#inventoryTable').DataTable({
                 pageLength: -1,
                 lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
@@ -372,17 +393,13 @@
                         extend: 'csvHtml5',
                         text: '<i class="fa-solid fa-file-csv mr-1.5"></i> Ekspor CSV',
                         title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10),
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6] // Hanya kolom data terpilih (SKU, Nama, Rak, Stok, Min, Status)
-                        }
+                        exportOptions: inventoryExportOptions
                     },
                     {
                         extend: 'excelHtml5',
                         text: '<i class="fa-solid fa-file-excel mr-1.5"></i> Ekspor Excel',
                         title: 'Inventory_Control_Report_' + new Date().toISOString().slice(0,10),
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6] // Exclude Foto (col 0) & Aksi QR (col 7)
-                        }
+                        exportOptions: inventoryExportOptions
                     },
                     {
                         extend: 'print',
@@ -408,9 +425,7 @@
                                 </div>
                             </div>
                         `,
-                        exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6]
-                        }
+                        exportOptions: inventoryExportOptions
                     }
                 ],
                 language: {

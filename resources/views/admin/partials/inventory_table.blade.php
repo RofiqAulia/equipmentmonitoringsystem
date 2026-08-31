@@ -33,7 +33,7 @@
             <thead class="bg-slate-100 dark:bg-slate-900/90 text-slate-500 dark:text-slate-400 uppercase font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
                     <th class="px-4 py-3.5 w-14 no-sort">Foto</th>
-                    <th class="px-4 py-3.5 cursor-pointer sorting">SKU / QR Payload</th>
+                    <th class="px-4 py-3.5 cursor-pointer sorting">Kode SKU</th>
                     <th class="px-4 py-3.5 min-w-[180px] cursor-pointer sorting">Nama Barang</th>
                     <th class="px-4 py-3.5 cursor-pointer sorting">Lokasi Gudang/Rak</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Stok Available</th>
@@ -50,7 +50,7 @@
                             <img src="{{ $item->image_url ?? 'https://placehold.co/100x100/1e293b/06b6d4?text=No+Photo' }}" alt="{{ $item->name }}" class="w-10 h-10 rounded-xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm">
                         </td>
                         <td class="px-4 py-3 break-words max-w-[150px]">
-                            <div class="font-bold text-cyan-600 dark:text-cyan-400 text-xs">{{ $item->sku }}</div>
+                            <div class="font-bold text-cyan-600 dark:text-cyan-400 text-xs item-sku-text">{{ $item->sku }}</div>
                             <div class="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">{{ $item->qr_code_payload }}</div>
                         </td>
                         <td class="px-4 py-3 font-bold text-slate-900 dark:text-white break-words max-w-[220px] leading-relaxed">
