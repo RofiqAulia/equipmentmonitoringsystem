@@ -173,8 +173,8 @@
             <!-- Brand Logo Header -->
             <!-- <div class="text-center lg:text-left">
                 <div class="inline-flex items-center space-x-3 mb-2">
-                    <div class="w-12 h-12 rounded-2xl bg-sky-600 shadow-xl shadow-sky-600/30 flex items-center justify-center border border-sky-400/40">
-                        <i class="fa-solid fa-boxes-stacked text-2xl text-white"></i>
+                    <div class="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 p-1.5 shadow-xl shadow-cyan-500/20 flex items-center justify-center border border-slate-200 dark:border-slate-800">
+                        <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo Mie Gacoan" class="w-full h-full object-contain">
                     </div>
                     <div>
                         <h1 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">

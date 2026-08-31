@@ -54,8 +54,8 @@
                     </button>
                 @endif
 
-                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-cyan-500 flex items-center justify-center shadow-md shadow-sky-600/25 shrink-0">
-                    <i class="fa-solid fa-boxes-stacked text-white text-base sm:text-lg"></i>
+                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-slate-900 p-1 flex items-center justify-center shadow-md shadow-cyan-500/20 shrink-0 border border-slate-200 dark:border-slate-800">
+                    <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo Mie Gacoan" class="w-full h-full object-contain">
                 </div>
                 <div>
                     <span class="font-heading font-black text-sm sm:text-lg tracking-wide text-slate-900 dark:text-white block leading-none">INVENTORY<span class="text-sky-600 dark:text-sky-400">CONTROL</span></span>
