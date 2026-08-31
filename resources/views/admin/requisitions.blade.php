@@ -121,7 +121,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
-                    @forelse($requisitions as $req)
+                    @foreach($requisitions as $req)
                         <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition">
                             <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap">
                                 <div class="font-bold text-slate-800 dark:text-slate-200">#REQ-{{ $req->id }}</div>
@@ -179,11 +179,7 @@
                                 @endif
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="7" class="px-4 py-6 text-center text-slate-500">Belum ada pengajuan pengadaan barang.</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>

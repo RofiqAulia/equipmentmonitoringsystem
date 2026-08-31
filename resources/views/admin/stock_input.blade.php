@@ -173,6 +173,64 @@
 
 @push('scripts')
 <script>
+    function updatePreviewState() {
+        const mode = document.getElementById('form-mode').value;
+        const fileInput = document.getElementById('image_file_input');
+        const hasUploadedFile = fileInput && fileInput.files && fileInput.files[0];
+        const defaultPlaceholder = 'https://placehold.co/150x150/1e293b/0284c7?text=Preview';
+
+        if (mode === 'new') {
+            const skuVal = document.getElementById('sku_input').value.trim();
+            const nameVal = document.getElementById('name_input').value.trim();
+            const qtyVal = document.querySelector('input[name="quantity"]').value;
+            const minVal = document.getElementById('minimum_stock_input').value;
+
+            document.getElementById('preview-name').innerText = nameVal || 'Input Barang Baru';
+            document.getElementById('preview-sku').innerText = 'SKU: ' + (skuVal || '-');
+            document.getElementById('preview-stock').innerText = (qtyVal || '0') + ' unit (Stok Awal)';
+            document.getElementById('preview-min').innerText = (minVal || '0') + ' unit';
+
+            if (!hasUploadedFile) {
+                document.getElementById('preview-image').src = 'https://placehold.co/150x150/1e293b/0284c7?text=Barang+Baru';
+            }
+        } else {
+            // Mode existing
+            const select = document.getElementById('item_id_select');
+            if (select && select.value) {
+                const option = select.options[select.selectedIndex];
+                const name = option.text.split('—')[0].trim();
+                const sku = option.getAttribute('data-sku');
+                const stock = option.getAttribute('data-stock');
+                const min = option.getAttribute('data-min');
+                const image = option.getAttribute('data-image');
+                const addedQty = document.querySelector('input[name="quantity"]').value || 0;
+
+                document.getElementById('preview-name').innerText = name;
+                document.getElementById('preview-sku').innerText = 'SKU: ' + (sku || '-');
+                
+                const currentStockNum = parseInt(stock) || 0;
+                const addedNum = parseInt(addedQty) || 0;
+                const totalEst = currentStockNum + addedNum;
+
+                document.getElementById('preview-stock').innerHTML = `${currentStockNum} unit <span class="text-[10px] text-emerald-500 font-bold block">(+${addedNum} Restock → ${totalEst} unit)</span>`;
+                document.getElementById('preview-min').innerText = (min || '0') + ' unit';
+
+                if (!hasUploadedFile) {
+                    document.getElementById('preview-image').src = image || 'https://placehold.co/150x150/1e293b/06b6d4?text=No+Photo';
+                }
+            } else {
+                // No item selected
+                document.getElementById('preview-name').innerText = 'Pilih Barang untuk Preview';
+                document.getElementById('preview-sku').innerText = 'SKU: -';
+                document.getElementById('preview-stock').innerText = '0 unit';
+                document.getElementById('preview-min').innerText = '0 unit';
+                if (!hasUploadedFile) {
+                    document.getElementById('preview-image').src = defaultPlaceholder;
+                }
+            }
+        }
+    }
+
     function switchMode(mode) {
         document.getElementById('form-mode').value = mode;
         const tabExisting = document.getElementById('tab-existing');
@@ -194,6 +252,7 @@
             secExisting.classList.add('hidden');
             labelQty.innerText = 'Stok Awal Barang *';
         }
+        updatePreviewState();
     }
 
     function previewSelectedImage(input) {
@@ -212,36 +271,43 @@
                 display.innerText = 'File Terpilih: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
                 display.classList.remove('hidden');
             }
+        } else {
+            const display = document.getElementById('file-name-display');
+            if (display) display.classList.add('hidden');
+            updatePreviewState();
         }
     }
 
     function onSelectItem(select) {
         const option = select.options[select.selectedIndex];
-        if (!option || !option.value) return;
-
-        const bin = option.getAttribute('data-bin');
-        const stock = option.getAttribute('data-stock');
-        const min = option.getAttribute('data-min');
-        const image = option.getAttribute('data-image');
-        const name = option.text.split('—')[0];
-        const sku = option.getAttribute('data-sku');
-
-        if (bin) document.getElementById('location_bin_input').value = bin;
-        if (min) document.getElementById('minimum_stock_input').value = min;
-        if (image) {
-            document.getElementById('preview-image').src = image;
+        if (option && option.value) {
+            const bin = option.getAttribute('data-bin');
+            const min = option.getAttribute('data-min');
+            if (bin) document.getElementById('location_bin_input').value = bin;
+            if (min) document.getElementById('minimum_stock_input').value = min;
         }
-
-        document.getElementById('preview-name').innerText = name;
-        document.getElementById('preview-sku').innerText = 'SKU: ' + sku;
-        document.getElementById('preview-stock').innerText = stock + ' unit';
-        document.getElementById('preview-min').innerText = min + ' unit';
+        updatePreviewState();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        const inputs = [
+            document.getElementById('sku_input'),
+            document.getElementById('name_input'),
+            document.getElementById('minimum_stock_input'),
+            document.querySelector('input[name="quantity"]')
+        ];
+
+        inputs.forEach(input => {
+            if (input) {
+                input.addEventListener('input', updatePreviewState);
+            }
+        });
+
         const select = document.getElementById('item_id_select');
         if (select && select.value) {
             onSelectItem(select);
+        } else {
+            updatePreviewState();
         }
     });
 </script>

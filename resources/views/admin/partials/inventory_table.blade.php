@@ -51,7 +51,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
-                @forelse($items as $item)
+                @foreach($items as $item)
                     <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition">
                         <td class="px-4 py-3 w-14">
                             <img src="{{ $item->image_url ?? 'https://placehold.co/100x100/1e293b/06b6d4?text=No+Photo' }}" alt="{{ $item->name }}" class="w-10 h-10 rounded-xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm">
@@ -105,11 +105,7 @@
                             </div>
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="9" class="px-4 py-6 text-center text-slate-500">Tidak ada data barang inventaris yang sesuai.</td>
-                    </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>

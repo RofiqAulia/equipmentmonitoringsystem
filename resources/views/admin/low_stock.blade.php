@@ -129,7 +129,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
-                    @forelse($allLowStockItems as $item)
+                    @foreach($allLowStockItems as $item)
                         @php
                             $deficit = max(0, $item->minimum_stock - $item->available_stock);
                             $hasPendingReq = in_array($item->id, $pendingRequisitions);
@@ -159,7 +159,8 @@
                             </td>
                             <td class="px-4 py-3 text-center font-bold text-rose-500 text-xs" data-order="{{ $deficit }}">
                                 -{{ $deficit }} unit
-                                                         <td class="px-4 py-3 text-center whitespace-nowrap">
+                            </td>
+                            <td class="px-4 py-3 text-center whitespace-nowrap">
                                 <div class="flex items-center justify-center space-x-1.5">
                                     <a href="{{ route('admin.stock.input', ['item_id' => $item->id]) }}" class="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-500 text-white font-bold rounded-xl text-[10px] transition shadow-sm flex items-center">
                                         <i class="fa-solid fa-plus mr-1"></i> Restock
@@ -172,14 +173,7 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="px-4 py-8 text-center text-slate-500">
-                                <i class="fa-solid fa-circle-check text-emerald-500 text-3xl mb-2 block"></i>
-                                Semua stok barang gudang terpantau aman di atas batas minimum.
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -203,6 +197,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
+            if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
+                $.fn.dataTable.ext.errMode = 'none';
+            }
             if ($('#lowStockTable').length) {
                 $('#lowStockTable').DataTable({
                     pageLength: 10,

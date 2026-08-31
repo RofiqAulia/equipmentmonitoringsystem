@@ -36,7 +36,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
-                @forelse($recentRetrievals as $retrieval)
+                @foreach($recentRetrievals as $retrieval)
                     <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition">
                         <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap" data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}">
                             <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
@@ -65,11 +65,7 @@
                             {{ $retrieval->notes ?: '-' }}
                         </td>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="px-4 py-6 text-center text-slate-500">Belum ada aktivitas pengambilan stok barang.</td>
-                    </tr>
-                @endforelse
+                @endforeach
             </tbody>
         </table>
     </div>

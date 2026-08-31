@@ -319,6 +319,10 @@
 
     <script>
         $(document).ready(function() {
+            if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
+                $.fn.dataTable.ext.errMode = 'none';
+            }
+
             // 1. Activity Log Table with Dynamic Row Grouping
             var activityTable = $('#activityLogTable').DataTable({
                 pageLength: 10,

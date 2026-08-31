@@ -193,7 +193,7 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-xs font-semibold">
-                    @forelse($users as $user)
+                    @foreach($users as $user)
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
                             <!-- Avatar + Name -->
                             <td class="py-3.5 px-4">
@@ -266,14 +266,7 @@
                                 </div>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="py-8 text-center text-slate-400 dark:text-slate-500">
-                                <i class="fa-solid fa-user-slash text-3xl mb-2"></i>
-                                <p class="text-xs font-bold">Belum ada data user yang terdaftar.</p>
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
         </div>
