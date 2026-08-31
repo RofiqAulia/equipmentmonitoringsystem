@@ -118,6 +118,7 @@
             <table id="lowStockTable" class="w-full min-w-[880px] align-middle text-left text-xs text-slate-700 dark:text-slate-300 display">
                 <thead class="bg-slate-100 dark:bg-slate-900/90 text-slate-500 dark:text-slate-400 uppercase font-semibold border-b border-slate-200 dark:border-slate-800">
                     <tr>
+                        <th class="px-3 py-3.5 text-center w-10 cursor-pointer sorting">No</th>
                         <th class="px-4 py-3.5 w-14 no-sort">Foto</th>
                         <th class="px-4 py-3.5 cursor-pointer sorting">SKU & QR Payload</th>
                         <th class="px-4 py-3.5 min-w-[200px] cursor-pointer sorting">Nama Barang</th>
@@ -135,6 +136,9 @@
                             $hasPendingReq = in_array($item->id, $pendingRequisitions);
                         @endphp
                         <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition">
+                            <td class="px-3 py-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs" data-order="{{ $loop->iteration }}">
+                                {{ $loop->iteration }}
+                            </td>
                             <td class="px-4 py-3 w-14">
                                 <img src="{{ $item->image_url ?? 'https://placehold.co/100x100/1e293b/06b6d4?text=Item' }}" class="w-10 h-10 rounded-xl object-cover border border-slate-300 dark:border-slate-700">
                             </td>
@@ -202,9 +206,9 @@
                 $('#lowStockTable').DataTable({
                     pageLength: -1,
                     lengthMenu: [[-1, 10, 25, 50], ["Tampilkan Semua", 10, 25, 50]],
-                    order: [[4, 'asc']], // Order by Sisa Stok ASC (most critical first)
+                    order: [[5, 'asc']], // Order by Sisa Stok ASC (most critical first)
                     columnDefs: [
-                        { orderable: false, targets: [0, 7] }
+                        { orderable: false, targets: [1, 8] }
                     ],
                     language: {
                         search: "_INPUT_",

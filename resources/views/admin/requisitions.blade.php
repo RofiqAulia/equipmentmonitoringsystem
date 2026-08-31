@@ -111,6 +111,7 @@
             <table id="requisitionsTable" class="w-full min-w-[850px] align-middle text-left text-xs text-slate-700 dark:text-slate-300">
                 <thead class="bg-slate-100 dark:bg-slate-900/90 text-slate-500 dark:text-slate-400 uppercase font-semibold border-b border-slate-200 dark:border-slate-800">
                     <tr>
+                        <th class="px-3 py-3.5 text-center w-10 whitespace-nowrap">No</th>
                         <th class="px-4 py-3.5 whitespace-nowrap">ID & Waktu</th>
                         <th class="px-4 py-3.5 min-w-[180px]">Nama Barang & SKU</th>
                         <th class="px-4 py-3.5 text-center whitespace-nowrap">Qty Diajukan</th>
@@ -123,6 +124,9 @@
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
                     @foreach($requisitions as $req)
                         <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition">
+                            <td class="px-3 py-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs" data-order="{{ $loop->iteration }}">
+                                {{ $loop->iteration }}
+                            </td>
                             <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap">
                                 <div class="font-bold text-slate-800 dark:text-slate-200">#REQ-{{ $req->id }}</div>
                                 <div class="text-[10px] text-slate-400">{{ $req->created_at->format('d M Y, H:i') }}</div>

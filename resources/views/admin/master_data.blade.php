@@ -60,10 +60,13 @@
             }
 
             var inventoryExportOptions = {
-                columns: [1, 2, 3, 4, 5, 6],
+                columns: [0, 2, 3, 4, 5, 6, 7],
                 format: {
                     body: function (data, row, column, node) {
-                        if (column === 0 && node) {
+                        if (column === 0) {
+                            return (row + 1).toString();
+                        }
+                        if (column === 1 && node) {
                             var skuEl = $(node).find('.item-sku-text');
                             if (skuEl.length) {
                                 return skuEl.text().trim();
@@ -76,6 +79,9 @@
                     },
                     header: function (data, column) {
                         if (column === 0) {
+                            return 'No';
+                        }
+                        if (column === 1) {
                             return 'Kode SKU';
                         }
                         return data;
@@ -86,12 +92,12 @@
             var inventoryTable = $('#inventoryTable').DataTable({
                 pageLength: -1,
                 lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
-                order: [[1, 'asc']], // Default Sort by SKU ASC
+                order: [[0, 'asc']], // Default Sort by No ASC
                 columnDefs: [
-                    { orderable: false, targets: [0, 7, 8] },
-                    { orderable: true, targets: [1, 2, 3, 4, 5, 6] }
+                    { orderable: false, targets: [1, 8, 9] },
+                    { orderable: true, targets: [0, 2, 3, 4, 5, 6, 7] }
                 ],
-                dom: '<"flex flex-col md:flex-row md:items-center justify-between gap-3 mb-4 p-1"lBf>rt<"flex flex-col md:flex-row md:items-center justify-between gap-3 mt-4 p-1"ip>',
+                dom: '<"flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-4 p-3 bg-slate-50/70 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800"<"flex flex-wrap items-center gap-3"lB><"w-full xl:w-auto"f>>rt<"flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 p-2"ip>',
                 buttons: [
                     {
                         extend: 'csvHtml5',

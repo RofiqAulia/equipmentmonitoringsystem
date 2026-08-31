@@ -185,6 +185,7 @@
             <table id="users-datatable" class="w-full text-left border-collapse">
                 <thead>
                     <tr class="text-[11px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-200 dark:border-slate-800">
+                        <th class="py-3 px-3 text-center w-10">No</th>
                         <th class="py-3 px-4">User / Akun</th>
                         <th class="py-3 px-4">Email</th>
                         <th class="py-3 px-4">Role Hak Akses</th>
@@ -195,6 +196,9 @@
                 <tbody class="divide-y divide-slate-200 dark:divide-slate-800 text-xs font-semibold">
                     @foreach($users as $user)
                         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                            <td class="py-3.5 px-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs" data-order="{{ $loop->iteration }}">
+                                {{ $loop->iteration }}
+                            </td>
                             <!-- Avatar + Name -->
                             <td class="py-3.5 px-4">
                                 <div class="flex items-center space-x-3">

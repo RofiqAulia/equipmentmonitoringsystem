@@ -15,9 +15,9 @@
             </label>
             <select id="group-activity-select" class="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 shadow-sm cursor-pointer">
                 <option value="-1">Tanpa Grouping</option>
-                <option value="1">Group berdasarkan Operator</option>
-                <option value="2">Group berdasarkan Supervisor (SPV)</option>
-                <option value="5">Group berdasarkan Lokasi Rak</option>
+                <option value="2">Group berdasarkan Operator</option>
+                <option value="3">Group berdasarkan Supervisor (SPV)</option>
+                <option value="6">Group berdasarkan Lokasi Rak</option>
             </select>
         </div>
     </div>
@@ -26,6 +26,7 @@
         <table id="activityLogTable" class="w-full min-w-[850px] text-left text-xs text-slate-700 dark:text-slate-300 display">
             <thead class="bg-slate-100 dark:bg-slate-900/90 text-slate-500 dark:text-slate-400 uppercase font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
+                    <th class="px-3 py-3 text-center w-10 cursor-pointer">No</th>
                     <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-hashtag mr-1 text-slate-400"></i> ID / Waktu</th>
                     <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user mr-1 text-slate-400"></i> Operator</th>
                     <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user-shield mr-1 text-slate-400"></i> Supervisor (SPV)</th>
@@ -38,6 +39,9 @@
             <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
                 @foreach($recentRetrievals as $retrieval)
                     <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition">
+                        <td class="px-3 py-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs" data-order="{{ $loop->iteration }}">
+                            {{ $loop->iteration }}
+                        </td>
                         <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap" data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}">
                             <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
                             <div class="text-[10px] text-slate-400">{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</div>
