@@ -18,14 +18,7 @@
                     <option value="out_of_stock" {{ request('status') == 'out_of_stock' ? 'selected' : '' }}>Out of Stock (Habis)</option>
                 </select>
 
-                <select name="per_page" onchange="this.form.submit()" class="px-3.5 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
-                    <option value="-1" {{ request('per_page', '-1') == '-1' ? 'selected' : '' }}>Tampilkan Semua</option>
-                    <option value="10" {{ request('per_page') == '10' ? 'selected' : '' }}>10 / Halaman</option>
-                    <option value="25" {{ request('per_page') == '25' ? 'selected' : '' }}>25 / Halaman</option>
-                    <option value="50" {{ request('per_page') == '50' ? 'selected' : '' }}>50 / Halaman</option>
-                </select>
-
-                @if(request('search') || request('status') || request('per_page'))
+                @if(request('search') || request('status'))
                     <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-300 dark:hover:bg-slate-700 transition" title="Reset Filter">
                         <i class="fa-solid fa-xmark mr-1"></i> Reset
                     </a>
