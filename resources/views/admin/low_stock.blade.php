@@ -202,7 +202,8 @@
             }
             if ($('#lowStockTable').length) {
                 $('#lowStockTable').DataTable({
-                    pageLength: 10,
+                    pageLength: -1,
+                    lengthMenu: [[-1, 10, 25, 50], ["Tampilkan Semua", 10, 25, 50]],
                     order: [[4, 'asc']], // Order by Sisa Stok ASC (most critical first)
                     columnDefs: [
                         { orderable: false, targets: [0, 7] }

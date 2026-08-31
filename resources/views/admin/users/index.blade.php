@@ -542,7 +542,8 @@
                     previous: "Kembali"
                 }
             },
-            pageLength: 10,
+            pageLength: -1,
+            lengthMenu: [[-1, 10, 25, 50], ["Tampilkan Semua", 10, 25, 50]],
             order: [[3, 'desc']]
         });
     });

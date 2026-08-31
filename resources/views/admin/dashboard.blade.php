@@ -325,7 +325,8 @@
 
             // 1. Activity Log Table with Dynamic Row Grouping
             var activityTable = $('#activityLogTable').DataTable({
-                pageLength: 10,
+                pageLength: -1,
+                lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
                 order: [[0, 'desc']], // Default Sort ID Descending
                 columnDefs: [
                     { orderable: true, targets: '_all' }
@@ -359,8 +360,8 @@
 
             // 2. Inventory Master Table with Dynamic Row Grouping & Column ASC/DESC Filtering
             var inventoryTable = $('#inventoryTable').DataTable({
-                pageLength: 10,
-                lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Semua"]],
+                pageLength: -1,
+                lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
                 order: [[1, 'asc']], // Default Sort by SKU ASC
                 columnDefs: [
                     { orderable: false, targets: [0, 7, 8] }, // Photo, Aksi QR & Aksi columns no sort

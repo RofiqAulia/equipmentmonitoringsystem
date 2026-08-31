@@ -83,7 +83,7 @@ class AdminDashboardController extends Controller
             }
         }
 
-        $perPage = (int) $request->input('per_page', 10);
+        $perPage = (int) $request->input('per_page', -1);
         if ($perPage === -1) {
             $items = $query->latest('updated_at')->get();
         } else {
