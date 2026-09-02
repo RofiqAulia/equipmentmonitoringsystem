@@ -1,14 +1,14 @@
 <!-- DataTables Table 1: Activity Log Table -->
 <div class="glass-panel p-6 rounded-3xl space-y-4">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
         <div>
             <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center">
                 <i class="fa-solid fa-clock-rotate-left text-cyan-600 dark:text-cyan-400 mr-2"></i> Activity Log (DataTables Transaksi Pengambilan)
             </h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Pencarian, Pengurutan (ASC/DESC), & Grouping Interaktif Transaksi</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Filter Barang, Rentang Tanggal Real-time, & Cetak Laporan PDF/Print</p>
         </div>
 
-        <!-- Grouping Dropdown for Activity Log -->
+        <!-- Grouping & Action Toolbar -->
         <div class="flex items-center space-x-2">
             <label class="text-xs font-bold text-slate-600 dark:text-slate-400 flex items-center">
                 <i class="fa-solid fa-layer-group text-cyan-500 mr-1.5"></i> Grouping:
@@ -21,6 +21,64 @@
             </select>
         </div>
     </div>
+
+    <!-- Filter Control Panel Form -->
+    <form action="{{ route('admin.dashboard') }}" method="GET" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 flex flex-col md:flex-row items-end gap-3 flex-wrap">
+        
+        <!-- Filter 1: Item / Barang Search & Select -->
+        <div class="flex-1 min-w-[200px] w-full">
+            <label for="item_id" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                <i class="fa-solid fa-box text-cyan-500 mr-1"></i> Filter Barang / Item:
+            </label>
+            <select name="item_id" id="item_id" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
+                <option value="all" {{ ($selectedItemId ?? '') == 'all' || empty($selectedItemId ?? '') ? 'selected' : '' }}>-- Semua Barang / Item --</option>
+                @foreach($allItemsList ?? [] as $itemOption)
+                    <option value="{{ $itemOption->id }}" {{ ($selectedItemId ?? '') == $itemOption->id ? 'selected' : '' }}>
+                        [{{ $itemOption->sku }}] {{ $itemOption->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Filter 2: Tanggal Dari (Start Date) -->
+        <div class="w-full md:w-44">
+            <label for="start_date" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                <i class="fa-solid fa-calendar-day text-cyan-500 mr-1"></i> Tanggal Dari:
+            </label>
+            <input type="date" name="start_date" id="start_date" value="{{ $startDate ?? today()->format('Y-m-d') }}"
+                   class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
+        </div>
+
+        <!-- Filter 3: Tanggal Sampai (End Date) -->
+        <div class="w-full md:w-44">
+            <label for="end_date" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                <i class="fa-solid fa-calendar-check text-cyan-500 mr-1"></i> Tanggal Sampai:
+            </label>
+            <input type="date" name="end_date" id="end_date" value="{{ $endDate ?? today()->format('Y-m-d') }}"
+                   class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
+        </div>
+
+        <!-- Action Buttons: Submit Filter & Print Report -->
+        <div class="flex items-center space-x-2 w-full md:w-auto pt-1 md:pt-0">
+            <button type="submit" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-600/20 transition flex items-center justify-center space-x-1.5">
+                <i class="fa-solid fa-filter text-xs"></i>
+                <span>Terapkan Filter</span>
+            </button>
+
+            <a href="{{ route('admin.dashboard') }}" class="px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl transition flex items-center justify-center" title="Reset Filter ke Hari Ini">
+                <i class="fa-solid fa-rotate-left"></i>
+            </a>
+
+            <!-- PRINT / UNDUH REPORT BUTTON -->
+            <a href="{{ route('admin.activity-log.report', ['item_id' => $selectedItemId ?? 'all', 'start_date' => $startDate ?? today()->format('Y-m-d'), 'end_date' => $endDate ?? today()->format('Y-m-d')]) }}"
+               target="_blank"
+               class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-md shadow-rose-600/20 transition flex items-center justify-center space-x-1.5">
+                <i class="fa-solid fa-print text-xs"></i>
+                <span>Cetak / Unduh Laporan</span>
+            </a>
+        </div>
+
+    </form>
 
     <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800/80 p-2">
         <table id="activityLogTable" class="w-full min-w-[850px] text-left text-xs text-slate-700 dark:text-slate-300 display">

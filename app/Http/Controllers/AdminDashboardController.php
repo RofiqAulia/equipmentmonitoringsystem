@@ -48,15 +48,32 @@ class AdminDashboardController extends Controller
             'out_of_stock' => $outOfStockCount,
         ];
 
-        // 3. Activity Log Real-time (Latest 15 transactions)
-        $recentRetrievals = RetrievalLog::with([
+        // 3. Activity Log Real-time & Filtered by Item & Date Range
+        $startDate = $request->has('start_date') ? $request->input('start_date') : today()->format('Y-m-d');
+        $endDate = $request->has('end_date') ? $request->input('end_date') : today()->format('Y-m-d');
+        $selectedItemId = $request->input('item_id', '');
+
+        $logQuery = RetrievalLog::with([
             'user:id,name,email,avatar',
             'supervisor:id,name,email,avatar',
             'item:id,sku,name,location_bin',
-        ])
+        ]);
+
+        if (!empty($selectedItemId) && $selectedItemId !== 'all') {
+            $logQuery->where('item_id', $selectedItemId);
+        }
+
+        if (!empty($startDate)) {
+            $logQuery->whereDate('picked_at', '>=', $startDate);
+        }
+
+        if (!empty($endDate)) {
+            $logQuery->whereDate('picked_at', '<=', $endDate);
+        }
+
+        $recentRetrievals = $logQuery
             ->orderBy('picked_at', 'desc')
             ->orderBy('id', 'desc')
-            ->take(15)
             ->get();
 
         // 4. Inventory List with Search & Status Filtering
@@ -148,6 +165,10 @@ class AdminDashboardController extends Controller
             'retrievalCategoryQty' => $retrievalCategoryQty,
             'activity_logs' => $recentRetrievals,
             'items' => $items,
+            'allItemsList' => Item::orderBy('name', 'asc')->get(['id', 'sku', 'name']),
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'selectedItemId' => $selectedItemId,
         ];
 
         if ($request->wantsJson()) {
@@ -158,6 +179,55 @@ class AdminDashboardController extends Controller
         }
 
         return view('admin.dashboard', $data);
+    }
+
+    /**
+     * GET /admin/activity-log/report
+     * Render printable report view with Gacoan logo and exact 5 required columns.
+     */
+    public function printReport(Request $request)
+    {
+        $startDate = $request->has('start_date') ? $request->input('start_date') : today()->format('Y-m-d');
+        $endDate = $request->has('end_date') ? $request->input('end_date') : today()->format('Y-m-d');
+        $selectedItemId = $request->input('item_id', '');
+
+        $logQuery = RetrievalLog::with([
+            'user:id,name,email,avatar',
+            'supervisor:id,name,email,avatar',
+            'item:id,sku,name,location_bin',
+        ]);
+
+        if (!empty($selectedItemId) && $selectedItemId !== 'all') {
+            $logQuery->where('item_id', $selectedItemId);
+        }
+
+        if (!empty($startDate)) {
+            $logQuery->whereDate('picked_at', '>=', $startDate);
+        }
+
+        if (!empty($endDate)) {
+            $logQuery->whereDate('picked_at', '<=', $endDate);
+        }
+
+        $logs = $logQuery
+            ->orderBy('picked_at', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $selectedItem = (!empty($selectedItemId) && $selectedItemId !== 'all')
+            ? Item::find($selectedItemId)
+            : null;
+
+        $totalQtyPicked = $logs->sum('quantity_picked');
+
+        return view('admin.reports.activity_log_print', [
+            'logs' => $logs,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'selectedItem' => $selectedItem,
+            'totalQtyPicked' => $totalQtyPicked,
+            'printedAt' => now()->setTimezone('Asia/Jakarta')->format('d F Y, H:i') . ' WIB',
+        ]);
     }
 
     /**
