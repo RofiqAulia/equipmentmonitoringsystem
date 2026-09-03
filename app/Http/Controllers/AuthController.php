@@ -48,6 +48,11 @@ class AuthController extends Controller
      */
     protected function verifyCaptcha(Request $request): bool
     {
+        // Bypass CAPTCHA in local development environment
+        if (app()->environment('local', 'testing')) {
+            return true;
+        }
+
         // 1. If Google reCAPTCHA secret key is configured in .env or config/services.php
         $recaptchaSecret = config('services.recaptcha.secret_key') ?: env('RECAPTCHA_SECRET_KEY');
         $gRecaptchaResponse = $request->input('g-recaptcha-response');

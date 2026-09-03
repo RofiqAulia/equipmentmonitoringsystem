@@ -205,8 +205,8 @@
             }
 
             var activityLogDateFilter = function(settings, searchData, index, rowData, counter) {
-                var tableId = settings.sTableId || (settings.nTable ? settings.nTable.id : '');
-                if (tableId !== 'activityLogTable') {
+                // Only skip if the table is explicitly a different table (not activityLogTable)
+                if (settings.nTable && settings.nTable.id && settings.nTable.id !== 'activityLogTable') {
                     return true;
                 }
 
