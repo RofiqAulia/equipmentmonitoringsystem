@@ -378,6 +378,9 @@
                                    .replace(/<[^>]*>/g, '')
                                    .replace(/\s+/g, ' ')
                                    .trim();
+                    },
+                    footer: function(data, row, column, node) {
+                        return data.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
                     }
                 }
             };
@@ -390,18 +393,21 @@
                         extend: 'csvHtml5',
                         text: '<i class="fa-solid fa-file-csv mr-1.5"></i> Ekspor CSV',
                         title: 'Activity_Log_Report_' + new Date().toISOString().slice(0,10),
-                        exportOptions: activityExportOptions
+                        exportOptions: activityExportOptions,
+                        footer: true
                     },
                     {
                         extend: 'excelHtml5',
                         text: '<i class="fa-solid fa-file-excel mr-1.5"></i> Ekspor Excel',
                         title: 'Activity_Log_Report_' + new Date().toISOString().slice(0,10),
-                        exportOptions: activityExportOptions
+                        exportOptions: activityExportOptions,
+                        footer: true
                     },
                     {
                         extend: 'print',
                         text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
                         title: '',
+                        footer: true,
                         messageTop: function() {
                             var start = $('#start_date').val();
                             var end = $('#end_date').val();
@@ -439,8 +445,15 @@
                 ],
                 pageLength: -1,
                 lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
-                order: [[0, 'desc']], // Default Sort ID Descending
+                order: [[3, 'desc']], // Default Sort by Waktu Descending
                 columnDefs: [
+                    {
+                        targets: 0,
+                        orderable: false,
+                        render: function (data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
                     { orderable: true, targets: '_all' }
                 ],
                 rowGroup: {
