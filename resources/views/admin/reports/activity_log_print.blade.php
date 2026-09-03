@@ -193,22 +193,7 @@
             </table>
         </div>
 
-        <!-- REPORT FOOTER & SIGNATURE SECTION -->
-        <div class="pt-8 grid grid-cols-2 gap-8 text-xs text-center border-t border-slate-200">
-            <div>
-                <p class="text-slate-500 mb-12 font-medium">Petugas Gudang / Admin System,</p>
-                <div class="font-bold underline text-slate-900 uppercase">{{ Auth::user()->name ?? 'Administrator' }}</div>
-                <div class="text-[10px] text-slate-400">Inventory Control Operator</div>
-            </div>
 
-            <div>
-                <p class="text-slate-500 mb-12 font-medium">Penanggung Jawab / Supervisor Gudang,</p>
-                <div class="font-bold underline text-slate-900 uppercase">
-                    {{ $logs->first()?->supervisor->name ?? Auth::user()->name ?? 'Supervisor Gudang' }}
-                </div>
-                <div class="text-[10px] text-slate-400">SPV Penanggung Jawab Operasional</div>
-            </div>
-        </div>
 
         <!-- Footer Notice -->
         <div class="text-[10px] text-slate-400 text-center pt-4 border-t border-slate-100">

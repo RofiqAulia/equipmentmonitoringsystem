@@ -409,16 +409,6 @@
                                 </div>
                             </div>
                         `,
-                        messageBottom: `
-                            <div style="margin-top: 35px; display: flex; justify-content: flex-end; font-size: 11px; color: #0f172a;">
-                                <div style="text-align: center; width: 200px;">
-                                    <div>Disetujui oleh,</div>
-                                    <div style="height: 55px;"></div>
-                                    <div style="font-weight: bold;">{{ auth()->user()->name ?? 'Supervisor' }}</div>
-                                    <div style="font-size: 10px; color: #64748b;">Supervisor Gudang</div>
-                                </div>
-                            </div>
-                        `,
                         exportOptions: activityExportOptions
                     }
                 ],
