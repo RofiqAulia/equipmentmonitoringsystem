@@ -370,7 +370,7 @@
             }
 
             var activityExportOptions = {
-                columns: [0, 1, 2, 3, 4, 5, 6],
+                columns: [0, 1, 2, 3, 4, 5],
                 format: {
                     body: function(data, row, column, node) {
                         return data.replace(/\[DATE:[^\]]*\]/g, '')
@@ -446,6 +446,24 @@
                 rowGroup: {
                     enable: false,
                     className: 'bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 font-bold text-xs px-4 py-2 border-y border-cyan-500/20'
+                },
+                footerCallback: function(row, data, start, end, display) {
+                    var api = this.api();
+                    
+                    var intVal = function(i) {
+                        if (typeof i === 'number') return i;
+                        if (typeof i === 'string') {
+                            var clean = i.replace(/<[^>]*>/g, '').replace(/[^0-9-]/g, '');
+                            return clean ? parseInt(clean, 10) : 0;
+                        }
+                        return 0;
+                    };
+
+                    var total = api.column(2, { search: 'applied' }).data().reduce(function(a, b) {
+                        return Math.abs(intVal(a)) + Math.abs(intVal(b));
+                    }, 0);
+
+                    $('#activity-total-qty').html('-' + total + ' unit');
                 },
                 language: {
                     search: "_INPUT_",

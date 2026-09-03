@@ -63,9 +63,9 @@
                 </label>
                 <select id="group-activity-select" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 shadow-sm cursor-pointer">
                     <option value="-1">Tanpa Grouping</option>
-                    <option value="2">Group berdasarkan SPV / Penanggung Jawab</option>
-                    <option value="3">Group berdasarkan Barang & SKU</option>
-                    <option value="5">Group berdasarkan Lokasi Rak</option>
+                    <option value="1">Group berdasarkan Item (Barang & SKU)</option>
+                    <option value="3">Group berdasarkan Waktu</option>
+                    <option value="4">Group berdasarkan SPV / Penanggung Jawab</option>
                 </select>
             </div>
 
@@ -105,11 +105,10 @@
             <thead class="bg-slate-100 dark:bg-slate-900/90 text-slate-500 dark:text-slate-400 uppercase font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
                     <th class="px-3 py-3 text-center w-10 cursor-pointer">No</th>
-                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-clock mr-1 text-slate-400"></i> Waktu Pengambilan</th>
-                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user-shield mr-1 text-slate-400"></i> SPV / Penanggung Jawab</th>
-                    <th class="px-4 py-3 min-w-[180px] cursor-pointer"><i class="fa-solid fa-box mr-1 text-slate-400"></i> Barang & SKU</th>
-                    <th class="px-4 py-3 text-center cursor-pointer"><i class="fa-solid fa-layer-group mr-1 text-slate-400"></i> Qty Ambil</th>
-                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-location-dot mr-1 text-slate-400"></i> Lokasi Rak</th>
+                    <th class="px-4 py-3 min-w-[180px] cursor-pointer"><i class="fa-solid fa-box mr-1 text-slate-400"></i> Item</th>
+                    <th class="px-4 py-3 text-center cursor-pointer"><i class="fa-solid fa-layer-group mr-1 text-slate-400"></i> Qty</th>
+                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-clock mr-1 text-slate-400"></i> Waktu</th>
+                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user-shield mr-1 text-slate-400"></i> Spv</th>
                     <th class="px-4 py-3 min-w-[160px] cursor-pointer"><i class="fa-solid fa-comment-dots mr-1 text-slate-400"></i> Catatan</th>
                 </tr>
             </thead>
@@ -146,43 +145,65 @@
                     <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition log-activity-row"
                         data-date="{{ $logDate }}"
                         data-item-id="{{ $retrieval->item_id }}">
+                        <!-- 1. No -->
                         <td class="px-3 py-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs"
                             data-order="{{ $loop->iteration }}"
                             data-date="{{ $logDate }}"
                             data-item-id="{{ $retrieval->item_id }}">
                             {{ $loop->iteration }}
                         </td>
+
+                        <!-- 2. Item -->
+                        <td class="px-4 py-3 break-words max-w-[200px]"
+                            data-search="[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}] {{ $retrieval->item->name ?? 'N/A' }} {{ $retrieval->item->sku ?? '-' }}">
+                            <span style="display:none;" class="log-metadata-tag">[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}]</span>
+                            <div class="font-bold text-slate-900 dark:text-white leading-snug">{{ $retrieval->item->name ?? 'N/A' }}</div>
+                            <div class="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">{{ $retrieval->item->sku ?? '-' }}</div>
+                        </td>
+
+                        <!-- 3. Qty -->
+                        <td class="px-4 py-3 text-center font-black text-rose-500 text-sm whitespace-nowrap"
+                            data-qty="{{ $retrieval->quantity_picked }}">
+                            -{{ $retrieval->quantity_picked }} unit
+                        </td>
+
+                        <!-- 4. Waktu -->
                         <td class="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200 whitespace-nowrap"
                             data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}"
-                            data-search="[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}] {{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB"
                             data-date="{{ $logDate }}"
                             data-item-id="{{ $retrieval->item_id }}">
-                            <span style="display:none;" class="log-metadata-tag">[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}]</span>
                             <div class="text-xs font-semibold text-slate-800 dark:text-slate-200">
                                 <i class="fa-solid fa-clock text-cyan-500 mr-1.5 text-xs"></i>{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
                             </div>
                         </td>
+
+                        <!-- 5. Spv -->
                         <td class="px-4 py-3 break-words max-w-[180px]">
                             <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border {{ $badgeStyle }} leading-snug">
                                 <i class="fa-solid {{ $iconStyle }} mr-1"></i> {{ $displayRole }}: {{ $displayName }}
                             </span>
                         </td>
-                        <td class="px-4 py-3 break-words max-w-[200px]">
-                            <div class="font-bold text-slate-900 dark:text-white leading-snug">{{ $retrieval->item->name ?? 'N/A' }}</div>
-                            <div class="text-[10px] font-mono text-cyan-600 dark:text-cyan-400">{{ $retrieval->item->sku ?? '-' }}</div>
-                        </td>
-                        <td class="px-4 py-3 text-center font-black text-rose-500 text-sm whitespace-nowrap">
-                            -{{ $retrieval->quantity_picked }} unit
-                        </td>
-                        <td class="px-4 py-3 break-words max-w-[130px] font-medium text-slate-700 dark:text-slate-300">
-                            {{ $retrieval->item->location_bin ?? '-' }}
-                        </td>
+
+                        <!-- 6. Catatan -->
                         <td class="px-4 py-3 text-slate-600 dark:text-slate-400 break-words max-w-[220px] leading-relaxed">
                             {{ $retrieval->notes ?: '-' }}
                         </td>
                     </tr>
                 @endforeach
             </tbody>
+            <tfoot class="bg-slate-100/90 dark:bg-slate-900/90 font-bold border-t-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white">
+                <tr>
+                    <td colspan="2" class="px-4 py-3 text-right font-black uppercase text-xs tracking-wider">
+                        Total Barang:
+                    </td>
+                    <td id="activity-total-qty" class="px-4 py-3 text-center font-black text-rose-600 dark:text-rose-400 text-sm whitespace-nowrap">
+                        0 unit
+                    </td>
+                    <td colspan="3" class="px-4 py-3 text-xs text-slate-500 font-normal italic">
+                        (Terakumulasi berdasarkan transaksi aktif)
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>

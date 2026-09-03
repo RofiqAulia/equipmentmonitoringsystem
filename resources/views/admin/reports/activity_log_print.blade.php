@@ -132,22 +132,35 @@
             </div>
         </div>
 
-        <!-- MAIN TABLE REPORT (EXACT 5 COLUMNS REQUESTED) -->
+        <!-- MAIN TABLE REPORT (EXACT 6 COLUMNS MATCHING DASHBOARD) -->
         <div class="overflow-x-auto">
             <table class="w-full text-left text-xs border-collapse border border-slate-300">
                 <thead>
                     <tr class="bg-slate-900 text-white uppercase text-[11px] tracking-wider font-bold">
-                        <th class="border border-slate-800 px-3 py-3 text-center w-12">1. Nomor</th>
-                        <th class="border border-slate-800 px-4 py-3">2. Item</th>
-                        <th class="border border-slate-800 px-4 py-3 text-center min-w-[150px]">3. Tanggal Pengambilan</th>
-                        <th class="border border-slate-800 px-4 py-3">4. SPV Saat Mengambil Barang</th>
-                        <th class="border border-slate-800 px-4 py-3 text-center min-w-[130px]">5. Jumlah Barang Diambil</th>
+                        <th class="border border-slate-800 px-3 py-3 text-center w-12">1. No</th>
+                        <th class="border border-slate-800 px-4 py-3 min-w-[180px]">2. Item</th>
+                        <th class="border border-slate-800 px-4 py-3 text-center min-w-[90px]">3. Qty</th>
+                        <th class="border border-slate-800 px-4 py-3 text-center min-w-[150px]">4. Waktu</th>
+                        <th class="border border-slate-800 px-4 py-3">5. Spv</th>
+                        <th class="border border-slate-800 px-4 py-3 min-w-[150px]">6. Catatan</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-300">
                     @forelse($logs as $index => $log)
+                        @php
+                            $performerUser = $log->user;
+                            $supervisorUser = $log->supervisor;
+                            $isAdminAction = ($performerUser && $performerUser->role === 'admin') || ($supervisorUser && $supervisorUser->role === 'admin');
+                            if ($isAdminAction) {
+                                $displayName = $performerUser->username ?? $performerUser->name ?? ($supervisorUser->username ?? $supervisorUser->name ?? 'admin');
+                                $displayRole = 'Admin';
+                            } else {
+                                $displayName = $supervisorUser->name ?? $performerUser->name ?? 'SPV Authorized';
+                                $displayRole = 'SPV';
+                            }
+                        @endphp
                         <tr class="{{ $loop->even ? 'bg-slate-50/60' : 'bg-white' }}">
-                            <!-- 1. Nomor -->
+                            <!-- 1. No -->
                             <td class="border border-slate-300 px-3 py-3 text-center font-bold text-slate-600">
                                 {{ $index + 1 }}
                             </td>
@@ -158,34 +171,33 @@
                                 <div class="text-[10px] font-mono text-cyan-700 font-bold">SKU: {{ $log->item->sku ?? '-' }}</div>
                             </td>
 
-                            <!-- 3. Tanggal Pengambilan (real-time) -->
+                            <!-- 3. Qty -->
+                            <td class="border border-slate-300 px-4 py-3 text-center font-black text-rose-600 text-sm whitespace-nowrap">
+                                -{{ $log->quantity_picked }} unit
+                            </td>
+
+                            <!-- 4. Waktu -->
                             <td class="border border-slate-300 px-4 py-3 text-center font-mono whitespace-nowrap">
                                 <div class="font-bold text-slate-800">
-                                    {{ optional($log->picked_at ?? $log->created_at)->setTimezone('Asia/Jakarta')->format('d M Y') }}
-                                </div>
-                                <div class="text-[10px] text-slate-500">
-                                    {{ optional($log->picked_at ?? $log->created_at)->setTimezone('Asia/Jakarta')->format('H:i:s') }} WIB
+                                    {{ optional($log->picked_at ?? $log->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
                                 </div>
                             </td>
 
-                            <!-- 4. SPV saat mengambil barang -->
+                            <!-- 5. Spv -->
                             <td class="border border-slate-300 px-4 py-3">
-                                <span class="font-semibold text-slate-900">
-                                    {{ $log->supervisor->name ?? 'SPV Authorized' }}
+                                <span class="font-bold text-slate-900">
+                                    {{ $displayRole }}: {{ $displayName }}
                                 </span>
-                                @if($log->supervisor && $log->supervisor->email)
-                                    <div class="text-[10px] text-slate-400">{{ $log->supervisor->email }}</div>
-                                @endif
                             </td>
 
-                            <!-- 5. Jumlah barang diambil berdasarkan filtering -->
-                            <td class="border border-slate-300 px-4 py-3 text-center font-black text-rose-600 text-sm whitespace-nowrap">
-                                {{ $log->quantity_picked }} Unit
+                            <!-- 6. Catatan -->
+                            <td class="border border-slate-300 px-4 py-3 text-slate-600">
+                                {{ $log->notes ?: '-' }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="border border-slate-300 px-4 py-8 text-center text-slate-400 font-medium italic">
+                            <td colspan="6" class="border border-slate-300 px-4 py-8 text-center text-slate-400 font-medium italic">
                                 Tidak ada transaksi pengambilan barang pada filter tanggal & item ini.
                             </td>
                         </tr>
@@ -193,12 +205,13 @@
                 </tbody>
                 <tfoot>
                     <tr class="bg-slate-100 text-slate-900 font-bold border-t-2 border-slate-900 text-xs">
-                        <td colspan="4" class="border border-slate-300 px-4 py-3 text-right uppercase tracking-wider font-extrabold">
-                            TOTAL JUMLAH BARANG DIAMBIL:
+                        <td colspan="2" class="border border-slate-300 px-4 py-3 text-right uppercase tracking-wider font-extrabold">
+                            TOTAL BARANG:
                         </td>
-                        <td class="border border-slate-300 px-4 py-3 text-center font-black text-rose-600 text-sm">
-                            {{ number_format($totalQtyPicked) }} Unit
+                        <td class="border border-slate-300 px-4 py-3 text-center font-black text-rose-600 text-sm whitespace-nowrap">
+                            -{{ number_format($totalQtyPicked) }} unit
                         </td>
+                        <td colspan="3" class="border border-slate-300 px-4 py-3"></td>
                     </tr>
                 </tfoot>
             </table>
