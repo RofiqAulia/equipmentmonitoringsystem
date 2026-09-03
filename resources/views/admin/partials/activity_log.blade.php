@@ -1,37 +1,34 @@
-<!-- DataTables Table 1: Activity Log Table -->
+<!-- DataTables Table 1: Activity Log Table (Unified Component) -->
 <div class="glass-panel p-6 rounded-3xl space-y-4">
+    <!-- Component Header & Status Summary -->
     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
         <div>
             <h2 class="text-base font-bold text-slate-900 dark:text-white flex items-center">
                 <i class="fa-solid fa-clock-rotate-left text-cyan-600 dark:text-cyan-400 mr-2"></i> Activity Log (DataTables Transaksi Pengambilan)
             </h2>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Filter Barang, Rentang Tanggal Real-time, & Cetak Laporan PDF/Print</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Filter Barang, Rentang Tanggal, & Grouping Real-Time langsung di DataTables</p>
         </div>
 
-        <!-- Grouping & Action Toolbar -->
-        <div class="flex items-center space-x-2">
-            <label class="text-xs font-bold text-slate-600 dark:text-slate-400 flex items-center">
-                <i class="fa-solid fa-layer-group text-cyan-500 mr-1.5"></i> Grouping:
-            </label>
-            <select id="group-activity-select" class="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 shadow-sm cursor-pointer">
-                <option value="-1">Tanpa Grouping</option>
-                <option value="2">Group berdasarkan Operator</option>
-                <option value="3">Group berdasarkan Supervisor (SPV)</option>
-                <option value="6">Group berdasarkan Lokasi Rak</option>
-            </select>
+        <div class="flex items-center space-x-3 shrink-0">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping mr-2"></span> Real-time DataTables
+            </span>
+            <span class="text-xs text-slate-600 dark:text-slate-400 font-semibold bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-xl border border-slate-200 dark:border-slate-700">
+                Ditemukan: <strong id="activity-filtered-count" class="text-cyan-600 dark:text-cyan-400 font-black text-sm">0</strong> data
+            </span>
         </div>
     </div>
 
-    <!-- Filter Control Panel Form -->
-    <form id="activity-log-filter-form" onsubmit="event.preventDefault(); applyActivityFilter();" class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
-        
-        <div class="flex flex-col md:flex-row items-end gap-3 flex-wrap">
+    <!-- Integrated DataTables Control Panel Toolbar (Embedded Directly Inside DataTables Header) -->
+    <div class="p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3 shadow-inner">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-end">
+            
             <!-- Filter 1: Item / Barang Search & Select -->
-            <div class="flex-1 min-w-[200px] w-full">
+            <div>
                 <label for="item_id" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     <i class="fa-solid fa-box text-cyan-500 mr-1"></i> Filter Barang / Item:
                 </label>
-                <select name="item_id" id="item_id" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
+                <select name="item_id" id="item_id" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm cursor-pointer">
                     <option value="all" {{ ($selectedItemId ?? '') == 'all' || empty($selectedItemId ?? '') ? 'selected' : '' }}>-- Semua Barang / Item --</option>
                     @foreach($allItemsList ?? [] as $itemOption)
                         <option value="{{ $itemOption->id }}" {{ ($selectedItemId ?? '') == $itemOption->id ? 'selected' : '' }}>
@@ -42,7 +39,7 @@
             </div>
 
             <!-- Filter 2: Tanggal Dari (Start Date) -->
-            <div class="w-full md:w-44">
+            <div>
                 <label for="start_date" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     <i class="fa-solid fa-calendar-day text-cyan-500 mr-1"></i> Tanggal Dari:
                 </label>
@@ -51,7 +48,7 @@
             </div>
 
             <!-- Filter 3: Tanggal Sampai (End Date) -->
-            <div class="w-full md:w-44">
+            <div>
                 <label for="end_date" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     <i class="fa-solid fa-calendar-check text-cyan-500 mr-1"></i> Tanggal Sampai:
                 </label>
@@ -59,18 +56,40 @@
                        class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 transition shadow-sm">
             </div>
 
-            <!-- Action Buttons: Real-time Apply & Print Report -->
-            <div class="flex items-center space-x-2 w-full md:w-auto pt-1 md:pt-0">
-                <button type="button" onclick="applyActivityFilter()" class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs rounded-xl shadow-md shadow-cyan-600/20 transition flex items-center justify-center space-x-1.5">
-                    <i class="fa-solid fa-filter text-xs"></i>
-                    <span>Terapkan Filter</span>
-                </button>
+            <!-- Filter 4: Grouping Select -->
+            <div>
+                <label for="group-activity-select" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    <i class="fa-solid fa-layer-group text-cyan-500 mr-1"></i> Grouping Tabel:
+                </label>
+                <select id="group-activity-select" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 shadow-sm cursor-pointer">
+                    <option value="-1">Tanpa Grouping</option>
+                    <option value="2">Group berdasarkan Operator</option>
+                    <option value="3">Group berdasarkan Supervisor (SPV)</option>
+                    <option value="4">Group berdasarkan Barang & SKU</option>
+                    <option value="6">Group berdasarkan Lokasi Rak</option>
+                </select>
+            </div>
 
-                <button type="button" onclick="resetActivityFilter()" class="px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs rounded-xl transition flex items-center justify-center" title="Reset Filter ke Hari Ini">
-                    <i class="fa-solid fa-rotate-left"></i>
-                </button>
+        </div>
 
-                <!-- PRINT / UNDUH REPORT BUTTON -->
+        <!-- Quick Presets & Report Actions Bar -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 pt-2 border-t border-slate-200/80 dark:border-slate-800/80 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="font-bold text-slate-600 dark:text-slate-400 flex items-center mr-1">
+                    <i class="fa-solid fa-bolt text-amber-500 mr-1"></i> Preset Rentang:
+                </span>
+                <button type="button" onclick="setPresetDate('today')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Hari Ini</button>
+                <button type="button" onclick="setPresetDate('7days')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">7 Hari Terakhir</button>
+                <button type="button" onclick="setPresetDate('month')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Bulan Ini</button>
+                <button type="button" onclick="setPresetDate('all')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Semua Tanggal</button>
+                
+                <button type="button" onclick="resetActivityFilter()" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold rounded-lg transition" title="Reset Filter ke Hari Ini">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                </button>
+            </div>
+
+            <!-- PRINT / UNDUH REPORT BUTTON -->
+            <div class="flex items-center space-x-2 pt-1 md:pt-0 shrink-0">
                 <a id="btn-print-report" href="{{ route('admin.activity-log.report', ['item_id' => $selectedItemId ?? 'all', 'start_date' => $startDate ?? today()->format('Y-m-d'), 'end_date' => $endDate ?? today()->format('Y-m-d')]) }}"
                    target="_blank"
                    class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-md shadow-rose-600/20 transition flex items-center justify-center space-x-1.5">
@@ -79,30 +98,9 @@
                 </a>
             </div>
         </div>
+    </div>
 
-        <!-- Real-time Quick Presets & Status Indicator -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-200/80 dark:border-slate-800/80 text-xs">
-            <div class="flex items-center gap-1.5 flex-wrap">
-                <span class="font-bold text-slate-600 dark:text-slate-400 flex items-center mr-1">
-                    <i class="fa-solid fa-bolt text-amber-500 mr-1"></i> Preset Rentang:
-                </span>
-                <button type="button" onclick="setPresetDate('today')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Hari Ini</button>
-                <button type="button" onclick="setPresetDate('7days')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">7 Hari Terakhir</button>
-                <button type="button" onclick="setPresetDate('month')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Bulan Ini</button>
-                <button type="button" onclick="setPresetDate('all')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-500 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Semua Tanggal</button>
-            </div>
-
-            <div class="flex items-center space-x-2 shrink-0">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping mr-1.5"></span> Real-time Filter
-                </span>
-                <span class="text-slate-500 dark:text-slate-400 text-[11px]">
-                    Ditemukan: <strong id="activity-filtered-count" class="text-cyan-600 dark:text-cyan-400 font-black">0</strong> data
-                </span>
-            </div>
-        </div>
-    </form>
-
+    <!-- DataTables Native Table View -->
     <div class="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800/80 p-2">
         <table id="activityLogTable" class="w-full min-w-[850px] text-left text-xs text-slate-700 dark:text-slate-300 display">
             <thead class="bg-slate-100 dark:bg-slate-900/90 text-slate-500 dark:text-slate-400 uppercase font-semibold border-b border-slate-200 dark:border-slate-800">
@@ -198,7 +196,6 @@
 
     (function() {
         if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
-            // Remove previous instances of custom search filter to avoid duplicates
             if ($.fn.dataTable.ext.search) {
                 for (var i = $.fn.dataTable.ext.search.length - 1; i >= 0; i--) {
                     if ($.fn.dataTable.ext.search[i].name === 'activityLogDateFilter') {
@@ -243,7 +240,7 @@
                 // Filter Date Range (start_date <= rowDate <= end_date)
                 if (min || max) {
                     if (!rowDate) {
-                        return false; // Hide if missing date when date filter is specified
+                        return false;
                     }
                     if (min && rowDate < min) {
                         return false;
@@ -270,11 +267,32 @@
         }
     }
 
+    function applyActivityGrouping() {
+        if ($.fn.DataTable.isDataTable('#activityLogTable')) {
+            var table = $('#activityLogTable').DataTable();
+            var colIdx = parseInt($('#group-activity-select').val());
+            if (colIdx >= 0) {
+                if (table.rowGroup) {
+                    table.rowGroup().dataSrc(colIdx).enable().draw();
+                } else {
+                    table.order([[colIdx, 'asc']]).draw();
+                }
+            } else {
+                if (table.rowGroup) {
+                    table.rowGroup().disable();
+                }
+                table.order([[0, 'desc']]).draw();
+            }
+        }
+    }
+
     function resetActivityFilter() {
         var today = new Date().toISOString().split('T')[0];
         $('#start_date').val(today);
         $('#end_date').val(today);
         $('#item_id').val('all');
+        $('#group-activity-select').val('-1');
+        applyActivityGrouping();
         applyActivityFilter();
     }
 
@@ -327,7 +345,12 @@
             applyActivityFilter();
         });
 
+        $('#group-activity-select').on('change', function() {
+            applyActivityGrouping();
+        });
+
         setTimeout(function() {
+            applyActivityGrouping();
             applyActivityFilter();
         }, 150);
     });

@@ -377,6 +377,10 @@
                 columnDefs: [
                     { orderable: true, targets: '_all' }
                 ],
+                rowGroup: {
+                    enable: false,
+                    className: 'bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 font-bold text-xs px-4 py-2 border-y border-cyan-500/20'
+                },
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Cari riwayat transaksi...",
@@ -397,10 +401,12 @@
             // Activity Log Grouping Handler
             $('#group-activity-select').on('change', function() {
                 var colIdx = parseInt($(this).val());
-                if (colIdx >= 0) {
-                    activityTable.rowGroup().dataSrc(colIdx).draw();
-                } else {
-                    activityTable.rowGroup().disable().draw();
+                if (activityTable && activityTable.rowGroup) {
+                    if (colIdx >= 0) {
+                        activityTable.rowGroup().dataSrc(colIdx).enable().draw();
+                    } else {
+                        activityTable.rowGroup().disable().draw();
+                    }
                 }
             });
         });
