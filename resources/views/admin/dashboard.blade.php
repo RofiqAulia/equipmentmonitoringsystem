@@ -451,13 +451,7 @@
                 lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
                 order: [[3, 'desc']], // Default Sort by Waktu Descending
                 columnDefs: [
-                    {
-                        targets: 0,
-                        orderable: false,
-                        render: function (data, type, row, meta) {
-                            return meta.row + 1;
-                        }
-                    },
+                    { targets: 0, orderable: false },
                     { orderable: true, targets: '_all' }
                 ],
                 rowGroup: {
@@ -497,6 +491,13 @@
                     }
                 },
                 responsive: true
+            });
+
+            activityTable.on('order.dt search.dt draw.dt', function () {
+                var i = 1;
+                activityTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell) {
+                    cell.innerHTML = i++;
+                });
             });
 
             // Activity Log Grouping Handler
