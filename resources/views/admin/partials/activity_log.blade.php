@@ -63,10 +63,9 @@
                 </label>
                 <select id="group-activity-select" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 shadow-sm cursor-pointer">
                     <option value="-1">Tanpa Grouping</option>
-                    <option value="2">Group berdasarkan Operator</option>
-                    <option value="3">Group berdasarkan Supervisor (SPV)</option>
-                    <option value="4">Group berdasarkan Barang & SKU</option>
-                    <option value="6">Group berdasarkan Lokasi Rak</option>
+                    <option value="2">Group berdasarkan SPV / Penanggung Jawab</option>
+                    <option value="3">Group berdasarkan Barang & SKU</option>
+                    <option value="5">Group berdasarkan Lokasi Rak</option>
                 </select>
             </div>
 
@@ -107,8 +106,7 @@
                 <tr>
                     <th class="px-3 py-3 text-center w-10 cursor-pointer">No</th>
                     <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-hashtag mr-1 text-slate-400"></i> ID / Waktu</th>
-                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user mr-1 text-slate-400"></i> Operator</th>
-                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user-shield mr-1 text-slate-400"></i> Supervisor (SPV)</th>
+                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user-shield mr-1 text-slate-400"></i> SPV / Penanggung Jawab</th>
                     <th class="px-4 py-3 min-w-[180px] cursor-pointer"><i class="fa-solid fa-box mr-1 text-slate-400"></i> Barang & SKU</th>
                     <th class="px-4 py-3 text-center cursor-pointer"><i class="fa-solid fa-layer-group mr-1 text-slate-400"></i> Qty Ambil</th>
                     <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-location-dot mr-1 text-slate-400"></i> Lokasi Rak</th>
@@ -126,6 +124,23 @@
                             } else {
                                 $logDate = \Carbon\Carbon::parse($dt)->setTimezone('Asia/Jakarta')->format('Y-m-d');
                             }
+                        }
+
+                        $performerUser = $retrieval->user;
+                        $supervisorUser = $retrieval->supervisor;
+                        
+                        $isAdminAction = ($performerUser && $performerUser->role === 'admin') || ($supervisorUser && $supervisorUser->role === 'admin');
+                        
+                        if ($isAdminAction) {
+                            $displayName = $performerUser->username ?? $performerUser->name ?? ($supervisorUser->username ?? $supervisorUser->name ?? 'admin');
+                            $displayRole = 'Admin';
+                            $badgeStyle = 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20';
+                            $iconStyle = 'fa-user-shield text-purple-500';
+                        } else {
+                            $displayName = $supervisorUser->name ?? $performerUser->name ?? 'SPV Authorized';
+                            $displayRole = 'SPV';
+                            $badgeStyle = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+                            $iconStyle = 'fa-user-check text-emerald-500';
                         }
                     @endphp
                     <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition log-activity-row"
@@ -147,14 +162,15 @@
                             <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
                             <div class="text-[10px] text-slate-400">{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</div>
                         </td>
-                        <td class="px-4 py-3 break-words max-w-[150px]">
-                            <div class="font-semibold text-slate-900 dark:text-white leading-snug">{{ $retrieval->user->name ?? 'Operator' }}</div>
-                            <div class="text-[10px] text-cyan-600 dark:text-cyan-400 font-mono">OP-ID: {{ $retrieval->user_id }}</div>
-                        </td>
-                        <td class="px-4 py-3 break-words max-w-[160px]">
-                            <span class="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 leading-snug">
-                                {{ $retrieval->supervisor->name ?? 'SPV Authorized' }}
+                        <td class="px-4 py-3 break-words max-w-[180px]">
+                            <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border {{ $badgeStyle }} leading-snug">
+                                <i class="fa-solid {{ $iconStyle }} mr-1"></i> {{ $displayRole }}: {{ $displayName }}
                             </span>
+                            @if(!$isAdminAction && $performerUser && $performerUser->id !== ($supervisorUser->id ?? null))
+                                <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
+                                    Op: {{ $performerUser->name }}
+                                </div>
+                            @endif
                         </td>
                         <td class="px-4 py-3 break-words max-w-[200px]">
                             <div class="font-bold text-slate-900 dark:text-white leading-snug">{{ $retrieval->item->name ?? 'N/A' }}</div>
