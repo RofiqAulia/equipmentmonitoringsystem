@@ -205,7 +205,8 @@
                 </tbody>
                 <tfoot>
                     <tr class="bg-slate-100 text-slate-900 font-bold border-t-2 border-slate-900 text-xs">
-                        <td colspan="2" class="border border-slate-300 px-4 py-3 text-right uppercase tracking-wider font-extrabold">
+                        <td class="border border-slate-300 px-3 py-3"></td>
+                        <td class="border border-slate-300 px-4 py-3 text-right uppercase tracking-wider font-extrabold">
                             TOTAL BARANG:
                         </td>
                         <td class="border border-slate-300 px-4 py-3 text-center font-black text-rose-600 text-sm whitespace-nowrap">
