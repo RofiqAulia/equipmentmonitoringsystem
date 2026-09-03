@@ -373,6 +373,9 @@
                 columns: [0, 1, 2, 3, 4, 5],
                 format: {
                     body: function(data, row, column, node) {
+                        if (column === 0) {
+                            return (row + 1).toString();
+                        }
                         if (data === null || data === undefined) return '';
                         var str = String(data);
                         return str.replace(/\[DATE:[^\]]*\]/g, '')
@@ -382,6 +385,12 @@
                                   .trim();
                     },
                     footer: function(data, row, column, node) {
+                        if (column === 0) {
+                            return 'Total Barang:';
+                        }
+                        if (column === 1) {
+                            return '';
+                        }
                         if (data === null || data === undefined) return '';
                         var str = String(data);
                         return str.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
