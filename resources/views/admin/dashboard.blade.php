@@ -455,6 +455,25 @@
                                    'Malang, ' + dateText +
                                    '</div></div>';
                         },
+                        customize: function (win) {
+                            var $table = $(win.document.body).find('table');
+                            $table.find('tfoot tr td:nth-child(2)').css({
+                                'font-weight': '900',
+                                'text-align': 'right',
+                                'text-transform': 'uppercase',
+                                'white-space': 'nowrap'
+                            });
+                            $table.find('tfoot tr td:nth-child(3)').css({
+                                'font-weight': '900',
+                                'color': '#e11d48',
+                                'text-align': 'left',
+                                'white-space': 'nowrap'
+                            });
+                            $table.find('tfoot tr td').css({
+                                'border-top': '2px solid #0f172a',
+                                'padding': '8px 12px'
+                            });
+                        },
                         exportOptions: activityExportOptions
                     }
                 ],

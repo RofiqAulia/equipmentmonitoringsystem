@@ -209,9 +209,12 @@
                         <td class="border border-slate-300 px-4 py-3 text-right uppercase tracking-wider font-extrabold whitespace-nowrap">
                             TOTAL BARANG:
                         </td>
-                        <td colspan="4" class="border border-slate-300 px-4 py-3 text-left font-black text-rose-600 text-sm whitespace-nowrap" style="white-space: nowrap !important;">
+                        <td class="border border-slate-300 px-4 py-3 text-left font-black text-rose-600 text-sm whitespace-nowrap" style="white-space: nowrap !important; min-width: 120px;">
                             -{{ number_format($totalQtyPicked) }} unit
                         </td>
+                        <td class="border border-slate-300 px-3 py-3"></td>
+                        <td class="border border-slate-300 px-3 py-3"></td>
+                        <td class="border border-slate-300 px-3 py-3"></td>
                     </tr>
                 </tfoot>
             </table>
