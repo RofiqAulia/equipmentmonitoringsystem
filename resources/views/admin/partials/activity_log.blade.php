@@ -88,14 +88,14 @@
             </div>
 
             <!-- PRINT / UNDUH REPORT BUTTON -->
-            <div class="flex items-center space-x-2 pt-1 md:pt-0 shrink-0">
+            <!-- <div class="flex items-center space-x-2 pt-1 md:pt-0 shrink-0">
                 <a id="btn-print-report" href="{{ route('admin.activity-log.report', ['item_id' => $selectedItemId ?? 'all', 'start_date' => $startDate ?? today()->format('Y-m-d'), 'end_date' => $endDate ?? today()->format('Y-m-d')]) }}"
                    target="_blank"
                    class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-1.5 border border-slate-700">
                     <i class="fa-solid fa-print text-xs"></i>
                     <span>Cetak Tabel</span>
                 </a>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -405,6 +405,23 @@
         var baseUrl = "{{ route('admin.activity-log.report') }}";
         var printUrl = baseUrl + "?item_id=" + encodeURIComponent(itemId) + "&start_date=" + encodeURIComponent(startDate) + "&end_date=" + encodeURIComponent(endDate);
         $('#btn-print-report').attr('href', printUrl);
+    }
+
+    function triggerActivityLogPrint() {
+        if (typeof $ !== 'undefined' && $.fn && $.fn.DataTable && $.fn.DataTable.isDataTable('#activityLogTable')) {
+            var table = $('#activityLogTable').DataTable();
+            var printBtn = table.button('.buttons-print');
+            if (printBtn && printBtn.length) {
+                printBtn.trigger();
+                return;
+            }
+        }
+        var itemId = $('#item_id').val() || 'all';
+        var startDate = $('#start_date').val() || '';
+        var endDate = $('#end_date').val() || '';
+        var baseUrl = "{{ route('admin.activity-log.report') }}";
+        var printUrl = baseUrl + "?item_id=" + encodeURIComponent(itemId) + "&start_date=" + encodeURIComponent(startDate) + "&end_date=" + encodeURIComponent(endDate);
+        window.open(printUrl, '_blank');
     }
 
     $(document).ready(function() {

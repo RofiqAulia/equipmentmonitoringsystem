@@ -373,14 +373,18 @@
                 columns: [0, 1, 2, 3, 4, 5],
                 format: {
                     body: function(data, row, column, node) {
-                        return data.replace(/\[DATE:[^\]]*\]/g, '')
-                                   .replace(/\[ITEM:[^\]]*\]/g, '')
-                                   .replace(/<[^>]*>/g, '')
-                                   .replace(/\s+/g, ' ')
-                                   .trim();
+                        if (data === null || data === undefined) return '';
+                        var str = String(data);
+                        return str.replace(/\[DATE:[^\]]*\]/g, '')
+                                  .replace(/\[ITEM:[^\]]*\]/g, '')
+                                  .replace(/<[^>]*>/g, '')
+                                  .replace(/\s+/g, ' ')
+                                  .trim();
                     },
                     footer: function(data, row, column, node) {
-                        return data.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                        if (data === null || data === undefined) return '';
+                        var str = String(data);
+                        return str.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
                     }
                 }
             };
