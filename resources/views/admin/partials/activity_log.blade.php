@@ -78,10 +78,10 @@
                 <span class="font-bold text-slate-600 dark:text-slate-400 flex items-center mr-1">
                     <i class="fa-solid fa-bolt text-amber-500 mr-1"></i> Preset Rentang:
                 </span>
-                <button type="button" onclick="setPresetDate('today')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Hari Ini</button>
-                <button type="button" onclick="setPresetDate('7days')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">7 Hari Terakhir</button>
-                <button type="button" onclick="setPresetDate('month')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Bulan Ini</button>
-                <button type="button" onclick="setPresetDate('all')" class="px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white dark:hover:bg-cyan-500 text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Semua Tanggal</button>
+                <button type="button" id="btn-preset-today" onclick="setPresetDate('today')" class="preset-btn px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Hari Ini</button>
+                <button type="button" id="btn-preset-7days" onclick="setPresetDate('7days')" class="preset-btn px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">7 Hari Terakhir</button>
+                <button type="button" id="btn-preset-month" onclick="setPresetDate('month')" class="preset-btn px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Bulan Ini</button>
+                <button type="button" id="btn-preset-all" onclick="setPresetDate('all')" class="preset-btn px-2.5 py-1 bg-white dark:bg-slate-900 hover:bg-cyan-600 hover:text-white text-slate-700 dark:text-slate-300 font-semibold rounded-lg border border-slate-300 dark:border-slate-700 transition shadow-sm">Semua Tanggal</button>
                 
                 <button type="button" onclick="resetActivityFilter()" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold rounded-lg transition" title="Reset Filter ke Hari Ini">
                     <i class="fa-solid fa-rotate-left mr-1"></i> Reset
@@ -128,7 +128,7 @@
                             }
                         }
                     @endphp
-                    <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition"
+                    <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition log-activity-row"
                         data-date="{{ $logDate }}"
                         data-item-id="{{ $retrieval->item_id }}">
                         <td class="px-3 py-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs"
@@ -139,10 +139,11 @@
                         </td>
                         <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap"
                             data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}"
+                            data-search="[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}] #LOG-{{ $retrieval->id }} {{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB"
                             data-date="{{ $logDate }}"
                             data-item-id="{{ $retrieval->item_id }}">
-                            <!-- Hidden Metadata for DataTables Real-time Filter -->
-                            <span class="hidden log-metadata" data-date="{{ $logDate }}" data-item-id="{{ $retrieval->item_id }}">[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}]</span>
+                            <!-- Zero-width inline tag so DataTables text readers never omit it -->
+                            <span style="display:inline-block; font-size:0; width:0; height:0; overflow:hidden;" class="log-metadata-tag">[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}]</span>
                             <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
                             <div class="text-[10px] text-slate-400">{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</div>
                         </td>
@@ -187,10 +188,6 @@
                         rowObj._date = rowObj.nTr.getAttribute('data-date');
                         rowObj._itemId = rowObj.nTr.getAttribute('data-item-id');
                     }
-                    if (!rowObj._date && rowObj.anCells && rowObj.anCells[0]) {
-                        rowObj._date = rowObj.anCells[0].getAttribute('data-date');
-                        rowObj._itemId = rowObj.anCells[0].getAttribute('data-item-id');
-                    }
                 });
             }
         }
@@ -198,7 +195,7 @@
 
     (function() {
         if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
-            // Remove previous instances of custom search filter to avoid duplicates
+            // Clear duplicate registrations of activityLogDateFilter
             if ($.fn.dataTable.ext.search) {
                 for (var i = $.fn.dataTable.ext.search.length - 1; i >= 0; i--) {
                     if ($.fn.dataTable.ext.search[i].name === 'activityLogDateFilter') {
@@ -208,7 +205,8 @@
             }
 
             var activityLogDateFilter = function(settings, searchData, index, rowData, counter) {
-                if (!settings.nTable || settings.nTable.id !== 'activityLogTable') {
+                var tableId = settings.sTableId || (settings.nTable ? settings.nTable.id : '');
+                if (tableId !== 'activityLogTable') {
                     return true;
                 }
 
@@ -216,25 +214,40 @@
                 var max = $('#end_date').val();
                 var selectedItem = $('#item_id').val();
 
-                // 1. Primary Extraction: Parse metadata directly from column 1 HTML (searchData[1])
-                var col1Html = searchData[1] || '';
-                var dateMatch = col1Html.match(/\[DATE:(\d{4}-\d{2}-\d{2})\]/);
-                var itemMatch = col1Html.match(/\[ITEM:(\d+)\]/);
+                var rowNode = settings.aoData[index] ? settings.aoData[index].nTr : null;
+                var rowDate = '';
+                var rowItemId = '';
 
-                var rowDate = dateMatch ? dateMatch[1] : '';
-                var rowItemId = itemMatch ? itemMatch[1] : '';
+                // Tier 1: Check TR node data attributes directly
+                if (rowNode) {
+                    rowDate = rowNode.getAttribute('data-date') || '';
+                    rowItemId = rowNode.getAttribute('data-item-id') || '';
+                }
 
-                // 2. Secondary Extraction: Fallback to aoData memory or DOM data attributes if needed
-                if (!rowDate) {
-                    var rowObj = settings.aoData[index];
-                    if (rowObj) {
-                        rowDate = rowObj._date;
-                        rowItemId = rowObj._itemId;
+                // Tier 2: Parse [DATE:YYYY-MM-DD] tag from searchData[1]
+                if (!rowDate && searchData && searchData[1]) {
+                    var dMatch = searchData[1].match(/\[DATE:(\d{4}-\d{2}-\d{2})\]/);
+                    if (dMatch) rowDate = dMatch[1];
+                }
+                if (!rowItemId && searchData && searchData[1]) {
+                    var iMatch = searchData[1].match(/\[ITEM:(\d+)\]/);
+                    if (iMatch) rowItemId = iMatch[1];
+                }
 
-                        if (!rowDate && rowObj.nTr) {
-                            rowDate = rowObj.nTr.getAttribute('data-date');
-                            rowItemId = rowObj.nTr.getAttribute('data-item-id');
-                        }
+                // Tier 3: Fallback parse rendered text date ("31 Aug 2026", "03 Sep 2026") from cell string
+                if (!rowDate && searchData && searchData[1]) {
+                    var textMatch = searchData[1].match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/);
+                    if (textMatch) {
+                        var day = String(textMatch[1]).padStart(2, '0');
+                        var monthStr = textMatch[2].toLowerCase();
+                        var year = textMatch[3];
+                        var monthMap = {
+                            'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04', 'may': '05', 'jun': '06',
+                            'jul': '07', 'aug': '08', 'sep': '09', 'oct': '10', 'nov': '11', 'dec': '12',
+                            'agt': '08', 'okt': '10', 'des': '12'
+                        };
+                        var m = monthMap[monthStr.substring(0, 3)] || '01';
+                        rowDate = year + '-' + m + '-' + day;
                     }
                 }
 
@@ -248,13 +261,13 @@
                 // Filter Date Range (start_date <= rowDate <= end_date)
                 if (min || max) {
                     if (!rowDate) {
-                        return false;
+                        return false; // Hide if date missing when date filter active
                     }
                     if (min && rowDate < min) {
-                        return false;
+                        return false; // Hide if older than start date
                     }
                     if (max && rowDate > max) {
-                        return false;
+                        return false; // Hide if newer than end date
                     }
                 }
 
@@ -294,12 +307,26 @@
         }
     }
 
+    function setPresetActiveHighlight(presetKey) {
+        $('.preset-btn').removeClass('bg-cyan-600 text-white shadow-md border-cyan-600').addClass('bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700');
+        if (presetKey === 'today') {
+            $('#btn-preset-today').removeClass('bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700').addClass('bg-cyan-600 text-white font-bold shadow-md border-cyan-600');
+        } else if (presetKey === '7days') {
+            $('#btn-preset-7days').removeClass('bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700').addClass('bg-cyan-600 text-white font-bold shadow-md border-cyan-600');
+        } else if (presetKey === 'month') {
+            $('#btn-preset-month').removeClass('bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700').addClass('bg-cyan-600 text-white font-bold shadow-md border-cyan-600');
+        } else if (presetKey === 'all') {
+            $('#btn-preset-all').removeClass('bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700').addClass('bg-cyan-600 text-white font-bold shadow-md border-cyan-600');
+        }
+    }
+
     function resetActivityFilter() {
         var today = new Date().toISOString().split('T')[0];
         $('#start_date').val(today);
         $('#end_date').val(today);
         $('#item_id').val('all');
         $('#group-activity-select').val('-1');
+        setPresetActiveHighlight('today');
         applyActivityGrouping();
         applyActivityFilter();
     }
@@ -330,6 +357,7 @@
             $('#start_date').val('');
             $('#end_date').val('');
         }
+        setPresetActiveHighlight(preset);
         applyActivityFilter();
     }
 
@@ -349,6 +377,8 @@
     }
 
     $(document).ready(function() {
+        setPresetActiveHighlight('today');
+
         $('#start_date, #end_date, #item_id').on('change input', function() {
             applyActivityFilter();
         });
@@ -360,7 +390,7 @@
         setTimeout(function() {
             applyActivityGrouping();
             applyActivityFilter();
-        }, 150);
+        }, 100);
     });
 </script>
 @endpush
