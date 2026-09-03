@@ -141,6 +141,8 @@
                             data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}"
                             data-date="{{ $logDate }}"
                             data-item-id="{{ $retrieval->item_id }}">
+                            <!-- Hidden Metadata for DataTables Real-time Filter -->
+                            <span class="hidden log-metadata" data-date="{{ $logDate }}" data-item-id="{{ $retrieval->item_id }}">[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}]</span>
                             <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
                             <div class="text-[10px] text-slate-400">{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</div>
                         </td>
@@ -196,6 +198,7 @@
 
     (function() {
         if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
+            // Remove previous instances of custom search filter to avoid duplicates
             if ($.fn.dataTable.ext.search) {
                 for (var i = $.fn.dataTable.ext.search.length - 1; i >= 0; i--) {
                     if ($.fn.dataTable.ext.search[i].name === 'activityLogDateFilter') {
@@ -213,21 +216,26 @@
                 var max = $('#end_date').val();
                 var selectedItem = $('#item_id').val();
 
-                var rowObj = settings.aoData[index];
-                var rowDate = rowObj._date;
-                var rowItemId = rowObj._itemId;
+                // 1. Primary Extraction: Parse metadata directly from column 1 HTML (searchData[1])
+                var col1Html = searchData[1] || '';
+                var dateMatch = col1Html.match(/\[DATE:(\d{4}-\d{2}-\d{2})\]/);
+                var itemMatch = col1Html.match(/\[ITEM:(\d+)\]/);
 
+                var rowDate = dateMatch ? dateMatch[1] : '';
+                var rowItemId = itemMatch ? itemMatch[1] : '';
+
+                // 2. Secondary Extraction: Fallback to aoData memory or DOM data attributes if needed
                 if (!rowDate) {
-                    var rowNode = rowObj.nTr;
-                    if (rowNode) {
-                        rowDate = rowNode.getAttribute('data-date');
-                        rowItemId = rowNode.getAttribute('data-item-id');
-                    }
-                }
+                    var rowObj = settings.aoData[index];
+                    if (rowObj) {
+                        rowDate = rowObj._date;
+                        rowItemId = rowObj._itemId;
 
-                if (!rowDate && rowObj.anCells && rowObj.anCells[0]) {
-                    rowDate = rowObj.anCells[0].getAttribute('data-date');
-                    rowItemId = rowObj.anCells[0].getAttribute('data-item-id');
+                        if (!rowDate && rowObj.nTr) {
+                            rowDate = rowObj.nTr.getAttribute('data-date');
+                            rowItemId = rowObj.nTr.getAttribute('data-item-id');
+                        }
+                    }
                 }
 
                 // Filter Item
