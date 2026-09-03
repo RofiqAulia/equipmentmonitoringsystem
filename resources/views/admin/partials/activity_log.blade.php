@@ -199,9 +199,7 @@
                     <td id="activity-total-qty" class="px-4 py-3 text-center font-black text-rose-600 dark:text-rose-400 text-sm whitespace-nowrap">
                         0 unit
                     </td>
-                    <td colspan="3" class="px-4 py-3 text-xs text-slate-500 font-normal italic">
-                        (Terakumulasi berdasarkan transaksi aktif)
-                    </td>
+                    <td colspan="3" class="px-4 py-3"></td>
                 </tr>
             </tfoot>
         </table>
