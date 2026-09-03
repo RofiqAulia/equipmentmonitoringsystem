@@ -457,22 +457,24 @@
                         },
                         customize: function (win) {
                             var $table = $(win.document.body).find('table');
-                            $table.find('tfoot tr td:nth-child(2)').css({
-                                'font-weight': '900',
-                                'text-align': 'right',
-                                'text-transform': 'uppercase',
-                                'white-space': 'nowrap'
-                            });
-                            $table.find('tfoot tr td:nth-child(3)').css({
-                                'font-weight': '900',
-                                'color': '#e11d48',
-                                'text-align': 'left',
-                                'white-space': 'nowrap'
-                            });
-                            $table.find('tfoot tr td').css({
-                                'border-top': '2px solid #0f172a',
-                                'padding': '8px 12px'
-                            });
+                            var totalQtyText = $('#activity-total-qty').text().replace(/\s+/g, ' ').trim() || '0 unit';
+                            
+                            $table.find('tfoot').remove();
+                            
+                            var newFooterHtml = `
+                                <tfoot>
+                                    <tr style="border-top: 2px solid #0f172a; border-bottom: 2px solid #0f172a; font-weight: 800; background-color: #f8fafc;">
+                                        <td style="padding: 10px 12px; text-align: right; font-weight: 900; text-transform: uppercase; font-size: 11px;" colspan="2">
+                                            Total Barang:
+                                        </td>
+                                        <td style="padding: 10px 12px; text-align: left; font-weight: 900; color: #e11d48; font-size: 13px; white-space: nowrap;" colspan="4">
+                                            ` + totalQtyText + `
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            `;
+                            
+                            $table.append(newFooterHtml);
                         },
                         exportOptions: activityExportOptions
                     }
