@@ -166,11 +166,6 @@
                             <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border {{ $badgeStyle }} leading-snug">
                                 <i class="fa-solid {{ $iconStyle }} mr-1"></i> {{ $displayRole }}: {{ $displayName }}
                             </span>
-                            @if(!$isAdminAction && $performerUser && $performerUser->id !== ($supervisorUser->id ?? null))
-                                <div class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5">
-                                    Op: {{ $performerUser->name }}
-                                </div>
-                            @endif
                         </td>
                         <td class="px-4 py-3 break-words max-w-[200px]">
                             <div class="font-bold text-slate-900 dark:text-white leading-snug">{{ $retrieval->item->name ?? 'N/A' }}</div>
