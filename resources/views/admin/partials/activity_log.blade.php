@@ -120,15 +120,29 @@
             <tbody class="divide-y divide-slate-200 dark:divide-slate-800/60">
                 @foreach($recentRetrievals as $retrieval)
                     @php
-                        $logDate = optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                        $dt = $retrieval->picked_at ?? $retrieval->created_at;
+                        $logDate = '';
+                        if ($dt) {
+                            if ($dt instanceof \Carbon\CarbonInterface) {
+                                $logDate = $dt->copy()->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                            } else {
+                                $logDate = \Carbon\Carbon::parse($dt)->setTimezone('Asia/Jakarta')->format('Y-m-d');
+                            }
+                        }
                     @endphp
                     <tr class="hover:bg-slate-100/60 dark:hover:bg-slate-900/50 transition"
                         data-date="{{ $logDate }}"
                         data-item-id="{{ $retrieval->item_id }}">
-                        <td class="px-3 py-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs" data-order="{{ $loop->iteration }}">
+                        <td class="px-3 py-3 text-center font-bold text-slate-500 dark:text-slate-400 text-xs"
+                            data-order="{{ $loop->iteration }}"
+                            data-date="{{ $logDate }}"
+                            data-item-id="{{ $retrieval->item_id }}">
                             {{ $loop->iteration }}
                         </td>
-                        <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap" data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}">
+                        <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap"
+                            data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}"
+                            data-date="{{ $logDate }}"
+                            data-item-id="{{ $retrieval->item_id }}">
                             <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
                             <div class="text-[10px] text-slate-400">{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</div>
                         </td>
@@ -163,9 +177,37 @@
 
 @push('scripts')
 <script>
+    function syncActivityLogDataAttributes() {
+        if (typeof $ !== 'undefined' && $.fn && $.fn.DataTable && $.fn.DataTable.isDataTable('#activityLogTable')) {
+            var table = $('#activityLogTable').DataTable();
+            var dtSettings = table.settings()[0];
+            if (dtSettings && dtSettings.aoData) {
+                dtSettings.aoData.forEach(function(rowObj) {
+                    if (rowObj.nTr) {
+                        rowObj._date = rowObj.nTr.getAttribute('data-date');
+                        rowObj._itemId = rowObj.nTr.getAttribute('data-item-id');
+                    }
+                    if (!rowObj._date && rowObj.anCells && rowObj.anCells[0]) {
+                        rowObj._date = rowObj.anCells[0].getAttribute('data-date');
+                        rowObj._itemId = rowObj.anCells[0].getAttribute('data-item-id');
+                    }
+                });
+            }
+        }
+    }
+
     (function() {
         if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
-            $.fn.dataTable.ext.search.push(function(settings, searchData, index, rowData, counter) {
+            // Remove previous instances of custom search filter to avoid duplicates
+            if ($.fn.dataTable.ext.search) {
+                for (var i = $.fn.dataTable.ext.search.length - 1; i >= 0; i--) {
+                    if ($.fn.dataTable.ext.search[i].name === 'activityLogDateFilter') {
+                        $.fn.dataTable.ext.search.splice(i, 1);
+                    }
+                }
+            }
+
+            var activityLogDateFilter = function(settings, searchData, index, rowData, counter) {
                 if (!settings.nTable || settings.nTable.id !== 'activityLogTable') {
                     return true;
                 }
@@ -174,11 +216,22 @@
                 var max = $('#end_date').val();
                 var selectedItem = $('#item_id').val();
 
-                var rowNode = settings.aoData[index].nTr;
-                if (!rowNode) return true;
+                var rowObj = settings.aoData[index];
+                var rowDate = rowObj._date;
+                var rowItemId = rowObj._itemId;
 
-                var rowDate = $(rowNode).attr('data-date');
-                var rowItemId = $(rowNode).attr('data-item-id');
+                if (!rowDate) {
+                    var rowNode = rowObj.nTr;
+                    if (rowNode) {
+                        rowDate = rowNode.getAttribute('data-date');
+                        rowItemId = rowNode.getAttribute('data-item-id');
+                    }
+                }
+
+                if (!rowDate && rowObj.anCells && rowObj.anCells[0]) {
+                    rowDate = rowObj.anCells[0].getAttribute('data-date');
+                    rowItemId = rowObj.anCells[0].getAttribute('data-item-id');
+                }
 
                 // Filter Item
                 if (selectedItem && selectedItem !== 'all' && selectedItem !== '') {
@@ -188,7 +241,10 @@
                 }
 
                 // Filter Date Range (start_date <= rowDate <= end_date)
-                if (rowDate) {
+                if (min || max) {
+                    if (!rowDate) {
+                        return false; // Hide if missing date when date filter is specified
+                    }
                     if (min && rowDate < min) {
                         return false;
                     }
@@ -198,13 +254,17 @@
                 }
 
                 return true;
-            });
+            };
+
+            Object.defineProperty(activityLogDateFilter, 'name', { value: 'activityLogDateFilter' });
+            $.fn.dataTable.ext.search.push(activityLogDateFilter);
         }
     })();
 
     function applyActivityFilter() {
         if ($.fn.DataTable.isDataTable('#activityLogTable')) {
             var table = $('#activityLogTable').DataTable();
+            syncActivityLogDataAttributes();
             table.draw();
             updateActivityFilterSummary();
         }
@@ -269,8 +329,9 @@
 
         setTimeout(function() {
             applyActivityFilter();
-        }, 200);
+        }, 150);
     });
 </script>
 @endpush
+
 
