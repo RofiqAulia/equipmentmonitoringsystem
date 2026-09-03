@@ -369,8 +369,59 @@
                 $.fn.dataTable.ext.errMode = 'none';
             }
 
-            // 1. Activity Log Table with Dynamic Row Grouping
+            var activityExportOptions = {
+                columns: [0, 1, 2, 3, 4, 5, 6],
+                format: {
+                    body: function(data, row, column, node) {
+                        return data.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                    }
+                }
+            };
+
+            // 1. Activity Log Table with Dynamic Row Grouping and Export Buttons
             var activityTable = $('#activityLogTable').DataTable({
+                dom: '<"flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-4 p-3 bg-slate-50/70 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800"<"flex flex-wrap items-center gap-3"lB><"w-full xl:w-auto"f>>rt<"flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 p-2"ip>',
+                buttons: [
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fa-solid fa-file-csv mr-1.5"></i> Ekspor CSV',
+                        title: 'Activity_Log_Report_' + new Date().toISOString().slice(0,10),
+                        exportOptions: activityExportOptions
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fa-solid fa-file-excel mr-1.5"></i> Ekspor Excel',
+                        title: 'Activity_Log_Report_' + new Date().toISOString().slice(0,10),
+                        exportOptions: activityExportOptions
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
+                        title: '',
+                        messageTop: `
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
+                                <div>
+                                    <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo" style="max-height: 70px; width: auto; object-fit: contain;">
+                                </div>
+                                <div style="text-align: right; font-weight: 700; font-size: 12px; color: #0f172a;">
+                                    Laporan Activity Log Transaksi Pengambilan<br>
+                                    Malang, {{ now()->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}
+                                </div>
+                            </div>
+                        `,
+                        messageBottom: `
+                            <div style="margin-top: 35px; display: flex; justify-content: flex-end; font-size: 11px; color: #0f172a;">
+                                <div style="text-align: center; width: 200px;">
+                                    <div>Disetujui oleh,</div>
+                                    <div style="height: 55px;"></div>
+                                    <div style="font-weight: bold;">{{ auth()->user()->name ?? 'Supervisor' }}</div>
+                                    <div style="font-size: 10px; color: #64748b;">Supervisor Gudang</div>
+                                </div>
+                            </div>
+                        `,
+                        exportOptions: activityExportOptions
+                    }
+                ],
                 pageLength: -1,
                 lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
                 order: [[0, 'desc']], // Default Sort ID Descending

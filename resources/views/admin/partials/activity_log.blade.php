@@ -91,9 +91,9 @@
             <div class="flex items-center space-x-2 pt-1 md:pt-0 shrink-0">
                 <a id="btn-print-report" href="{{ route('admin.activity-log.report', ['item_id' => $selectedItemId ?? 'all', 'start_date' => $startDate ?? today()->format('Y-m-d'), 'end_date' => $endDate ?? today()->format('Y-m-d')]) }}"
                    target="_blank"
-                   class="px-4 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl shadow-md shadow-rose-600/20 transition flex items-center justify-center space-x-1.5">
+                   class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center justify-center space-x-1.5 border border-slate-700">
                     <i class="fa-solid fa-print text-xs"></i>
-                    <span>Cetak / Unduh Laporan</span>
+                    <span>Cetak Tabel</span>
                 </a>
             </div>
         </div>

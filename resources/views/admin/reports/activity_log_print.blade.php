@@ -66,8 +66,8 @@
             <button onclick="window.close()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition">
                 <i class="fa-solid fa-xmark mr-1.5"></i> Tutup
             </button>
-            <button onclick="window.print()" class="px-5 py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-xl transition shadow-lg shadow-rose-600/30 flex items-center">
-                <i class="fa-solid fa-print mr-2"></i> Cetak / Unduh PDF
+            <button onclick="window.print()" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition shadow-lg flex items-center border border-slate-700">
+                <i class="fa-solid fa-print mr-2"></i> Cetak Tabel
             </button>
         </div>
     </div>
