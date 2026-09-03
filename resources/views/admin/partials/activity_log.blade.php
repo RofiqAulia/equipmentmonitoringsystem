@@ -194,13 +194,12 @@
             <tfoot class="bg-slate-100/90 dark:bg-slate-900/90 font-bold border-t-2 border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white">
                 <tr>
                     <td class="px-3 py-3"></td>
-                    <td class="px-4 py-3 text-right font-black uppercase text-xs tracking-wider">
+                    <td class="px-4 py-3 text-right font-black uppercase text-xs tracking-wider whitespace-nowrap">
                         Total Barang:
                     </td>
-                    <td id="activity-total-qty" class="px-4 py-3 text-center font-black text-rose-600 dark:text-rose-400 text-sm whitespace-nowrap">
+                    <td colspan="4" id="activity-total-qty" class="px-4 py-3 text-left font-black text-rose-600 dark:text-rose-400 text-sm whitespace-nowrap" style="white-space: nowrap !important;">
                         0 unit
                     </td>
-                    <td colspan="3" class="px-4 py-3"></td>
                 </tr>
             </tfoot>
         </table>

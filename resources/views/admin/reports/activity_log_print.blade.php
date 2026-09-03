@@ -206,13 +206,12 @@
                 <tfoot>
                     <tr class="bg-slate-100 text-slate-900 font-bold border-t-2 border-slate-900 text-xs">
                         <td class="border border-slate-300 px-3 py-3"></td>
-                        <td class="border border-slate-300 px-4 py-3 text-right uppercase tracking-wider font-extrabold">
+                        <td class="border border-slate-300 px-4 py-3 text-right uppercase tracking-wider font-extrabold whitespace-nowrap">
                             TOTAL BARANG:
                         </td>
-                        <td class="border border-slate-300 px-4 py-3 text-center font-black text-rose-600 text-sm whitespace-nowrap">
+                        <td colspan="4" class="border border-slate-300 px-4 py-3 text-left font-black text-rose-600 text-sm whitespace-nowrap" style="white-space: nowrap !important;">
                             -{{ number_format($totalQtyPicked) }} unit
                         </td>
-                        <td colspan="3" class="border border-slate-300 px-4 py-3"></td>
                     </tr>
                 </tfoot>
             </table>
