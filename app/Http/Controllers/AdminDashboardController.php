@@ -49,32 +49,19 @@ class AdminDashboardController extends Controller
         ];
 
         // 3. Activity Log Real-time & Filtered by Item & Date Range
-        $startDate = $request->has('start_date') ? $request->input('start_date') : today()->format('Y-m-d');
-        $endDate = $request->has('end_date') ? $request->input('end_date') : today()->format('Y-m-d');
-        $selectedItemId = $request->input('item_id', '');
+        $startDate = $request->input('start_date', today()->format('Y-m-d'));
+        $endDate = $request->input('end_date', today()->format('Y-m-d'));
+        $selectedItemId = $request->input('item_id', 'all');
 
-        $logQuery = RetrievalLog::with([
+        // Fetch retrieval logs for real-time DataTables client-side date range filtering
+        $recentRetrievals = RetrievalLog::with([
             'user:id,name,email,avatar',
             'supervisor:id,name,email,avatar',
             'item:id,sku,name,location_bin',
-        ]);
-
-        if (!empty($selectedItemId) && $selectedItemId !== 'all') {
-            $logQuery->where('item_id', $selectedItemId);
-        }
-
-        if (!empty($startDate)) {
-            $logQuery->whereDate('picked_at', '>=', $startDate);
-        }
-
-        if (!empty($endDate)) {
-            $logQuery->whereDate('picked_at', '<=', $endDate);
-        }
-
-        $recentRetrievals = $logQuery
-            ->orderBy('picked_at', 'desc')
-            ->orderBy('id', 'desc')
-            ->get();
+        ])
+        ->orderBy('picked_at', 'desc')
+        ->orderBy('id', 'desc')
+        ->get();
 
         // 4. Inventory List with Search & Status Filtering
         $query = Item::query();
