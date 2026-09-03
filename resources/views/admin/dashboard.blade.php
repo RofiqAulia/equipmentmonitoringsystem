@@ -398,17 +398,38 @@
                         extend: 'print',
                         text: '<i class="fa-solid fa-print mr-1.5"></i> Cetak Tabel',
                         title: '',
-                        messageTop: `
-                            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">
-                                <div>
-                                    <img src="{{ asset('images/LogoMieGacoan.png') }}" alt="Logo" style="max-height: 70px; width: auto; object-fit: contain;">
-                                </div>
-                                <div style="text-align: right; font-weight: 700; font-size: 12px; color: #0f172a;">
-                                    Laporan Activity Log Transaksi Pengambilan<br>
-                                    Malang, {{ now()->setTimezone('Asia/Jakarta')->translatedFormat('d F Y') }}
-                                </div>
-                            </div>
-                        `,
+                        messageTop: function() {
+                            var start = $('#start_date').val();
+                            var end = $('#end_date').val();
+                            var months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                            
+                            function fmtDate(dStr) {
+                                if (!dStr) return '';
+                                var p = dStr.split('-');
+                                if (p.length !== 3) return dStr;
+                                var idx = parseInt(p[1], 10) - 1;
+                                return p[2] + ' ' + (months[idx] || p[1]) + ' ' + p[0];
+                            }
+
+                            var dateText = '';
+                            if (start && end) {
+                                dateText = (start === end) ? fmtDate(start) : (fmtDate(start) + ' - ' + fmtDate(end));
+                            } else if (start) {
+                                dateText = 'Dari ' + fmtDate(start);
+                            } else if (end) {
+                                dateText = 'Sampai ' + fmtDate(end);
+                            } else {
+                                dateText = 'Semua Tanggal';
+                            }
+
+                            var logoUrl = "{{ asset('images/LogoMieGacoan.png') }}";
+                            return '<div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px;">' +
+                                   '<div><img src="' + logoUrl + '" alt="Logo" style="max-height: 70px; width: auto; object-fit: contain;"></div>' +
+                                   '<div style="text-align: right; font-weight: 700; font-size: 12px; color: #0f172a;">' +
+                                   'Laporan Activity Log Transaksi Pengambilan<br>' +
+                                   'Malang, ' + dateText +
+                                   '</div></div>';
+                        },
                         exportOptions: activityExportOptions
                     }
                 ],

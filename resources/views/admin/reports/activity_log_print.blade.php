@@ -93,7 +93,18 @@
                     Laporan Resmi Pengambilan Barang
                 </div>
                 <div class="text-xs font-semibold text-slate-600 pt-1">
-                    Periode Filter: <span class="font-bold text-slate-900">{{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} s/d {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</span>
+                    @php
+                        \Carbon\Carbon::setLocale('id');
+                        $startFmt = $startDate ? \Carbon\Carbon::parse($startDate)->translatedFormat('d F Y') : null;
+                        $endFmt = $endDate ? \Carbon\Carbon::parse($endDate)->translatedFormat('d F Y') : null;
+                        
+                        if ($startFmt && $endFmt) {
+                            $periodStr = ($startFmt === $endFmt) ? $startFmt : ($startFmt . ' - ' . $endFmt);
+                        } else {
+                            $periodStr = $startFmt ?? $endFmt ?? 'Semua Tanggal';
+                        }
+                    @endphp
+                    Periode Filter: <span class="font-bold text-slate-900">{{ $periodStr }}</span>
                 </div>
                 <div class="text-[10px] text-slate-500">
                     Dicetak Pada: {{ $printedAt }}
