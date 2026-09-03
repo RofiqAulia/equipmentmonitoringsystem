@@ -209,14 +209,12 @@
         }
     }
 
-    (function() {
-        if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable) {
-            // Clear duplicate registrations of activityLogDateFilter
-            if ($.fn.dataTable.ext.search) {
-                for (var i = $.fn.dataTable.ext.search.length - 1; i >= 0; i--) {
-                    if ($.fn.dataTable.ext.search[i].name === 'activityLogDateFilter') {
-                        $.fn.dataTable.ext.search.splice(i, 1);
-                    }
+    function registerActivityLogFilter() {
+        if (typeof $ !== 'undefined' && $.fn && $.fn.dataTable && $.fn.dataTable.ext && $.fn.dataTable.ext.search) {
+            // Remove any previous instance of activityLogDateFilter to prevent duplicates
+            for (var i = $.fn.dataTable.ext.search.length - 1; i >= 0; i--) {
+                if ($.fn.dataTable.ext.search[i].name === 'activityLogDateFilter') {
+                    $.fn.dataTable.ext.search.splice(i, 1);
                 }
             }
 
@@ -293,10 +291,11 @@
             Object.defineProperty(activityLogDateFilter, 'name', { value: 'activityLogDateFilter' });
             $.fn.dataTable.ext.search.push(activityLogDateFilter);
         }
-    })();
+    }
 
     function applyActivityFilter() {
-        if ($.fn.DataTable.isDataTable('#activityLogTable')) {
+        registerActivityLogFilter();
+        if (typeof $ !== 'undefined' && $.fn && $.fn.DataTable && $.fn.DataTable.isDataTable('#activityLogTable')) {
             var table = $('#activityLogTable').DataTable();
             syncActivityLogDataAttributes();
             table.draw();
@@ -393,6 +392,7 @@
     }
 
     $(document).ready(function() {
+        registerActivityLogFilter();
         setPresetActiveHighlight('today');
 
         $('#start_date, #end_date, #item_id').on('change input', function() {
