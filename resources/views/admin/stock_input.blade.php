@@ -99,27 +99,47 @@
                     </div>
                 </div>
 
-                <!-- Direct File Upload Dropzone (All Image Types: PNG, JPG, WEBP, GIF, SVG, BMP, HEIC, etc.) -->
+                <!-- Direct File Upload & Mobile Camera Capture -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                        <i class="fa-solid fa-cloud-arrow-up text-cyan-500 mr-1"></i> Upload File Gambar Barang (Mendukung Semua Jenis Gambar)
+                    <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
+                        <i class="fa-solid fa-camera-retro text-cyan-500 mr-1"></i> Foto Barang (Kamera HP / Upload File Galeri)
                     </label>
                     
-                    <div class="relative border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-cyan-500 dark:hover:border-cyan-500 rounded-2xl p-4 transition text-center bg-slate-50 dark:bg-slate-900/50 cursor-pointer group" onclick="document.getElementById('image_file_input').click()">
-                        <input type="file" name="image_file" id="image_file_input" accept="image/*,.png,.jpg,.jpeg,.gif,.webp,.svg,.bmp,.heic,.avif" onchange="previewSelectedImage(this)" class="hidden">
-                        
-                        <div class="space-y-1">
-                            <div class="w-10 h-10 mx-auto rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-lg group-hover:scale-110 transition duration-200">
-                                <i class="fa-solid fa-image"></i>
+                    <!-- Hidden File Inputs for Mobile Camera Capture vs File Upload -->
+                    <input type="file" name="image_file_camera" id="image_camera_input" accept="image/*" capture="environment" onchange="previewSelectedImage(this)" class="hidden">
+                    <input type="file" name="image_file" id="image_file_input" accept="image/*,.png,.jpg,.jpeg,.gif,.webp,.svg,.bmp,.heic,.avif" onchange="previewSelectedImage(this)" class="hidden">
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Option 1: Mobile Phone Camera -->
+                        <button type="button" onclick="document.getElementById('image_camera_input').click()" class="p-4 rounded-2xl border-2 border-dashed border-cyan-500/40 hover:border-cyan-500 bg-cyan-500/5 hover:bg-cyan-500/10 transition text-center group flex flex-col items-center justify-center space-y-1.5 cursor-pointer shadow-sm">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 flex items-center justify-center text-lg group-hover:scale-110 transition duration-200">
+                                <i class="fa-solid fa-camera"></i>
                             </div>
-                            <div class="text-xs font-bold text-slate-800 dark:text-slate-200">
-                                Klik untuk upload gambar dari perangkat Anda
+                            <div class="text-xs font-extrabold text-cyan-700 dark:text-cyan-300">
+                                Ambil Foto via Kamera HP
                             </div>
                             <p class="text-[10px] text-slate-500 dark:text-slate-400">
-                                Format: PNG, JPG, JPEG, WEBP, GIF, SVG, BMP, HEIC (Maksimal 10MB)
+                                Buka kamera smartphone & potret fisik barang
                             </p>
-                        </div>
-                        <div id="file-name-display" class="mt-2 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hidden"></div>
+                        </button>
+
+                        <!-- Option 2: Gallery File Upload -->
+                        <button type="button" onclick="document.getElementById('image_file_input').click()" class="p-4 rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 bg-slate-50 dark:bg-slate-900/50 hover:bg-slate-100 dark:hover:bg-slate-900 transition text-center group flex flex-col items-center justify-center space-y-1.5 cursor-pointer shadow-sm">
+                            <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center text-lg group-hover:scale-110 transition duration-200">
+                                <i class="fa-solid fa-images"></i>
+                            </div>
+                            <div class="text-xs font-extrabold text-slate-800 dark:text-slate-200">
+                                Pilih File dari Galeri / HP
+                            </div>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400">
+                                Format: PNG, JPG, WEBP, HEIC (Maks 10MB)
+                            </p>
+                        </button>
+                    </div>
+
+                    <div id="file-name-display" class="mt-2.5 text-xs font-extrabold text-cyan-600 dark:text-cyan-400 hidden flex items-center gap-2 p-2.5 bg-cyan-500/10 rounded-2xl border border-cyan-500/20">
+                        <i class="fa-solid fa-circle-check text-sm text-cyan-500"></i>
+                        <span id="file-name-text"></span>
                     </div>
                 </div>
 
@@ -267,8 +287,13 @@
             reader.readAsDataURL(file);
 
             const display = document.getElementById('file-name-display');
+            const displayText = document.getElementById('file-name-text');
             if (display) {
-                display.innerText = 'File Terpilih: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+                if (displayText) {
+                    displayText.innerText = 'Foto Terpilih: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+                } else {
+                    display.innerText = 'Foto Terpilih: ' + file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+                }
                 display.classList.remove('hidden');
             }
         } else {

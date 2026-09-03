@@ -199,8 +199,35 @@
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Ganti Foto Barang (Opsional)</label>
-                <input type="file" name="image_file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3.5 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500/10 file:text-amber-600 dark:file:text-amber-400 hover:file:bg-amber-500/20">
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Ganti Foto Barang (Kamera HP / File Galeri)
+                </label>
+
+                <!-- Hidden file inputs for Mobile Camera vs File Selection -->
+                <input type="file" id="edit-camera-input" name="image_file_camera" accept="image/*" capture="environment" onchange="previewEditImage(this)" class="hidden">
+                <input type="file" id="edit-file-input" name="image_file" accept="image/*,.png,.jpg,.jpeg,.gif,.webp,.heic,.avif" onchange="previewEditImage(this)" class="hidden">
+
+                <!-- Dual Action Buttons: Camera HP vs Gallery -->
+                <div class="grid grid-cols-2 gap-2 mt-1">
+                    <button type="button" onclick="document.getElementById('edit-camera-input').click()" class="py-2.5 px-3 bg-amber-500/10 hover:bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-camera text-sm"></i> Kamera HP
+                    </button>
+                    <button type="button" onclick="document.getElementById('edit-file-input').click()" class="py-2.5 px-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-extrabold transition flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-images text-sm text-sky-500"></i> Pilih File / Galeri
+                    </button>
+                </div>
+
+                <!-- Preview Selected New Image -->
+                <div id="edit-preview-container" class="mt-2.5 hidden flex items-center gap-3 p-2 bg-amber-500/10 border border-amber-500/30 rounded-2xl">
+                    <img id="edit-preview-img" src="" class="w-12 h-12 rounded-xl object-cover border border-amber-500/40 shadow-sm shrink-0">
+                    <div class="flex-1 min-w-0 text-xs">
+                        <div class="font-extrabold text-amber-800 dark:text-amber-300 text-xs">Foto Baru Terpilih</div>
+                        <div id="edit-preview-filename" class="text-[10px] text-slate-500 dark:text-slate-400 truncate"></div>
+                    </div>
+                    <button type="button" onclick="clearEditImage()" class="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded-lg text-xs font-bold transition" title="Batalkan foto baru">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="flex space-x-2 pt-3 border-t border-slate-200 dark:border-slate-800">
@@ -242,6 +269,27 @@
 </div>
 
 <script>
+    // Preview & Clear image functions for Edit modal
+    function previewEditImage(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('edit-preview-img').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            document.getElementById('edit-preview-filename').innerText = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
+            document.getElementById('edit-preview-container').classList.remove('hidden');
+        }
+    }
+
+    function clearEditImage() {
+        document.getElementById('edit-camera-input').value = '';
+        document.getElementById('edit-file-input').value = '';
+        document.getElementById('edit-preview-container').classList.add('hidden');
+    }
+
     // 1. Detail Modal Handlers
     function openDetailModal(item) {
         document.getElementById('detail-item-image').src = item.image_url || 'https://placehold.co/100x100/1e293b/06b6d4?text=No+Photo';
@@ -271,6 +319,7 @@
 
     // 2. Edit Modal Handlers
     function openEditModal(item) {
+        clearEditImage();
         document.getElementById('edit-item-form').action = '/admin/stock/' + item.id;
         document.getElementById('edit-item-sku').value = item.sku;
         document.getElementById('edit-item-name').value = item.name;
@@ -282,6 +331,7 @@
     }
 
     function closeEditModal() {
+        clearEditImage();
         document.getElementById('edit-item-modal').classList.add('hidden');
     }
 

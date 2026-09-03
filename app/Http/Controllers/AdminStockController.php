@@ -40,13 +40,14 @@ class AdminStockController extends Controller
             'quantity' => 'required|integer|min:1',
             'minimum_stock' => 'required|integer|min:0',
             'image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
+            'image_file_camera' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
         ]);
 
         $uploadedImageUrl = null;
 
-        // Handle Image File Upload (All Image Types Supported)
-        if ($request->hasFile('image_file')) {
-            $file = $request->file('image_file');
+        // Handle Image File Upload (File Gallery or Camera Capture)
+        $file = $request->file('image_file') ?? $request->file('image_file_camera');
+        if ($file) {
             $uploadPath = public_path('uploads/items');
             
             if (!file_exists($uploadPath)) {
@@ -183,10 +184,11 @@ class AdminStockController extends Controller
             'available_stock' => 'required|integer|min:0',
             'minimum_stock' => 'required|integer|min:0',
             'image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
+            'image_file_camera' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
         ]);
 
-        if ($request->hasFile('image_file')) {
-            $file = $request->file('image_file');
+        $file = $request->file('image_file') ?? $request->file('image_file_camera');
+        if ($file) {
             $uploadPath = public_path('uploads/items');
             if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0777, true);
