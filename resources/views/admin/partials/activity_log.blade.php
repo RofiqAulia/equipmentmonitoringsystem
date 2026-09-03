@@ -105,7 +105,7 @@
             <thead class="bg-slate-100 dark:bg-slate-900/90 text-slate-500 dark:text-slate-400 uppercase font-semibold border-b border-slate-200 dark:border-slate-800">
                 <tr>
                     <th class="px-3 py-3 text-center w-10 cursor-pointer">No</th>
-                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-hashtag mr-1 text-slate-400"></i> ID / Waktu</th>
+                    <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-clock mr-1 text-slate-400"></i> Waktu Pengambilan</th>
                     <th class="px-4 py-3 cursor-pointer"><i class="fa-solid fa-user-shield mr-1 text-slate-400"></i> SPV / Penanggung Jawab</th>
                     <th class="px-4 py-3 min-w-[180px] cursor-pointer"><i class="fa-solid fa-box mr-1 text-slate-400"></i> Barang & SKU</th>
                     <th class="px-4 py-3 text-center cursor-pointer"><i class="fa-solid fa-layer-group mr-1 text-slate-400"></i> Qty Ambil</th>
@@ -152,15 +152,15 @@
                             data-item-id="{{ $retrieval->item_id }}">
                             {{ $loop->iteration }}
                         </td>
-                        <td class="px-4 py-3 font-mono text-slate-500 whitespace-nowrap"
+                        <td class="px-4 py-3 font-semibold text-slate-800 dark:text-slate-200 whitespace-nowrap"
                             data-order="{{ optional($retrieval->picked_at ?? $retrieval->created_at)->timestamp ?? 0 }}"
-                            data-search="[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}] #LOG-{{ $retrieval->id }} {{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB"
+                            data-search="[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}] {{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB"
                             data-date="{{ $logDate }}"
                             data-item-id="{{ $retrieval->item_id }}">
-                            <!-- Zero-width inline tag so DataTables text readers never omit it -->
-                            <span style="display:inline-block; font-size:0; width:0; height:0; overflow:hidden;" class="log-metadata-tag">[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}]</span>
-                            <div class="font-bold text-slate-800 dark:text-slate-200">#LOG-{{ $retrieval->id }}</div>
-                            <div class="text-[10px] text-slate-400">{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB</div>
+                            <span style="display:none;" class="log-metadata-tag">[DATE:{{ $logDate }}][ITEM:{{ $retrieval->item_id }}]</span>
+                            <div class="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                                <i class="fa-solid fa-clock text-cyan-500 mr-1.5 text-xs"></i>{{ optional($retrieval->picked_at ?? $retrieval->created_at)->setTimezone('Asia/Jakarta')->format('d M Y, H:i') }} WIB
+                            </div>
                         </td>
                         <td class="px-4 py-3 break-words max-w-[180px]">
                             <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border {{ $badgeStyle }} leading-snug">

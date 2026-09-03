@@ -373,7 +373,11 @@
                 columns: [0, 1, 2, 3, 4, 5, 6],
                 format: {
                     body: function(data, row, column, node) {
-                        return data.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                        return data.replace(/\[DATE:[^\]]*\]/g, '')
+                                   .replace(/\[ITEM:[^\]]*\]/g, '')
+                                   .replace(/<[^>]*>/g, '')
+                                   .replace(/\s+/g, ' ')
+                                   .trim();
                     }
                 }
             };
