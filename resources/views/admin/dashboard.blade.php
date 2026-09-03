@@ -385,16 +385,15 @@
                                   .trim();
                     },
                     footer: function(data, row, column, node) {
-                        if (column === 0) {
-                            return '';
-                        }
                         if (column === 1) {
                             return 'Total Barang:';
                         }
                         if (column === 2) {
-                            if (data === null || data === undefined) return '';
-                            var str = String(data);
-                            return str.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                            var totalVal = $('#activity-total-qty').text().replace(/\s+/g, ' ').trim();
+                            if (!totalVal && data) {
+                                totalVal = String(data).replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+                            }
+                            return totalVal || '0 unit';
                         }
                         return '';
                     }
