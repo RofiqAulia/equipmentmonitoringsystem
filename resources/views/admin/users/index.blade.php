@@ -530,7 +530,7 @@
 
 <script>
     $(document).ready(function() {
-        $('#users-datatable').DataTable({
+        var usersTable = $('#users-datatable').DataTable({
             language: {
                 search: "Cari User:",
                 lengthMenu: "Tampilkan _MENU_ user",
@@ -546,7 +546,17 @@
             },
             pageLength: -1,
             lengthMenu: [[-1, 10, 25, 50], ["Tampilkan Semua", 10, 25, 50]],
-            order: [[3, 'desc']]
+            order: [[3, 'desc']],
+            columnDefs: [
+                { targets: 0, orderable: false }
+            ]
+        });
+
+        usersTable.on('order.dt search.dt draw.dt', function () {
+            var info = usersTable.page.info();
+            usersTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = (info ? info.start : 0) + i + 1;
+            });
         });
     });
 

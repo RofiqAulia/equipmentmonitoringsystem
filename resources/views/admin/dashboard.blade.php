@@ -526,9 +526,9 @@
             });
 
             activityTable.on('order.dt search.dt draw.dt', function () {
-                var i = 1;
-                activityTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell) {
-                    cell.innerHTML = i++;
+                var info = activityTable.page.info();
+                activityTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = (info ? info.start : 0) + i + 1;
                 });
             });
 

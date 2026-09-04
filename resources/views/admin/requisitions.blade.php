@@ -274,10 +274,13 @@
             $.fn.dataTable.ext.errMode = 'none';
         }
         if ($('#requisitionsTable').length) {
-            $('#requisitionsTable').DataTable({
+            var requisitionsTable = $('#requisitionsTable').DataTable({
                 pageLength: -1,
                 lengthMenu: [[-1, 10, 25, 50], ["Tampilkan Semua", 10, 25, 50]],
-                order: [[0, 'desc']],
+                order: [[1, 'desc']],
+                columnDefs: [
+                    { targets: 0, orderable: false }
+                ],
                 language: {
                     search: "_INPUT_",
                     searchPlaceholder: "Cari riwayat pengajuan...",
@@ -286,6 +289,13 @@
                     paginate: { previous: "« Prev", next: "Next »" }
                 },
                 responsive: true
+            });
+
+            requisitionsTable.on('order.dt search.dt draw.dt', function () {
+                var info = requisitionsTable.page.info();
+                requisitionsTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = (info ? info.start : 0) + i + 1;
+                });
             });
         }
 

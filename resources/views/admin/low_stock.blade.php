@@ -203,12 +203,12 @@
                 $.fn.dataTable.ext.errMode = 'none';
             }
             if ($('#lowStockTable').length) {
-                $('#lowStockTable').DataTable({
+                var lowStockTable = $('#lowStockTable').DataTable({
                     pageLength: -1,
                     lengthMenu: [[-1, 10, 25, 50], ["Tampilkan Semua", 10, 25, 50]],
                     order: [[5, 'asc']], // Order by Sisa Stok ASC (most critical first)
                     columnDefs: [
-                        { orderable: false, targets: [1, 8] }
+                        { orderable: false, targets: [0, 1, 8] }
                     ],
                     language: {
                         search: "_INPUT_",
@@ -218,6 +218,13 @@
                         paginate: { previous: "« Prev", next: "Next »" }
                     },
                     responsive: true
+                });
+
+                lowStockTable.on('order.dt search.dt draw.dt', function () {
+                    var info = lowStockTable.page.info();
+                    lowStockTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = (info ? info.start : 0) + i + 1;
+                    });
                 });
             }
 
