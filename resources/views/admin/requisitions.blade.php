@@ -292,9 +292,8 @@
             });
 
             requisitionsTable.on('order.dt search.dt draw.dt', function () {
-                var info = requisitionsTable.page.info();
                 requisitionsTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                    cell.innerHTML = (info ? info.start : 0) + i + 1;
+                    cell.innerHTML = i + 1;
                 });
             });
         }
