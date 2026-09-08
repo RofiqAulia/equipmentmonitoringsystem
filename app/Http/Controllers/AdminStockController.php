@@ -219,6 +219,69 @@ class AdminStockController extends Controller
 
         return redirect()->back()->with('success', "Barang '{$name}' (SKU: {$sku}) berhasil dihapus dari inventaris.");
     }
+
+    /**
+     * Display printable view for Batch QR Code printing (Kertas A4 / Stiker 4x6 / Custom Grid).
+     */
+    public function qrPrintIndex(Request $request)
+    {
+        $sortBy = $request->input('sort_by', 'name'); // 'name', 'sku', 'id'
+        $sortDir = strtolower($request->input('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+        $mode = $request->input('mode', 'all'); // 'all', 'range', 'selected'
+        $grid = $request->input('grid_layout', 'grid-4x6');
+
+        $query = Item::query();
+
+        // Apply sorting
+        if ($sortBy === 'sku') {
+            $query->orderBy('sku', $sortDir);
+        } elseif ($sortBy === 'id') {
+            $query->orderBy('id', $sortDir);
+        } else { // default 'name' (Abjad)
+            $query->orderBy('name', $sortDir);
+        }
+
+        $allItems = $query->get();
+
+        // Add 1-indexed sequential order number to each item for reference
+        $allItems->each(function ($item, $index) {
+            $item->seq_num = $index + 1;
+        });
+
+        $filteredItems = $allItems;
+
+        if ($mode === 'range') {
+            $from = (int) $request->input('range_from', 1);
+            $to = (int) $request->input('range_to', $allItems->count());
+            
+            if ($from < 1) $from = 1;
+            if ($to > $allItems->count()) $to = $allItems->count();
+            if ($from > $to) $from = $to;
+
+            $filteredItems = $allItems->slice($from - 1, ($to - $from + 1))->values();
+        } elseif ($mode === 'selected') {
+            $selectedIds = (array) $request->input('selected_ids', []);
+            if (!empty($selectedIds)) {
+                $filteredItems = $allItems->filter(function ($item) use ($selectedIds) {
+                    return in_array($item->id, $selectedIds);
+                })->values();
+            }
+        }
+
+        return view('admin.qr_print', [
+            'allItems' => $allItems,
+            'filteredItems' => $filteredItems,
+            'sortBy' => $sortBy,
+            'sortDir' => $sortDir,
+            'mode' => $mode,
+            'rangeFrom' => $request->input('range_from', 1),
+            'rangeTo' => $request->input('range_to', min(24, max(1, $allItems->count()))),
+            'selectedIds' => (array) $request->input('selected_ids', []),
+            'gridLayout' => $grid,
+            'printedAt' => now()->translatedFormat('d F Y, H:i') . ' WIB',
+            'printedBy' => auth()->user()->name ?? 'Supervisor',
+        ]);
+    }
 }
 
 

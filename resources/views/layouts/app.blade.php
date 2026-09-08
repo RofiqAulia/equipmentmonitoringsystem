@@ -148,14 +148,28 @@
                                     <i class="fa-solid fa-chevron-right text-[10px] opacity-70"></i>
                                 </a>
 
-                                <!-- 2. Master Data Inventaris -->
-                                <a href="{{ route('admin.master-data') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.master-data') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
-                                    <div class="flex items-center space-x-3">
-                                        <i class="fa-solid fa-boxes-stacked text-sm"></i>
-                                        <span>Master Data</span>
+                                <!-- 2. Master Data Inventaris (Dengan Sub-Menu Cetak QR) -->
+                                <div class="space-y-1">
+                                    <button onclick="toggleMasterSubmenu()" type="button" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.master-data') || request()->routeIs('admin.stock.qr-print') ? 'bg-sky-600/10 text-sky-600 dark:text-sky-400 border border-sky-500/20' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fa-solid fa-boxes-stacked text-sm"></i>
+                                            <span>Master Data</span>
+                                        </div>
+                                        <i id="master-submenu-arrow" class="fa-solid fa-chevron-down text-[10px] opacity-70 transition-transform duration-200 {{ request()->routeIs('admin.master-data') || request()->routeIs('admin.stock.qr-print') ? 'rotate-180' : '' }}"></i>
+                                    </button>
+
+                                    <!-- Sub-Menu Items -->
+                                    <div id="master-submenu" class="pl-3.5 space-y-1 border-l-2 border-slate-200 dark:border-slate-800 ml-3.5 mt-1 {{ request()->routeIs('admin.master-data') || request()->routeIs('admin.stock.qr-print') ? '' : 'hidden' }}">
+                                        <a href="{{ route('admin.master-data') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition {{ request()->routeIs('admin.master-data') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500' }}">
+                                            <i class="fa-solid fa-table-list text-[11px]"></i>
+                                            <span>Data Inventaris</span>
+                                        </a>
+                                        <a href="{{ route('admin.stock.qr-print') }}" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl text-xs font-bold transition {{ request()->routeIs('admin.stock.qr-print') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-sky-500' }}">
+                                            <i class="fa-solid fa-qrcode text-[11px]"></i>
+                                            <span>Cetak QR Code</span>
+                                        </a>
                                     </div>
-                                    <i class="fa-solid fa-chevron-right text-[10px] opacity-70"></i>
-                                </a>
+                                </div>
 
                                 <!-- 2. Input / Restock Stok -->
                                 <a href="{{ route('admin.stock.input') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition {{ request()->routeIs('admin.stock.input') ? 'bg-sky-600 text-white shadow-md shadow-sky-600/25' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-pink-500' }}">
@@ -305,6 +319,17 @@
             }
             if (backdrop) {
                 backdrop.classList.toggle('hidden');
+            }
+        }
+
+        function toggleMasterSubmenu() {
+            const submenu = document.getElementById('master-submenu');
+            const arrow = document.getElementById('master-submenu-arrow');
+            if (submenu) {
+                submenu.classList.toggle('hidden');
+            }
+            if (arrow) {
+                arrow.classList.toggle('rotate-180');
             }
         }
 

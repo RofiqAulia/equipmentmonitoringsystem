@@ -79,8 +79,9 @@ Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     // Deteksi Barang Menipis (Low Stock Detector)
     Route::get('/admin/low-stock', [AdminStockController::class, 'lowStockDetector'])->name('admin.low-stock');
 
-    // Cetak Laporan Inventaris Gudang
+    // Cetak Laporan Inventaris Gudang & Cetak QR Code Batch
     Route::get('/admin/stock/print', [AdminStockController::class, 'printReport'])->name('admin.stock.print');
+    Route::get('/admin/stock/qr-print', [AdminStockController::class, 'qrPrintIndex'])->name('admin.stock.qr-print');
 
     // Edit & Hapus Barang Inventaris
     Route::put('/admin/stock/{item}', [AdminStockController::class, 'updateItem'])->name('admin.stock.update');
