@@ -131,7 +131,7 @@
                                     <div>Disetujui oleh,</div>
                                     <div style="height: 55px;"></div>
                                     <div style="font-weight: bold;">{{ auth()->user()->name ?? 'Supervisor' }}</div>
-                                    <div style="font-size: 10px; color: #64748b;">Supervisor Gudang</div>
+                                    <div style="font-size: 10px; color: #64748b;">{{ auth()->user()->role ?? 'Supervisor' }}</div>
                                 </div>
                             </div>
                         `,
