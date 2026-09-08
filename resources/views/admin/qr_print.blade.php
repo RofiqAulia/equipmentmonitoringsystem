@@ -127,12 +127,16 @@
             line-height: 1 !important;
         }
 
-        .qr-card-brand {
-            font-size: 7px !important;
+        .qr-card-sku {
+            font-size: 9px !important;
+            font-family: monospace !important;
             font-weight: 900 !important;
+            color: #0369a1 !important;
+            background: #f0f9ff !important;
+            border: 1px solid #bae6fd !important;
+            padding: 1px 5px !important;
+            border-radius: 4px !important;
             letter-spacing: 0.5px !important;
-            text-transform: uppercase !important;
-            color: #0284c7 !important;
         }
 
         /* QR Code Container Box */
@@ -186,25 +190,17 @@
             width: 100% !important;
         }
 
-        .qr-card-sku-badge {
-            font-size: 9px !important;
-            font-family: monospace !important;
+        .qr-card-bin {
+            font-size: 10px !important;
             font-weight: 900 !important;
-            color: #0369a1 !important;
-            background: #f0f9ff !important;
-            border: 1px solid #bae6fd !important;
-            padding: 1px 5px !important;
+            color: #ffffff !important;
+            background: #0f172a !important;
+            padding: 2px 6px !important;
             border-radius: 4px !important;
-            display: inline-block !important;
             margin-top: 2px !important;
             letter-spacing: 0.5px !important;
-        }
-
-        .qr-card-bin {
-            font-size: 8px !important;
-            font-weight: 600 !important;
-            color: #475569 !important;
-            margin-top: 1px !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
         }
     }
 </style>
@@ -388,13 +384,13 @@
                     <!-- Modern Styled Card -->
                     <div class="qr-card relative p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center flex flex-col items-center justify-between shadow-sm transition hover:shadow-md">
                         
-                        <!-- Header Accent Bar -->
+                        <!-- Header Accent Bar (SKU on top right, no INVENTORY CONTROL) -->
                         <div class="qr-card-header w-full flex items-center justify-between pb-1 mb-1 border-b border-slate-100 dark:border-slate-800">
                             <span class="qr-card-seq text-[9px] font-black bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-1.5 py-0.5 rounded">
                                 #{{ sprintf('%02d', $item->seq_num ?? $loop->iteration) }}
                             </span>
-                            <span class="qr-card-brand text-[8px] font-black tracking-wider text-sky-600 dark:text-sky-400 uppercase">
-                                INVENTORY CONTROL
+                            <span class="qr-card-sku font-mono text-[10px] font-black tracking-wider text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/80 px-2 py-0.5 rounded border border-sky-200 dark:border-sky-800">
+                                {{ $item->sku }}
                             </span>
                         </div>
 
@@ -403,25 +399,20 @@
                             <img src="{{ $qrApiUrl }}" alt="QR {{ $item->sku }}" class="w-24 h-24 sm:w-28 sm:h-28 object-contain mx-auto">
                         </div>
 
-                        <!-- Item Details & SKU Badge -->
+                        <!-- Item Details & Prominent Location Badge -->
                         <div class="w-full space-y-1 mt-1">
                             <div class="qr-card-title text-xs font-bold text-slate-900 dark:text-white truncate" title="{{ $item->name }}">
                                 {{ $item->name }}
                             </div>
-                            
-                            <div>
-                                <span class="qr-card-sku-badge font-mono text-[11px] font-black tracking-wide text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 px-2 py-0.5 rounded-md border border-sky-200 dark:border-sky-800">
-                                    {{ $item->sku }}
-                                </span>
-                            </div>
 
-                            <div class="qr-card-bin text-[9px] text-slate-500 dark:text-slate-400 font-semibold flex items-center justify-center space-x-1">
-                                <i class="fa-solid fa-location-dot text-rose-500 text-[9px]"></i>
-                                <span>Rak: {{ $item->location_bin }}</span>
+                            <!-- Prominent Location Badge -->
+                            <div class="qr-card-bin py-1 px-2.5 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black text-xs flex items-center justify-center space-x-1.5 shadow-sm">
+                                <i class="fa-solid fa-location-dot text-rose-400 dark:text-rose-600 text-xs"></i>
+                                <span>RAK: {{ strtoupper($item->location_bin) }}</span>
                             </div>
 
                             <!-- Tombol Cetak Stiker Mandiri / Thermal Label (No-Print) -->
-                            <button onclick="printSingleSticker('{{ addslashes($item->name) }}', '{{ addslashes($item->sku) }}', '{{ $qrApiUrl }}', '{{ addslashes($item->location_bin) }}', '{{ sprintf('%02d', $item->seq_num ?? $loop->iteration) }}')" type="button" title="Cetak Stiker Single untuk Printer Thermal" class="no-print mt-2 w-full py-1.5 px-2 text-[10px] font-extrabold rounded-xl bg-sky-500/10 hover:bg-sky-600 text-sky-600 hover:text-white dark:text-sky-400 dark:hover:text-white transition flex items-center justify-center space-x-1 border border-sky-500/20 shadow-sm active:scale-95">
+                            <button onclick="printSingleSticker('{{ addslashes($item->name) }}', '{{ addslashes($item->sku) }}', '{{ $qrApiUrl }}', '{{ addslashes($item->location_bin) }}', '{{ sprintf('%02d', $item->seq_num ?? $loop->iteration) }}')" type="button" title="Cetak Stiker Single untuk Printer Thermal" class="no-print mt-1.5 w-full py-1.5 px-2 text-[10px] font-extrabold rounded-xl bg-sky-500/10 hover:bg-sky-600 text-sky-600 hover:text-white dark:text-sky-400 dark:hover:text-white transition flex items-center justify-center space-x-1 border border-sky-500/20 shadow-sm active:scale-95">
                                 <i class="fa-solid fa-print text-xs"></i>
                                 <span>Cetak Stiker Single</span>
                             </button>
@@ -482,16 +473,19 @@
                         padding: 2px 6px;
                         border-radius: 4px;
                     }
-                    .brand {
-                        font-size: 8px;
+                    .sku {
+                        font-size: 11px;
+                        font-family: monospace;
                         font-weight: 900;
-                        color: #0284c7;
-                        letter-spacing: 1px;
-                        text-transform: uppercase;
+                        color: #0369a1;
+                        background: #f0f9ff;
+                        border: 1px solid #bae6fd;
+                        padding: 2px 6px;
+                        border-radius: 4px;
                     }
                     img {
-                        width: 140px;
-                        height: 140px;
+                        width: 145px;
+                        height: 145px;
                         margin: 4px 0;
                         object-fit: contain;
                     }
@@ -502,23 +496,16 @@
                         color: #0f172a;
                         line-height: 1.2;
                     }
-                    .sku {
+                    .bin-box {
                         font-size: 12px;
-                        font-family: monospace;
                         font-weight: 900;
-                        color: #0369a1;
-                        background: #f0f9ff;
-                        border: 1px solid #bae6fd;
-                        padding: 2px 8px;
+                        color: #ffffff;
+                        background: #0f172a;
+                        padding: 4px 10px;
                         border-radius: 6px;
-                        display: inline-block;
-                        margin-top: 4px;
-                    }
-                    .bin {
-                        font-size: 10px;
-                        font-weight: 600;
-                        color: #475569;
-                        margin-top: 4px;
+                        display: block;
+                        margin-top: 8px;
+                        letter-spacing: 0.5px;
                     }
                 </style>
             </head>
@@ -526,12 +513,11 @@
                 <div class="sticker-box">
                     <div class="header">
                         <span class="seq">#${seqNum}</span>
-                        <span class="brand">INVENTORY CONTROL</span>
+                        <span class="sku">${sku}</span>
                     </div>
                     <img src="${qrUrl}" alt="QR ${sku}">
                     <div class="title">${name}</div>
-                    <div class="sku">${sku}</div>
-                    <div class="bin">Rak: ${bin}</div>
+                    <div class="bin-box">RAK: ${bin.toUpperCase()}</div>
                 </div>
             </body>
             </html>
