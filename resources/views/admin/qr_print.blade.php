@@ -429,7 +429,7 @@
                             </div>
 
                             <!-- Tombol Cetak Stiker Mandiri / Thermal Label (No-Print) -->
-                            <button onclick="printSingleSticker('{{ addslashes($item->name) }}', '{{ addslashes($item->sku) }}', '{{ $qrApiUrl }}', '{{ addslashes($item->location_bin) }}', '{{ sprintf('%02d', $item->seq_num ?? $loop->iteration) }}')" type="button" title="Cetak Stiker Single untuk Printer Thermal" class="no-print mt-1.5 w-full py-1.5 px-2 text-[10px] font-extrabold rounded-xl bg-sky-500/10 hover:bg-sky-600 text-sky-600 hover:text-white dark:text-sky-400 dark:hover:text-white transition flex items-center justify-center space-x-1 border border-sky-500/20 shadow-sm active:scale-95">
+                            <button onclick="printSingleSticker('{{ addslashes($item->name) }}', '{{ addslashes($item->sku) }}', '{{ $qrApiUrl }}', '{{ addslashes($item->location_bin) }}', '{{ addslashes($item->gis_category ?? 'TANPA KATEGORI') }}')" type="button" title="Cetak Stiker Single untuk Printer Thermal" class="no-print mt-1.5 w-full py-1.5 px-2 text-[10px] font-extrabold rounded-xl bg-sky-500/10 hover:bg-sky-600 text-sky-600 hover:text-white dark:text-sky-400 dark:hover:text-white transition flex items-center justify-center space-x-1 border border-sky-500/20 shadow-sm active:scale-95">
                                 <i class="fa-solid fa-print text-xs"></i>
                                 <span>Cetak Stiker Single</span>
                             </button>
@@ -445,7 +445,7 @@
 
 @push('scripts')
 <script>
-    function printSingleSticker(name, sku, qrUrl, bin, seqNum) {
+    function printSingleSticker(name, sku, qrUrl, bin, category) {
         var win = window.open('', '_blank', 'width=450,height=520');
         win.document.write(`
             <!DOCTYPE html>
@@ -454,107 +454,82 @@
                 <title>Cetak Stiker Single - ${sku}</title>
                 <style>
                     @page {
-                        size: 50mm 70mm;
+                        size: 70mm 50mm;
                         margin: 0;
                     }
                     body {
-                        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                        font-family: Arial, sans-serif;
                         margin: 0;
                         padding: 0;
-                        text-align: center;
                         background: #ffffff;
-                        color: #0f172a;
-                        width: 50mm;
-                        height: 70mm;
-                        overflow: hidden;
+                        color: #000000;
+                        width: 70mm;
+                        height: 50mm;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        box-sizing: border-box;
+                    }
+                    .sticker-container {
+                        width: 68mm;
+                        height: 48mm;
+                        border: 1px solid #000;
+                        box-sizing: border-box;
+                        display: flex;
+                        flex-direction: row;
+                    }
+                    .left-col {
+                        width: 62%;
+                        border-right: 1px solid #000;
                         display: flex;
                         flex-direction: column;
+                    }
+                    .right-col {
+                        width: 38%;
+                        display: flex;
                         align-items: center;
                         justify-content: center;
-                        box-sizing: border-box;
+                        padding: 2px;
                     }
-                    .sticker-box {
-                        border: 1.5px dashed #0f172a;
-                        border-radius: 6px;
-                        padding: 4px;
-                        width: 48mm;
-                        height: 68mm;
-                        box-sizing: border-box;
+                    .row {
+                        flex: 1;
+                        border-bottom: 1px solid #000;
                         display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
                         align-items: center;
-                    }
-                    .header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        width: 100%;
-                        border-bottom: 1px solid #cbd5e1;
-                        padding-bottom: 3px;
-                        margin-bottom: 2px;
-                    }
-                    .seq {
-                        font-size: 9px;
-                        font-weight: 900;
-                        background: #0f172a;
-                        color: #ffffff;
-                        padding: 1px 4px;
-                        border-radius: 3px;
-                    }
-                    .sku {
-                        font-size: 9px;
-                        font-family: monospace;
-                        font-weight: 900;
-                        color: #0369a1;
-                        background: #f0f9ff;
-                        border: 1px solid #bae6fd;
-                        padding: 1px 4px;
-                        border-radius: 3px;
-                    }
-                    img {
-                        width: auto;
-                        height: 110px;
-                        max-width: 100%;
-                        max-height: 40mm;
-                        margin: 2px 0;
-                        object-fit: contain;
-                    }
-                    .title {
+                        padding: 0 4px;
                         font-size: 10px;
-                        font-weight: 800;
-                        margin-top: 2px;
-                        color: #0f172a;
-                        line-height: 1.1;
-                        white-space: nowrap;
+                        text-transform: uppercase;
                         overflow: hidden;
-                        text-overflow: ellipsis;
-                        width: 100%;
+                        white-space: nowrap;
                     }
-                    .bin-box {
-                        font-size: 10px;
-                        font-weight: 900;
-                        color: #ffffff;
-                        background: #0f172a;
-                        padding: 3px 6px;
-                        border-radius: 4px;
-                        display: block;
-                        margin-top: auto;
-                        letter-spacing: 0.5px;
+                    .row:last-child {
+                        border-bottom: none;
+                    }
+                    .row-title {
+                        font-weight: bold;
+                        font-size: 11px;
+                        white-space: normal;
+                        line-height: 1.1;
+                    }
+                    .qr-img {
                         width: 100%;
-                        box-sizing: border-box;
+                        height: 100%;
+                        object-fit: contain;
                     }
                 </style>
             </head>
             <body onload="window.print(); setTimeout(function(){ window.close(); }, 500);">
-                <div class="sticker-box">
-                    <div class="header">
-                        <span class="seq">#${seqNum}</span>
-                        <span class="sku">${sku}</span>
+                <div class="sticker-container">
+                    <div class="left-col">
+                        <div class="row row-title">${name}</div>
+                        <div class="row">ITEM GIS : ${category}</div>
+                        <div class="row">KODE : ${sku}</div>
+                        <div class="row">QTY: XX</div>
+                        <div class="row">LOKASI: ${bin}</div>
                     </div>
-                    <img src="${qrUrl}" alt="QR ${sku}">
-                    <div class="title">${name}</div>
-                    <div class="bin-box">RAK: ${bin.toUpperCase()}</div>
+                    <div class="right-col">
+                        <img class="qr-img" src="${qrUrl}" alt="QR ${sku}">
+                    </div>
                 </div>
             </body>
             </html>

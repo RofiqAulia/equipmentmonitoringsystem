@@ -196,8 +196,10 @@
                     <option value="">-- Tanpa Kategori --</option>
                     <option value="ATK & Fotocopy">ATK & Fotocopy</option>
                     <option value="Biaya Packaging">Biaya Packaging</option>
-                    <option value="Biaya Kebersihan">Biaya Kebersihan</option>
+                    <option value="Kebersihan">Kebersihan (Biaya Kebersihan)</option>
                     <option value="Sparepart Inventaris">Sparepart Inventaris</option>
+                    <option value="Jasa Lainnya">Jasa Lainnya</option>
+                    <option value="Lain-lain">Lain-lain</option>
                 </select>
             </div>
 
