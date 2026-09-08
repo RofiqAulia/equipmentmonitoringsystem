@@ -496,11 +496,12 @@
                         border-bottom: 1px solid #000;
                         display: flex;
                         align-items: center;
-                        padding: 0 4px;
+                        padding: 2px 4px;
                         font-size: 10px;
                         text-transform: uppercase;
-                        overflow: hidden;
-                        white-space: nowrap;
+                        word-wrap: break-word;
+                        white-space: normal;
+                        line-height: 1.1;
                     }
                     .row:last-child {
                         border-bottom: none;
@@ -524,7 +525,6 @@
                         <div class="row row-title">${name}</div>
                         <div class="row">ITEM GIS : ${category}</div>
                         <div class="row">KODE : ${sku}</div>
-                        <div class="row">QTY: XX</div>
                         <div class="row">LOKASI: ${bin}</div>
                     </div>
                     <div class="right-col">
