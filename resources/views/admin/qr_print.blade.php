@@ -243,8 +243,19 @@
         </div>
 
         <!-- 2. FILTER & GRID LAYOUT CONTROLLER FORM -->
-        <form action="{{ route('admin.stock.qr-print') }}" method="GET" id="qr-filter-form" class="pt-4 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <form action="{{ route('admin.stock.qr-print') }}" method="GET" id="qr-filter-form" class="pt-4 border-t border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
             
+            <!-- Searching Nama Barang / SKU -->
+            <div>
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
+                    <i class="fa-solid fa-magnifying-glass mr-1 text-sky-500"></i> Cari Barang / SKU
+                </label>
+                <div class="relative">
+                    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Ketik kata kunci..." class="w-full pl-8 pr-3 py-2 text-xs font-bold rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none transition">
+                    <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-xs text-slate-400"></i>
+                </div>
+            </div>
+
             <!-- Mode Pilihan Item -->
             <div>
                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
@@ -408,6 +419,12 @@
                                 <i class="fa-solid fa-location-dot text-rose-500 text-[9px]"></i>
                                 <span>Rak: {{ $item->location_bin }}</span>
                             </div>
+
+                            <!-- Tombol Cetak Stiker Mandiri / Thermal Label (No-Print) -->
+                            <button onclick="printSingleSticker('{{ addslashes($item->name) }}', '{{ addslashes($item->sku) }}', '{{ $qrApiUrl }}', '{{ addslashes($item->location_bin) }}', '{{ sprintf('%02d', $item->seq_num ?? $loop->iteration) }}')" type="button" title="Cetak Stiker Single untuk Printer Thermal" class="no-print mt-2 w-full py-1.5 px-2 text-[10px] font-extrabold rounded-xl bg-sky-500/10 hover:bg-sky-600 text-sky-600 hover:text-white dark:text-sky-400 dark:hover:text-white transition flex items-center justify-center space-x-1 border border-sky-500/20 shadow-sm active:scale-95">
+                                <i class="fa-solid fa-print text-xs"></i>
+                                <span>Cetak Stiker Single</span>
+                            </button>
                         </div>
                     </div>
                 @endforeach
@@ -420,6 +437,108 @@
 
 @push('scripts')
 <script>
+    function printSingleSticker(name, sku, qrUrl, bin, seqNum) {
+        var win = window.open('', '_blank', 'width=450,height=520');
+        win.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Cetak Stiker Single - ${sku}</title>
+                <style>
+                    @page {
+                        size: auto;
+                        margin: 2mm;
+                    }
+                    body {
+                        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+                        margin: 0;
+                        padding: 10px;
+                        text-align: center;
+                        background: #ffffff;
+                        color: #0f172a;
+                    }
+                    .sticker-box {
+                        border: 2px dashed #0f172a;
+                        border-radius: 12px;
+                        padding: 12px;
+                        display: inline-block;
+                        width: 100%;
+                        max-width: 260px;
+                        box-sizing: border-box;
+                    }
+                    .header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid #cbd5e1;
+                        padding-bottom: 4px;
+                        margin-bottom: 6px;
+                    }
+                    .seq {
+                        font-size: 10px;
+                        font-weight: 900;
+                        background: #0f172a;
+                        color: #ffffff;
+                        padding: 2px 6px;
+                        border-radius: 4px;
+                    }
+                    .brand {
+                        font-size: 8px;
+                        font-weight: 900;
+                        color: #0284c7;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                    }
+                    img {
+                        width: 140px;
+                        height: 140px;
+                        margin: 4px 0;
+                        object-fit: contain;
+                    }
+                    .title {
+                        font-size: 13px;
+                        font-weight: 800;
+                        margin-top: 4px;
+                        color: #0f172a;
+                        line-height: 1.2;
+                    }
+                    .sku {
+                        font-size: 12px;
+                        font-family: monospace;
+                        font-weight: 900;
+                        color: #0369a1;
+                        background: #f0f9ff;
+                        border: 1px solid #bae6fd;
+                        padding: 2px 8px;
+                        border-radius: 6px;
+                        display: inline-block;
+                        margin-top: 4px;
+                    }
+                    .bin {
+                        font-size: 10px;
+                        font-weight: 600;
+                        color: #475569;
+                        margin-top: 4px;
+                    }
+                </style>
+            </head>
+            <body onload="window.print(); setTimeout(function(){ window.close(); }, 500);">
+                <div class="sticker-box">
+                    <div class="header">
+                        <span class="seq">#${seqNum}</span>
+                        <span class="brand">INVENTORY CONTROL</span>
+                    </div>
+                    <img src="${qrUrl}" alt="QR ${sku}">
+                    <div class="title">${name}</div>
+                    <div class="sku">${sku}</div>
+                    <div class="bin">Rak: ${bin}</div>
+                </div>
+            </body>
+            </html>
+        `);
+        win.document.close();
+    }
+
     function toggleModeFields() {
         const mode = document.getElementById('mode-select').value;
         const rangeContainer = document.getElementById('range-fields-container');

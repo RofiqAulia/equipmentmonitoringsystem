@@ -229,8 +229,17 @@ class AdminStockController extends Controller
         $sortDir = strtolower($request->input('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
         $mode = $request->input('mode', 'all'); // 'all', 'range', 'selected'
         $grid = $request->input('grid_layout', 'grid-3x5');
+        $search = trim($request->input('search', ''));
 
         $query = Item::query();
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%")
+                  ->orWhere('location_bin', 'like', "%{$search}%");
+            });
+        }
 
         // Apply sorting
         if ($sortBy === 'sku') {
@@ -274,6 +283,7 @@ class AdminStockController extends Controller
             'sortBy' => $sortBy,
             'sortDir' => $sortDir,
             'mode' => $mode,
+            'search' => $search,
             'rangeFrom' => $request->input('range_from', 1),
             'rangeTo' => $request->input('range_to', min(15, max(1, $allItems->count()))),
             'selectedIds' => (array) $request->input('selected_ids', []),
