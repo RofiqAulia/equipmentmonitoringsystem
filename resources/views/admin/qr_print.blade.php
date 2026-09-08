@@ -61,6 +61,12 @@
             gap: 2.5mm !important;
         }
 
+        /* Preset Grid Stiker 5x7 (35 Label per Lembar A4) */
+        .grid-5x7 {
+            grid-template-columns: repeat(5, 1fr) !important;
+            gap: 2mm !important;
+        }
+
         /* Preset Grid Stiker 2x4 (8 Label per Lembar A4) */
         .grid-2x4 {
             grid-template-columns: repeat(2, 1fr) !important;
@@ -100,6 +106,12 @@
         .grid-4x6 .qr-card {
             height: 42mm !important;
             max-height: 42mm !important;
+        }
+
+        .grid-5x7 .qr-card {
+            height: 38mm !important;
+            max-height: 38mm !important;
+            padding: 3px 4px !important;
         }
 
         .grid-2x4 .qr-card {
@@ -165,6 +177,11 @@
         .grid-4x6 .qr-card img {
             width: 72px !important;
             height: 72px !important;
+        }
+
+        .grid-5x7 .qr-card img {
+            width: 58px !important;
+            height: 58px !important;
         }
 
         .grid-2x4 .qr-card img {
@@ -290,6 +307,7 @@
                 <select name="grid_layout" id="grid-layout-select" onchange="applyGridLayout()" class="w-full px-3 py-2 text-xs font-bold rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none transition">
                     <option value="grid-3x5" {{ $gridLayout === 'grid-3x5' ? 'selected' : '' }}>Stiker 3x5 (15 Kode / Lembar A4 - Default)</option>
                     <option value="grid-4x6" {{ $gridLayout === 'grid-4x6' ? 'selected' : '' }}>Stiker 4x6 (24 Kode / Lembar A4)</option>
+                    <option value="grid-5x7" {{ $gridLayout === 'grid-5x7' ? 'selected' : '' }}>Stiker 5x7 (35 Kode / Lembar A4)</option>
                     <option value="grid-2x4" {{ $gridLayout === 'grid-2x4' ? 'selected' : '' }}>Stiker 2x4 (8 Kode / Lembar A4)</option>
                     <option value="grid-single" {{ $gridLayout === 'grid-single' ? 'selected' : '' }}>Stiker Single (1 QR / Lembar)</option>
                 </select>
@@ -360,7 +378,7 @@
             <span class="text-slate-400 font-normal">| Format Layout: <span id="current-grid-label" class="uppercase font-mono font-bold">{{ str_replace('grid-', '', $gridLayout) }}</span></span>
         </div>
         <div class="text-slate-500 dark:text-slate-400 text-[11px]">
-            Estimasi Halaman A4: <strong class="text-slate-900 dark:text-white font-bold">{{ ceil($filteredItems->count() / ($gridLayout === 'grid-4x6' ? 24 : ($gridLayout === 'grid-3x5' ? 15 : ($gridLayout === 'grid-2x4' ? 8 : 1)))) }} Lembar</strong>
+            Estimasi Halaman A4: <strong class="text-slate-900 dark:text-white font-bold">{{ ceil($filteredItems->count() / ($gridLayout === 'grid-5x7' ? 35 : ($gridLayout === 'grid-4x6' ? 24 : ($gridLayout === 'grid-3x5' ? 15 : ($gridLayout === 'grid-2x4' ? 8 : 1))))) }} Lembar</strong>
         </div>
     </div>
 
@@ -567,7 +585,9 @@
         if (gridContainer) {
             gridContainer.className = 'qr-grid-container ' + layout + ' grid gap-4';
             
-            if (layout === 'grid-3x5') {
+            if (layout === 'grid-5x7') {
+                gridContainer.classList.add('grid-cols-2', 'sm:grid-cols-4', 'md:grid-cols-5');
+            } else if (layout === 'grid-3x5') {
                 gridContainer.classList.add('grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3');
             } else if (layout === 'grid-4x6') {
                 gridContainer.classList.add('grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-4');
