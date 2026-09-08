@@ -405,9 +405,8 @@
                                 {{ $item->name }}
                             </div>
 
-                            <!-- Prominent Location Badge -->
-                            <div class="qr-card-bin py-1 px-2.5 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black text-xs flex items-center justify-center space-x-1.5 shadow-sm">
-                                <i class="fa-solid fa-location-dot text-rose-400 dark:text-rose-600 text-xs"></i>
+                            <!-- Prominent Location Badge (Tanpa Ikon) -->
+                            <div class="qr-card-bin py-1 px-2.5 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black text-xs flex items-center justify-center shadow-sm">
                                 <span>RAK: {{ strtoupper($item->location_bin) }}</span>
                             </div>
 
