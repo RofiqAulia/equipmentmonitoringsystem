@@ -48,19 +48,22 @@
             width: 100% !important;
         }
 
-        /* Preset Grid Stiker 4x6 (24 Label per A4) */
-        .grid-4x6 {
-            grid-template-columns: repeat(4, 1fr) !important;
-        }
-
-        /* Preset Grid Stiker 3x5 (15 Label per A4) */
+        /* Preset Grid Stiker 3x5 (15 Label per Lembar A4 - Pas 1 Halaman) */
         .grid-3x5 {
             grid-template-columns: repeat(3, 1fr) !important;
+            gap: 3mm !important;
         }
 
-        /* Preset Grid Stiker 2x4 (8 Label per A4) */
+        /* Preset Grid Stiker 4x6 (24 Label per Lembar A4) */
+        .grid-4x6 {
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 2.5mm !important;
+        }
+
+        /* Preset Grid Stiker 2x4 (8 Label per Lembar A4) */
         .grid-2x4 {
             grid-template-columns: repeat(2, 1fr) !important;
+            gap: 4mm !important;
         }
 
         /* Preset Grid Single (1 Label per Halaman) */
@@ -71,7 +74,7 @@
         .qr-card {
             border: 1px dashed #334155 !important;
             border-radius: 8px !important;
-            padding: 6px !important;
+            padding: 5px !important;
             background: white !important;
             color: black !important;
             box-shadow: none !important;
@@ -82,18 +85,29 @@
             align-items: center !important;
             justify-content: center !important;
             text-align: center !important;
+            box-sizing: border-box !important;
+        }
+
+        .grid-3x5 .qr-card {
+            height: 52mm !important;
+            max-height: 52mm !important;
+        }
+
+        .grid-4x6 .qr-card {
+            height: 42mm !important;
+            max-height: 42mm !important;
         }
 
         .qr-card img {
-            width: 90px !important;
-            height: 90px !important;
+            width: 85px !important;
+            height: 85px !important;
             max-width: 100% !important;
             object-fit: contain !important;
         }
 
         .grid-3x5 .qr-card img {
-            width: 110px !important;
-            height: 110px !important;
+            width: 100px !important;
+            height: 100px !important;
         }
 
         .grid-2x4 .qr-card img {
@@ -218,8 +232,8 @@
                     <i class="fa-solid fa-table-cells mr-1 text-sky-500"></i> Grid Stiker Kertas A4
                 </label>
                 <select name="grid_layout" id="grid-layout-select" onchange="applyGridLayout()" class="w-full px-3 py-2 text-xs font-bold rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none transition">
+                    <option value="grid-3x5" {{ $gridLayout === 'grid-3x5' ? 'selected' : '' }}>Stiker 3x5 (15 Label / Lembar A4 - Default)</option>
                     <option value="grid-4x6" {{ $gridLayout === 'grid-4x6' ? 'selected' : '' }}>Stiker 4x6 (24 Label / Lembar A4)</option>
-                    <option value="grid-3x5" {{ $gridLayout === 'grid-3x5' ? 'selected' : '' }}>Stiker 3x5 (15 Label / Lembar A4)</option>
                     <option value="grid-2x4" {{ $gridLayout === 'grid-2x4' ? 'selected' : '' }}>Stiker 2x4 (8 Label / Lembar A4)</option>
                     <option value="grid-single" {{ $gridLayout === 'grid-single' ? 'selected' : '' }}>Stiker Single (1 QR / Lembar)</option>
                 </select>

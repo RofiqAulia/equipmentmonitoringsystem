@@ -228,7 +228,7 @@ class AdminStockController extends Controller
         $sortBy = $request->input('sort_by', 'name'); // 'name', 'sku', 'id'
         $sortDir = strtolower($request->input('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
         $mode = $request->input('mode', 'all'); // 'all', 'range', 'selected'
-        $grid = $request->input('grid_layout', 'grid-4x6');
+        $grid = $request->input('grid_layout', 'grid-3x5');
 
         $query = Item::query();
 
@@ -252,7 +252,7 @@ class AdminStockController extends Controller
 
         if ($mode === 'range') {
             $from = (int) $request->input('range_from', 1);
-            $to = (int) $request->input('range_to', $allItems->count());
+            $to = (int) $request->input('range_to', min(15, max(1, $allItems->count())));
             
             if ($from < 1) $from = 1;
             if ($to > $allItems->count()) $to = $allItems->count();
@@ -275,7 +275,7 @@ class AdminStockController extends Controller
             'sortDir' => $sortDir,
             'mode' => $mode,
             'rangeFrom' => $request->input('range_from', 1),
-            'rangeTo' => $request->input('range_to', min(24, max(1, $allItems->count()))),
+            'rangeTo' => $request->input('range_to', min(15, max(1, $allItems->count()))),
             'selectedIds' => (array) $request->input('selected_ids', []),
             'gridLayout' => $grid,
             'printedAt' => now()->translatedFormat('d F Y, H:i') . ' WIB',
