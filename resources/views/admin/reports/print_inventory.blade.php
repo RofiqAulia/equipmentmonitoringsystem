@@ -299,6 +299,7 @@
                     <th style="width: 35px;" class="text-center">No</th>
                     <th style="width: 110px;">SKU</th>
                     <th>Nama Barang</th>
+                    <th style="width: 120px;">Kategori GIS</th>
                     <th style="width: 140px;">Lokasi Gudang / Rak</th>
                     <th style="width: 90px;" class="text-center">Stok Available</th>
                     <th style="width: 80px;" class="text-center">Min. Stock</th>
@@ -311,6 +312,7 @@
                         <td class="text-center">{{ $index + 1 }}</td>
                         <td class="font-mono font-bold">{{ $item->sku }}</td>
                         <td class="font-bold">{{ $item->name }}</td>
+                        <td>{{ $item->gis_category ?? '-' }}</td>
                         <td>{{ $item->location_bin }}</td>
                         <td class="text-center font-bold">{{ number_format($item->available_stock) }}</td>
                         <td class="text-center">{{ number_format($item->minimum_stock) }}</td>
@@ -326,7 +328,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center" style="padding: 20px; color: #64748b;">
+                        <td colspan="8" class="text-center" style="padding: 20px; color: #64748b;">
                             Tidak ada data inventaris barang yang tersedia.
                         </td>
                     </tr>

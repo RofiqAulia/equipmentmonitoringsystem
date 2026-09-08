@@ -14,6 +14,7 @@ class Item extends Model
         'sku',
         'qr_code_payload',
         'name',
+        'gis_category',
         'location_bin',
         'available_stock',
         'minimum_stock',

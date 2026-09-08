@@ -79,6 +79,17 @@
                             <input type="text" name="name" id="name_input" placeholder="Contoh: Keypad Module V2" class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-cyan-500">
                         </div>
                     </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kategori Item GIS (Opsional)</label>
+                        <select name="gis_category" id="gis_category_input" class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500">
+                            <option value="">-- Tanpa Kategori / Kosongkan --</option>
+                            <option value="ATK & Fotocopy">ATK & Fotocopy</option>
+                            <option value="Biaya Packaging">Biaya Packaging</option>
+                            <option value="Biaya Kebersihan">Biaya Kebersihan</option>
+                            <option value="Sparepart Inventaris">Sparepart Inventaris</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Shared Input Fields -->

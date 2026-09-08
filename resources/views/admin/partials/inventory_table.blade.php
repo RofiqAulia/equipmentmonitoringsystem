@@ -36,6 +36,7 @@
                     <th class="px-4 py-3.5 w-14 no-sort">Foto</th>
                     <th class="px-4 py-3.5 cursor-pointer sorting">Kode SKU</th>
                     <th class="px-4 py-3.5 min-w-[180px] cursor-pointer sorting">Nama Barang</th>
+                    <th class="px-4 py-3.5 cursor-pointer sorting">Kategori GIS</th>
                     <th class="px-4 py-3.5 cursor-pointer sorting">Lokasi Gudang/Rak</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Stok Available</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Min Threshold</th>
@@ -59,6 +60,9 @@
                         </td>
                         <td class="px-4 py-3 font-bold text-slate-900 dark:text-white break-words max-w-[220px] leading-relaxed">
                             {{ $item->name }}
+                        </td>
+                        <td class="px-4 py-3 break-words max-w-[140px] font-medium text-slate-600 dark:text-slate-400">
+                            {{ $item->gis_category ?? '-' }}
                         </td>
                         <td class="px-4 py-3 break-words max-w-[130px] font-medium text-slate-700 dark:text-slate-300">
                             {{ $item->location_bin }}
@@ -135,6 +139,10 @@
                 <div id="detail-item-location" class="font-extrabold text-slate-900 dark:text-white text-sm mt-0.5"></div>
             </div>
             <div class="p-3 bg-slate-100 dark:bg-slate-900/80 rounded-2xl border border-slate-200 dark:border-slate-800">
+                <div class="text-slate-400 uppercase text-[10px] font-bold">Kategori Item GIS</div>
+                <div id="detail-item-category" class="font-bold text-sky-600 dark:text-sky-400 text-sm mt-0.5 truncate"></div>
+            </div>
+            <div class="p-3 bg-slate-100 dark:bg-slate-900/80 rounded-2xl border border-slate-200 dark:border-slate-800">
                 <div class="text-slate-400 uppercase text-[10px] font-bold">QR Payload</div>
                 <div id="detail-item-qr" class="font-mono font-bold text-slate-700 dark:text-slate-300 text-xs mt-0.5 truncate"></div>
             </div>
@@ -180,6 +188,17 @@
             <div>
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Nama Barang <span class="text-rose-500">*</span></label>
                 <input type="text" name="name" id="edit-item-name" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kategori Item GIS</label>
+                <select name="gis_category" id="edit-item-category-input" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
+                    <option value="">-- Tanpa Kategori --</option>
+                    <option value="ATK & Fotocopy">ATK & Fotocopy</option>
+                    <option value="Biaya Packaging">Biaya Packaging</option>
+                    <option value="Biaya Kebersihan">Biaya Kebersihan</option>
+                    <option value="Sparepart Inventaris">Sparepart Inventaris</option>
+                </select>
             </div>
 
             <div>
@@ -296,6 +315,7 @@
         document.getElementById('detail-item-name').innerText = item.name;
         document.getElementById('detail-item-sku').innerText = 'SKU: ' + item.sku;
         document.getElementById('detail-item-location').innerText = item.location_bin;
+        document.getElementById('detail-item-category').innerText = item.gis_category || '-';
         document.getElementById('detail-item-qr').innerText = item.qr_code_payload;
         document.getElementById('detail-item-stock').innerText = item.available_stock + ' Unit';
         document.getElementById('detail-item-min').innerText = item.minimum_stock + ' Unit';
@@ -323,6 +343,7 @@
         document.getElementById('edit-item-form').action = '/admin/stock/' + item.id;
         document.getElementById('edit-item-sku').value = item.sku;
         document.getElementById('edit-item-name').value = item.name;
+        document.getElementById('edit-item-category-input').value = item.gis_category || '';
         document.getElementById('edit-item-location').value = item.location_bin;
         document.getElementById('edit-item-stock').value = item.available_stock;
         document.getElementById('edit-item-min').value = item.minimum_stock;
