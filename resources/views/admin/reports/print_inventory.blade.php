@@ -340,7 +340,7 @@
                 <div>Disetujui oleh,</div>
                 <div class="signature-space"></div>
                 <div class="signature-name">{{ $printedBy }}</div>
-                <div class="signature-role">Supervisor</div>
+                <div class="signature-role">{{ auth()->user()->role ?? 'Supervisor' }}</div>
             </div>
         </div>
     </div>
