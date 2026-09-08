@@ -4,11 +4,11 @@
 
 @push('styles')
 <style>
-    /* Styling Khusus Cetak Kertas A4 & Label Stiker */
+    /* Styling Khusus Cetak Kertas A4 & Label Stiker Modern */
     @media print {
         @page {
             size: A4 portrait;
-            margin: 6mm;
+            margin: 6mm 6mm;
         }
 
         body {
@@ -16,6 +16,7 @@
             color: black !important;
             padding: 0 !important;
             margin: 0 !important;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
         }
 
         .no-print, 
@@ -44,14 +45,14 @@
 
         .qr-grid-container {
             display: grid !important;
-            gap: 4mm !important;
             width: 100% !important;
+            box-sizing: border-box !important;
         }
 
-        /* Preset Grid Stiker 3x5 (15 Label per Lembar A4 - Pas 1 Halaman) */
+        /* Preset Grid Stiker 3x5 (15 Label per Lembar A4 - Pas 1 Halaman Presisi) */
         .grid-3x5 {
             grid-template-columns: repeat(3, 1fr) !important;
-            gap: 3mm !important;
+            gap: 3.5mm !important;
         }
 
         /* Preset Grid Stiker 4x6 (24 Label per Lembar A4) */
@@ -71,21 +72,24 @@
             grid-template-columns: repeat(1, 1fr) !important;
         }
 
+        /* Modern QR Card Container untuk Cetak */
         .qr-card {
-            border: 1px dashed #334155 !important;
+            border: 1px solid #cbd5e1 !important;
             border-radius: 8px !important;
-            padding: 5px !important;
-            background: white !important;
-            color: black !important;
+            padding: 5px 6px !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
             box-shadow: none !important;
             page-break-inside: avoid !important;
             break-inside: avoid !important;
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
-            justify-content: center !important;
+            justify-content: space-between !important;
             text-align: center !important;
             box-sizing: border-box !important;
+            position: relative !important;
+            overflow: hidden !important;
         }
 
         .grid-3x5 .qr-card {
@@ -98,21 +102,70 @@
             max-height: 42mm !important;
         }
 
+        .grid-2x4 .qr-card {
+            height: 65mm !important;
+        }
+
+        /* Modern Card Header Accent */
+        .qr-card-header {
+            width: 100% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            border-b: 1px solid #f1f5f9 !important;
+            padding-bottom: 2px !important;
+            margin-bottom: 2px !important;
+        }
+
+        .qr-card-seq {
+            font-size: 8px !important;
+            font-weight: 800 !important;
+            background: #0f172a !important;
+            color: #ffffff !important;
+            padding: 1px 4px !important;
+            border-radius: 3px !important;
+            line-height: 1 !important;
+        }
+
+        .qr-card-brand {
+            font-size: 7px !important;
+            font-weight: 900 !important;
+            letter-spacing: 0.5px !important;
+            text-transform: uppercase !important;
+            color: #0284c7 !important;
+        }
+
+        /* QR Code Container Box */
+        .qr-image-wrapper {
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 6px !important;
+            padding: 2px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
         .qr-card img {
-            width: 85px !important;
-            height: 85px !important;
+            width: 80px !important;
+            height: 80px !important;
             max-width: 100% !important;
             object-fit: contain !important;
         }
 
         .grid-3x5 .qr-card img {
-            width: 100px !important;
-            height: 100px !important;
+            width: 98px !important;
+            height: 98px !important;
+        }
+
+        .grid-4x6 .qr-card img {
+            width: 72px !important;
+            height: 72px !important;
         }
 
         .grid-2x4 .qr-card img {
-            width: 140px !important;
-            height: 140px !important;
+            width: 130px !important;
+            height: 130px !important;
         }
 
         .grid-single .qr-card img {
@@ -120,42 +173,38 @@
             height: 220px !important;
         }
 
+        /* Card Content Details */
         .qr-card-title {
             font-size: 10px !important;
-            font-weight: bold !important;
+            font-weight: 800 !important;
             color: #0f172a !important;
-            margin-top: 4px !important;
+            margin-top: 2px !important;
             line-height: 1.2 !important;
-            display: -webkit-box !important;
-            -webkit-line-clamp: 2 !important;
-            -webkit-box-orient: vertical !important;
+            white-space: nowrap !important;
             overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            width: 100% !important;
         }
 
-        .qr-card-sku {
-            font-size: 10px !important;
+        .qr-card-sku-badge {
+            font-size: 9px !important;
             font-family: monospace !important;
-            font-weight: 800 !important;
-            color: #0284c7 !important;
+            font-weight: 900 !important;
+            color: #0369a1 !important;
+            background: #f0f9ff !important;
+            border: 1px solid #bae6fd !important;
+            padding: 1px 5px !important;
+            border-radius: 4px !important;
+            display: inline-block !important;
             margin-top: 2px !important;
+            letter-spacing: 0.5px !important;
         }
 
         .qr-card-bin {
             font-size: 8px !important;
+            font-weight: 600 !important;
             color: #475569 !important;
             margin-top: 1px !important;
-        }
-
-        .qr-card-seq {
-            font-size: 8px !important;
-            font-weight: bold !important;
-            background: #f1f5f9 !important;
-            color: #334155 !important;
-            padding: 1px 4px !important;
-            border-radius: 4px !important;
-            position: absolute !important;
-            top: 4px !important;
-            left: 4px !important;
         }
     }
 </style>
@@ -178,7 +227,7 @@
                     <i class="fa-solid fa-qrcode text-sky-600 dark:text-sky-400 mr-3"></i> Cetak Batch QR Code Barang
                 </h1>
                 <p class="text-xs text-slate-500 dark:text-slate-400">
-                    Cetak kode QR sekaligus untuk seluruh item, rentang nomor, atau item pilihan dengan penyesuaian ukuran stiker / kertas A4.
+                    Cetak kode QR dengan tata letak modern, rapi, dan presisi untuk kertas A4 atau kertas stiker label.
                 </p>
             </div>
 
@@ -187,7 +236,7 @@
                     <i class="fa-solid fa-arrow-left mr-1.5"></i> Kembali
                 </a>
 
-                <button onclick="window.print()" type="button" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition flex items-center shadow-lg shadow-emerald-600/30 active:scale-95">
+                <button onclick="window.print()" type="button" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white font-black text-xs transition flex items-center shadow-lg shadow-sky-600/30 active:scale-95">
                     <i class="fa-solid fa-print mr-2 text-sm"></i> Cetak Kertas / Stiker A4
                 </button>
             </div>
@@ -203,7 +252,7 @@
                 </label>
                 <select name="mode" id="mode-select" onchange="toggleModeFields()" class="w-full px-3 py-2 text-xs font-bold rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none transition">
                     <option value="all" {{ $mode === 'all' ? 'selected' : '' }}>Semua Item ({{ $allItems->count() }} Barang)</option>
-                    <option value="range" {{ $mode === 'range' ? 'selected' : '' }}>Rentang Nomor (misal: No 1 - 24)</option>
+                    <option value="range" {{ $mode === 'range' ? 'selected' : '' }}>Rentang Nomor (misal: No 1 - 15)</option>
                     <option value="selected" {{ $mode === 'selected' ? 'selected' : '' }}>Pilihan Item Manual (Checkbox)</option>
                 </select>
             </div>
@@ -229,12 +278,12 @@
             <!-- Preset Layout Grid Stiker -->
             <div>
                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
-                    <i class="fa-solid fa-table-cells mr-1 text-sky-500"></i> Grid Stiker Kertas A4
+                    <i class="fa-solid fa-table-cells mr-1 text-sky-500"></i> Layout Kertas / Stiker
                 </label>
                 <select name="grid_layout" id="grid-layout-select" onchange="applyGridLayout()" class="w-full px-3 py-2 text-xs font-bold rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:ring-2 focus:ring-sky-500 focus:outline-none transition">
-                    <option value="grid-3x5" {{ $gridLayout === 'grid-3x5' ? 'selected' : '' }}>Stiker 3x5 (15 Label / Lembar A4 - Default)</option>
-                    <option value="grid-4x6" {{ $gridLayout === 'grid-4x6' ? 'selected' : '' }}>Stiker 4x6 (24 Label / Lembar A4)</option>
-                    <option value="grid-2x4" {{ $gridLayout === 'grid-2x4' ? 'selected' : '' }}>Stiker 2x4 (8 Label / Lembar A4)</option>
+                    <option value="grid-3x5" {{ $gridLayout === 'grid-3x5' ? 'selected' : '' }}>Stiker 3x5 (15 Kode / Lembar A4 - Default)</option>
+                    <option value="grid-4x6" {{ $gridLayout === 'grid-4x6' ? 'selected' : '' }}>Stiker 4x6 (24 Kode / Lembar A4)</option>
+                    <option value="grid-2x4" {{ $gridLayout === 'grid-2x4' ? 'selected' : '' }}>Stiker 2x4 (8 Kode / Lembar A4)</option>
                     <option value="grid-single" {{ $gridLayout === 'grid-single' ? 'selected' : '' }}>Stiker Single (1 QR / Lembar)</option>
                 </select>
             </div>
@@ -301,14 +350,14 @@
         <div class="flex items-center space-x-2 text-sky-700 dark:text-sky-300 font-bold">
             <i class="fa-solid fa-circle-info text-base"></i>
             <span>Siap Dicetak: <strong class="text-sky-600 dark:text-sky-400 font-extrabold text-sm">{{ $filteredItems->count() }} Label QR Code</strong></span>
-            <span class="text-slate-400 font-normal">| Grid Layout: <span id="current-grid-label" class="uppercase font-mono font-bold">{{ str_replace('grid-', '', $gridLayout) }}</span></span>
+            <span class="text-slate-400 font-normal">| Format Layout: <span id="current-grid-label" class="uppercase font-mono font-bold">{{ str_replace('grid-', '', $gridLayout) }}</span></span>
         </div>
         <div class="text-slate-500 dark:text-slate-400 text-[11px]">
             Estimasi Halaman A4: <strong class="text-slate-900 dark:text-white font-bold">{{ ceil($filteredItems->count() / ($gridLayout === 'grid-4x6' ? 24 : ($gridLayout === 'grid-3x5' ? 15 : ($gridLayout === 'grid-2x4' ? 8 : 1)))) }} Lembar</strong>
         </div>
     </div>
 
-    <!-- 4. AREA PRATINJAU & AREA CETAK A4 (PREVIEW & PRINTABLE AREA) -->
+    <!-- 4. AREA PRATINJAU & AREA CETAK A4 (MODERN PRINTABLE AREA) -->
     <div class="print-container">
         @if($filteredItems->isEmpty())
             <div class="no-print p-12 text-center glass-panel rounded-3xl space-y-3">
@@ -317,35 +366,47 @@
                 <p class="text-xs text-slate-500">Silakan sesuaikan filter atau centang pilihan item barang di atas.</p>
             </div>
         @else
-            <!-- Grid Container QR Code -->
-            <div id="printable-qr-grid" class="qr-grid-container {{ $gridLayout }} grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <!-- Grid Container QR Code Modern -->
+            <div id="printable-qr-grid" class="qr-grid-container {{ $gridLayout }} grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 @foreach($filteredItems as $item)
                     @php
                         $qrPayload = $item->qr_code_payload ?? ('QR-' . $item->sku);
-                        $qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($qrPayload);
+                        $qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' . urlencode($qrPayload);
                     @endphp
+                    
+                    <!-- Modern Styled Card -->
                     <div class="qr-card relative p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center flex flex-col items-center justify-between shadow-sm transition hover:shadow-md">
                         
-                        <!-- Nomor Urut Label -->
-                        <span class="qr-card-seq text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-md mb-1">
-                            #{{ $item->seq_num ?? $loop->iteration }}
-                        </span>
+                        <!-- Header Accent Bar -->
+                        <div class="qr-card-header w-full flex items-center justify-between pb-1 mb-1 border-b border-slate-100 dark:border-slate-800">
+                            <span class="qr-card-seq text-[9px] font-black bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-1.5 py-0.5 rounded">
+                                #{{ sprintf('%02d', $item->seq_num ?? $loop->iteration) }}
+                            </span>
+                            <span class="qr-card-brand text-[8px] font-black tracking-wider text-sky-600 dark:text-sky-400 uppercase">
+                                INVENTORY CONTROL
+                            </span>
+                        </div>
 
-                        <!-- QR Code Image -->
-                        <div class="p-2 bg-white rounded-xl border border-slate-100 shadow-inner my-1">
+                        <!-- High-Density QR Image Container -->
+                        <div class="qr-image-wrapper p-1.5 bg-white rounded-xl border border-slate-200 shadow-inner my-0.5">
                             <img src="{{ $qrApiUrl }}" alt="QR {{ $item->sku }}" class="w-24 h-24 sm:w-28 sm:h-28 object-contain mx-auto">
                         </div>
 
-                        <!-- Item Information -->
-                        <div class="w-full space-y-0.5 mt-1">
+                        <!-- Item Details & SKU Badge -->
+                        <div class="w-full space-y-1 mt-1">
                             <div class="qr-card-title text-xs font-bold text-slate-900 dark:text-white truncate" title="{{ $item->name }}">
                                 {{ $item->name }}
                             </div>
-                            <div class="qr-card-sku text-xs font-mono font-extrabold text-sky-600 dark:text-sky-400">
-                                {{ $item->sku }}
+                            
+                            <div>
+                                <span class="qr-card-sku-badge font-mono text-[11px] font-black tracking-wide text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/60 px-2 py-0.5 rounded-md border border-sky-200 dark:border-sky-800">
+                                    {{ $item->sku }}
+                                </span>
                             </div>
-                            <div class="qr-card-bin text-[10px] text-slate-500 dark:text-slate-400">
-                                Rak: {{ $item->location_bin }}
+
+                            <div class="qr-card-bin text-[9px] text-slate-500 dark:text-slate-400 font-semibold flex items-center justify-center space-x-1">
+                                <i class="fa-solid fa-location-dot text-rose-500 text-[9px]"></i>
+                                <span>Rak: {{ $item->location_bin }}</span>
                             </div>
                         </div>
                     </div>
@@ -402,10 +463,10 @@
         if (gridContainer) {
             gridContainer.className = 'qr-grid-container ' + layout + ' grid gap-4';
             
-            if (layout === 'grid-4x6') {
-                gridContainer.classList.add('grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-4');
-            } else if (layout === 'grid-3x5') {
+            if (layout === 'grid-3x5') {
                 gridContainer.classList.add('grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3');
+            } else if (layout === 'grid-4x6') {
+                gridContainer.classList.add('grid-cols-2', 'sm:grid-cols-3', 'md:grid-cols-4');
             } else if (layout === 'grid-2x4') {
                 gridContainer.classList.add('grid-cols-1', 'sm:grid-cols-2');
             } else {
