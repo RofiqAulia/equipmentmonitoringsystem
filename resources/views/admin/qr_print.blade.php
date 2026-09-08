@@ -454,75 +454,95 @@
                 <title>Cetak Stiker Single - ${sku}</title>
                 <style>
                     @page {
-                        size: auto;
-                        margin: 2mm;
+                        size: 50mm 70mm;
+                        margin: 0;
                     }
                     body {
                         font-family: 'Inter', system-ui, -apple-system, sans-serif;
                         margin: 0;
-                        padding: 10px;
+                        padding: 0;
                         text-align: center;
                         background: #ffffff;
                         color: #0f172a;
+                        width: 50mm;
+                        height: 70mm;
+                        overflow: hidden;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        box-sizing: border-box;
                     }
                     .sticker-box {
-                        border: 2px dashed #0f172a;
-                        border-radius: 12px;
-                        padding: 12px;
-                        display: inline-block;
-                        width: 100%;
-                        max-width: 260px;
+                        border: 1.5px dashed #0f172a;
+                        border-radius: 6px;
+                        padding: 4px;
+                        width: 48mm;
+                        height: 68mm;
                         box-sizing: border-box;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: center;
                     }
                     .header {
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
+                        width: 100%;
                         border-bottom: 1px solid #cbd5e1;
-                        padding-bottom: 4px;
-                        margin-bottom: 6px;
+                        padding-bottom: 3px;
+                        margin-bottom: 2px;
                     }
                     .seq {
-                        font-size: 10px;
+                        font-size: 9px;
                         font-weight: 900;
                         background: #0f172a;
                         color: #ffffff;
-                        padding: 2px 6px;
-                        border-radius: 4px;
+                        padding: 1px 4px;
+                        border-radius: 3px;
                     }
                     .sku {
-                        font-size: 11px;
+                        font-size: 9px;
                         font-family: monospace;
                         font-weight: 900;
                         color: #0369a1;
                         background: #f0f9ff;
                         border: 1px solid #bae6fd;
-                        padding: 2px 6px;
-                        border-radius: 4px;
+                        padding: 1px 4px;
+                        border-radius: 3px;
                     }
                     img {
-                        width: 145px;
-                        height: 145px;
-                        margin: 4px 0;
+                        width: auto;
+                        height: 110px;
+                        max-width: 100%;
+                        max-height: 40mm;
+                        margin: 2px 0;
                         object-fit: contain;
                     }
                     .title {
-                        font-size: 13px;
+                        font-size: 10px;
                         font-weight: 800;
-                        margin-top: 4px;
+                        margin-top: 2px;
                         color: #0f172a;
-                        line-height: 1.2;
+                        line-height: 1.1;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        width: 100%;
                     }
                     .bin-box {
-                        font-size: 12px;
+                        font-size: 10px;
                         font-weight: 900;
                         color: #ffffff;
                         background: #0f172a;
-                        padding: 4px 10px;
-                        border-radius: 6px;
+                        padding: 3px 6px;
+                        border-radius: 4px;
                         display: block;
-                        margin-top: 8px;
+                        margin-top: auto;
                         letter-spacing: 0.5px;
+                        width: 100%;
+                        box-sizing: border-box;
                     }
                 </style>
             </head>
