@@ -140,7 +140,7 @@
                                 {{ $loop->iteration }}
                             </td>
                             <td class="px-4 py-3 w-14">
-                                <img src="{{ $item->image_url ?? 'https://placehold.co/100x100/1e293b/06b6d4?text=Item' }}" class="w-10 h-10 rounded-xl object-cover border border-slate-300 dark:border-slate-700">
+                                <img src="{{ $item->image_url ?? 'https://placehold.co/100x100/1e293b/06b6d4?text=Item' }}" class="w-10 h-10 rounded-xl object-cover border border-slate-300 dark:border-slate-700 cursor-pointer hover:opacity-80 transition" onclick="openImageViewer(this.src)">
                             </td>
                             <td class="px-4 py-3 break-words max-w-[160px]">
                                 <div class="font-bold text-cyan-600 dark:text-cyan-400 text-xs">{{ $item->sku }}</div>

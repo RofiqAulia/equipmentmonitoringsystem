@@ -13,7 +13,7 @@
     <div id="item-detail-card" class="hidden glass-panel p-6 rounded-3xl space-y-6 h-full flex flex-col justify-between">
         <!-- Item Info Header -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 pb-6 border-b border-slate-200 dark:border-slate-800">
-            <img id="item-image" src="" alt="Foto Barang" class="w-24 h-24 rounded-2xl object-cover bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 shadow-md">
+            <img id="item-image" src="" alt="Foto Barang" class="w-24 h-24 rounded-2xl object-cover bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 shadow-md cursor-pointer hover:opacity-80 transition" onclick="openImageViewer(this.src)">
             <div class="space-y-1 flex-1">
                 <div class="flex items-center space-x-2">
                     <span id="item-sku-badge" class="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30"></span>

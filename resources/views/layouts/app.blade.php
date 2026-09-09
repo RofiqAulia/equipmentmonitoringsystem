@@ -307,6 +307,46 @@
             </div>
         </div>
     </footer>
+
+    <!-- Global Image Viewer Modal -->
+    <div id="global-image-viewer" class="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-sm hidden flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeImageViewer()">
+        <div class="relative max-w-4xl w-full flex flex-col items-center justify-center" onclick="event.stopPropagation()">
+            <!-- Close Button -->
+            <button type="button" onclick="closeImageViewer()" class="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition border border-white/20 shadow-lg">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <!-- Image Container -->
+            <div class="bg-white/5 p-2 rounded-2xl border border-white/10 shadow-2xl backdrop-blur-md mb-4 flex items-center justify-center overflow-hidden w-full max-w-2xl">
+                <img id="viewer-image" src="" alt="View Image" class="max-w-full max-h-[70vh] object-contain rounded-xl">
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-3">
+                <a id="viewer-download-btn" href="" download class="px-5 py-2.5 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-sky-600/20 transition flex items-center">
+                    <i class="fa-solid fa-download mr-2"></i> Unduh Gambar
+                </a>
+                <button type="button" onclick="closeImageViewer()" class="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-sm font-bold transition">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openImageViewer(src) {
+        if(!src || src.includes('ui-avatars.com') || src.includes('placehold.co')) return;
+        document.getElementById('viewer-image').src = src;
+        document.getElementById('viewer-download-btn').href = src;
+        document.getElementById('global-image-viewer').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeImageViewer() {
+        document.getElementById('global-image-viewer').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    </script>
+
     <!-- Global Core Libraries: jQuery, Select2 & SweetAlert2 -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

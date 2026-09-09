@@ -60,7 +60,7 @@
 
         <!-- Detail Item (Foto, SKU, Nama, Lokasi) -->
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-slate-800">
-            <img id="modal-item-image" src="" alt="Foto Barang" class="w-24 h-24 rounded-2xl object-cover bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 shadow-md shrink-0">
+            <img id="modal-item-image" src="" alt="Foto Barang" class="w-24 h-24 rounded-2xl object-cover bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 shadow-md shrink-0 cursor-pointer hover:opacity-80 transition" onclick="openImageViewer(this.src)">
             <div class="space-y-1 text-center sm:text-left flex-1 min-w-0">
                 <div class="flex items-center justify-center sm:justify-start space-x-2 flex-wrap gap-y-1">
                     <span id="modal-item-sku-badge" class="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30"></span>

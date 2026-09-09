@@ -52,7 +52,7 @@
                             {{ $loop->iteration }}
                         </td>
                         <td class="px-4 py-3 w-14">
-                            <img src="{{ $item->image_url ?? 'https://placehold.co/100x100/1e293b/06b6d4?text=No+Photo' }}" alt="{{ $item->name }}" class="w-10 h-10 rounded-xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm">
+                            <img src="{{ $item->image_url ?? 'https://placehold.co/100x100/1e293b/06b6d4?text=No+Photo' }}" alt="{{ $item->name }}" class="w-10 h-10 rounded-xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-sm cursor-pointer hover:opacity-80 transition" onclick="openImageViewer(this.src)">
                         </td>
                         <td class="px-4 py-3 break-words max-w-[150px]">
                             <div class="font-bold text-cyan-600 dark:text-cyan-400 text-xs item-sku-text">{{ $item->sku }}</div>
@@ -125,7 +125,7 @@
         </div>
 
         <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-            <img id="detail-item-image" src="" alt="Foto Barang" class="w-24 h-24 rounded-2xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-md">
+            <img id="detail-item-image" src="" alt="Foto Barang" class="w-24 h-24 rounded-2xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-md cursor-pointer hover:opacity-80 transition" onclick="openImageViewer(this.src)">
             <div class="space-y-1 text-center sm:text-left flex-1">
                 <h4 id="detail-item-name" class="text-lg font-extrabold text-slate-900 dark:text-white"></h4>
                 <div class="text-xs font-mono text-cyan-600 dark:text-cyan-400 font-bold" id="detail-item-sku"></div>
@@ -240,7 +240,7 @@
 
                 <!-- Preview Selected New Image -->
                 <div id="edit-preview-container" class="mt-2.5 hidden flex items-center gap-3 p-2 bg-amber-500/10 border border-amber-500/30 rounded-2xl">
-                    <img id="edit-preview-img" src="" class="w-12 h-12 rounded-xl object-cover border border-amber-500/40 shadow-sm shrink-0">
+                    <img id="edit-preview-img" src="" class="w-12 h-12 rounded-xl object-cover border border-amber-500/40 shadow-sm shrink-0 cursor-pointer hover:opacity-80 transition" onclick="openImageViewer(this.src)">
                     <div class="flex-1 min-w-0 text-xs">
                         <div class="font-extrabold text-amber-800 dark:text-amber-300 text-xs">Foto Baru Terpilih</div>
                         <div id="edit-preview-filename" class="text-[10px] text-slate-500 dark:text-slate-400 truncate"></div>

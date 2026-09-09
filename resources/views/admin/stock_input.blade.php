@@ -173,7 +173,7 @@
                 </h3>
 
                 <div class="text-center p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
-                    <img id="preview-image" src="https://placehold.co/150x150/1e293b/0284c7?text=Preview" alt="Item Preview" class="w-28 h-28 mx-auto rounded-2xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-md">
+                    <img id="preview-image" src="https://placehold.co/150x150/1e293b/0284c7?text=Preview" alt="Item Preview" class="w-28 h-28 mx-auto rounded-2xl object-cover border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-md cursor-pointer hover:opacity-80 transition" onclick="openImageViewer(this.src)">
                     
                     <div>
                         <div id="preview-name" class="font-bold text-slate-900 dark:text-white text-sm">Pilih Barang untuk Preview</div>
