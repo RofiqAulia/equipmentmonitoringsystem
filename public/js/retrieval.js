@@ -279,15 +279,25 @@ function renderItemDetail(item, openModal = true) {
     
     let statusClass = 'px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30';
     let statusText = 'In Stock (Tersedia)';
+    
+    // Default Green for stock number
+    let stockColorClass = 'text-emerald-600 dark:text-emerald-400'; 
+    
     if (item.available_stock <= 0) {
         statusClass = 'px-2.5 py-0.5 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30';
         statusText = 'Out of Stock (Habis)';
+        stockColorClass = 'text-rose-600 dark:text-rose-400';
     } else if (item.available_stock <= item.minimum_stock) {
         statusClass = 'px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30';
         statusText = 'Low Stock (Menipis)';
+        stockColorClass = 'text-amber-500 dark:text-amber-400';
     }
+    
     if (statusBadge) { statusBadge.className = statusClass; statusBadge.textContent = statusText; }
     if (modalStatusBadge) { modalStatusBadge.className = statusClass; modalStatusBadge.textContent = statusText; }
+
+    if (availableStock) availableStock.className = 'text-3xl sm:text-4xl font-black mt-1 ' + stockColorClass;
+    if (modalAvailableStock) modalAvailableStock.className = 'text-3xl font-black mt-1 ' + stockColorClass;
 
     const confirmBtn = document.getElementById('btn-confirm-retrieval');
     const modalConfirmBtn = document.getElementById('modal-btn-confirm-retrieval');
