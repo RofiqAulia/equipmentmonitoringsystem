@@ -38,8 +38,8 @@ class AdminStockController extends Controller
             'name' => 'nullable|required_if:mode,new|string|max:255',
             'gis_category' => 'nullable|string|in:ATK & Fotocopy,Biaya Packaging,Biaya Kebersihan,Kebersihan,Sparepart Inventaris,Jasa Lainnya,Lain-lain',
             'location_bin' => 'required|string|max:100',
-            'quantity' => 'required|integer|min:1',
-            'minimum_stock' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:0',
+            'minimum_stock' => 'required|integer|min:0',
             'image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
             'image_file_camera' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
         ]);
@@ -185,7 +185,7 @@ class AdminStockController extends Controller
             'gis_category' => 'nullable|string|in:ATK & Fotocopy,Biaya Packaging,Biaya Kebersihan,Kebersihan,Sparepart Inventaris,Jasa Lainnya,Lain-lain',
             'location_bin' => 'required|string|max:100',
             'available_stock' => 'required|integer|min:0',
-            'minimum_stock' => 'required|integer|min:1',
+            'minimum_stock' => 'required|integer|min:0',
             'image_file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
             'image_file_camera' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,webp,bmp,heic,avif,ico,tiff|max:10240',
         ]);

@@ -215,7 +215,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Minimum Stock <span class="text-rose-500">*</span></label>
-                    <input type="number" name="minimum_stock" id="edit-item-min" min="1" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
+                    <input type="number" name="minimum_stock" id="edit-item-min" min="0" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
                 </div>
             </div>
 
