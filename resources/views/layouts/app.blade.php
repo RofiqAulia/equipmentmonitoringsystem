@@ -91,12 +91,17 @@
 
                 <!-- User Profile Avatar & Header Logout -->
                 <div class="flex items-center space-x-2 sm:space-x-3 pl-1.5 sm:pl-3 border-l border-slate-200 dark:border-slate-800">
-                    <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=0284c7&color=fff' }}" 
-                         alt="{{ Auth::user()->name }}" class="w-8 h-8 rounded-full border border-pink-500/40 object-cover">
+                    @php
+                        $profileUser = Auth::user()->supervisor ?? Auth::user();
+                    @endphp
+                    <img src="{{ $profileUser->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode($profileUser->name).'&background=0284c7&color=fff' }}" 
+                         alt="{{ $profileUser->name }}" class="w-8 h-8 rounded-full border border-pink-500/40 object-cover">
                     
                     <div class="hidden lg:block text-left">
-                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate max-w-[110px]">{{ Auth::user()->name }}</div>
-                        <div class="text-[9px] text-sky-600 dark:text-sky-400 uppercase tracking-wider font-extrabold">{{ Auth::user()->role }}</div>
+                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate max-w-[110px]">{{ $profileUser->name }}</div>
+                        <div class="text-[9px] text-sky-600 dark:text-sky-400 uppercase tracking-wider font-extrabold">
+                            {{ $profileUser->role }}
+                        </div>
                     </div>
 
                     <form action="{{ route('logout') }}" method="POST" class="inline-block">
@@ -244,11 +249,16 @@
                             <!-- Sidebar User Profile Card & Dedicated Logout Button -->
                             <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
                                 <div class="flex items-center space-x-3 px-1">
-                                    <img src="{{ Auth::user()->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode(Auth::user()->name).'&background=0284c7&color=fff' }}" 
-                                         alt="{{ Auth::user()->name }}" class="w-9 h-9 rounded-xl border border-sky-500/40 object-cover shadow-sm">
+                                    @php
+                                        $profileUser = Auth::user()->supervisor ?? Auth::user();
+                                    @endphp
+                                    <img src="{{ $profileUser->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode($profileUser->name).'&background=0284c7&color=fff' }}" 
+                                         alt="{{ $profileUser->name }}" class="w-9 h-9 rounded-xl border border-sky-500/40 object-cover shadow-sm">
                                     <div class="flex-1 min-w-0">
-                                        <div class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ Auth::user()->name }}</div>
-                                        <div class="text-[10px] text-sky-600 dark:text-sky-400 font-extrabold uppercase tracking-wider">{{ Auth::user()->role }}</div>
+                                        <div class="text-xs font-bold text-slate-900 dark:text-white truncate">{{ $profileUser->name }}</div>
+                                        <div class="text-[10px] text-sky-600 dark:text-sky-400 font-extrabold uppercase tracking-wider">
+                                            {{ $profileUser->role }}
+                                        </div>
                                     </div>
                                 </div>
 
