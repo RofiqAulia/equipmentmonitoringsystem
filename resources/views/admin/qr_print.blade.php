@@ -4,7 +4,101 @@
 
 @push('styles')
 <style>
-    /* Styling Khusus Cetak Kertas A4 & Label Stiker Modern */
+    /* -------------------------------------------------------------
+       Base Layout Stiker (Berlaku untuk Pratinjau Layar & Print)
+       ------------------------------------------------------------- */
+    .qr-card-wrapper {
+        display: flex;
+        flex-direction: column;
+        background: transparent;
+        height: 100%;
+    }
+
+    .qr-card {
+        border: 2px solid #000 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-sizing: border-box !important;
+        font-family: Arial, Helvetica, sans-serif !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        overflow: hidden !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 140px; /* Minimal height for screen view */
+    }
+
+    .qr-card-header {
+        border-bottom: 2px solid #000 !important;
+        padding: 6px 8px !important;
+        text-align: center !important;
+        font-weight: 900 !important;
+        font-size: 13px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+    }
+
+    .qr-card-middle {
+        display: flex !important;
+        flex: 1 !important;
+    }
+
+    .qr-card-middle-left {
+        width: 65% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        border-right: 2px solid #000 !important;
+    }
+
+    .qr-card-middle-row {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+        font-weight: 800 !important;
+        display: flex !important;
+        align-items: center !important;
+        flex: 1 !important;
+        text-transform: uppercase !important;
+        line-height: 1.2 !important;
+    }
+
+    .qr-card-middle-row:first-child {
+        border-bottom: 2px solid #000 !important;
+    }
+
+    .qr-card-middle-right {
+        width: 35% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 4px !important;
+        background: #fff !important;
+    }
+
+    .qr-card-middle-right img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: contain !important;
+        max-height: 90px !important; /* Batasan agar tidak meluap di screen */
+    }
+
+    .qr-card-footer {
+        border-top: 2px solid #000 !important;
+        padding: 6px 8px !important;
+        font-size: 12px !important;
+        font-weight: 900 !important;
+        text-transform: uppercase !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* -------------------------------------------------------------
+       Styling Khusus Cetak Kertas A4 & Label Stiker Modern
+       ------------------------------------------------------------- */
     @media print {
         @page {
             size: A4 portrait;
@@ -16,209 +110,58 @@
             color: black !important;
             padding: 0 !important;
             margin: 0 !important;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+            font-family: Arial, Helvetica, sans-serif !important;
         }
 
-        .no-print, 
-        nav, 
-        aside, 
-        footer, 
-        #sidebar-backdrop {
+        .no-print, nav, aside, footer, #sidebar-backdrop {
             display: none !important;
         }
 
-        .main-content-container {
-            padding: 0 !important;
-            margin: 0 !important;
-            max-width: 100% !important;
-        }
-
-        .lg\:pl-\[17\.5rem\] {
-            padding-left: 0 !important;
-        }
-
-        .print-container {
-            width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-        }
-
+        .main-content-container { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+        .lg\:pl-\[17\.5rem\] { padding-left: 0 !important; }
+        .print-container { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+        
         .qr-grid-container {
             display: grid !important;
             width: 100% !important;
             box-sizing: border-box !important;
         }
 
-        /* Preset Grid Stiker 3x5 (15 Label per Lembar A4 - Pas 1 Halaman Presisi) */
-        .grid-3x5 {
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 3.5mm !important;
-        }
+        /* Preset Grid Stiker */
+        .grid-3x5 { grid-template-columns: repeat(3, 1fr) !important; gap: 3.5mm !important; }
+        .grid-4x6 { grid-template-columns: repeat(4, 1fr) !important; gap: 2.5mm !important; }
+        .grid-5x7 { grid-template-columns: repeat(5, 1fr) !important; gap: 2mm !important; }
+        .grid-2x4 { grid-template-columns: repeat(2, 1fr) !important; gap: 4mm !important; }
+        .grid-single { grid-template-columns: repeat(1, 1fr) !important; }
 
-        /* Preset Grid Stiker 4x6 (24 Label per Lembar A4) */
-        .grid-4x6 {
-            grid-template-columns: repeat(4, 1fr) !important;
-            gap: 2.5mm !important;
-        }
-
-        /* Preset Grid Stiker 5x7 (35 Label per Lembar A4) */
-        .grid-5x7 {
-            grid-template-columns: repeat(5, 1fr) !important;
-            gap: 2mm !important;
-        }
-
-        /* Preset Grid Stiker 2x4 (8 Label per Lembar A4) */
-        .grid-2x4 {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 4mm !important;
-        }
-
-        /* Preset Grid Single (1 Label per Halaman) */
-        .grid-single {
-            grid-template-columns: repeat(1, 1fr) !important;
-        }
-
-        /* Modern QR Card Container untuk Cetak */
+        /* Tinggi spesifik untuk cetak container pembungkus */
+        .grid-3x5 .qr-card-wrapper { height: 52mm !important; }
+        .grid-4x6 .qr-card-wrapper { height: 42mm !important; }
+        .grid-5x7 .qr-card-wrapper { height: 38mm !important; }
+        .grid-2x4 .qr-card-wrapper { height: 65mm !important; }
+        
         .qr-card {
-            border: 1px solid #cbd5e1 !important;
-            border-radius: 8px !important;
-            padding: 5px 6px !important;
-            background: #ffffff !important;
-            color: #0f172a !important;
-            box-shadow: none !important;
+            border: 1px solid #000 !important; /* Gunakan border tipis untuk cetak */
             page-break-inside: avoid !important;
             break-inside: avoid !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            text-align: center !important;
-            box-sizing: border-box !important;
-            position: relative !important;
-            overflow: hidden !important;
+            min-height: auto !important;
         }
+        
+        .qr-card-header { border-bottom: 1px solid #000 !important; }
+        .qr-card-middle-left { border-right: 1px solid #000 !important; }
+        .qr-card-middle-row:first-child { border-bottom: 1px solid #000 !important; }
+        .qr-card-footer { border-top: 1px solid #000 !important; }
 
-        .grid-3x5 .qr-card {
-            height: 52mm !important;
-            max-height: 52mm !important;
-        }
+        .qr-card-middle-right img { max-height: 100% !important; }
 
-        .grid-4x6 .qr-card {
-            height: 42mm !important;
-            max-height: 42mm !important;
-        }
-
-        .grid-5x7 .qr-card {
-            height: 38mm !important;
-            max-height: 38mm !important;
-            padding: 3px 4px !important;
-        }
-
-        .grid-2x4 .qr-card {
-            height: 65mm !important;
-        }
-
-        /* Modern Card Header Accent */
-        .qr-card-header {
-            width: 100% !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            border-b: 1px solid #f1f5f9 !important;
-            padding-bottom: 2px !important;
-            margin-bottom: 2px !important;
-        }
-
-        .qr-card-seq {
-            font-size: 8px !important;
-            font-weight: 800 !important;
-            background: #0f172a !important;
-            color: #ffffff !important;
-            padding: 1px 4px !important;
-            border-radius: 3px !important;
-            line-height: 1 !important;
-        }
-
-        .qr-card-sku {
-            font-size: 9px !important;
-            font-family: monospace !important;
-            font-weight: 900 !important;
-            color: #0369a1 !important;
-            background: #f0f9ff !important;
-            border: 1px solid #bae6fd !important;
-            padding: 1px 5px !important;
-            border-radius: 4px !important;
-            letter-spacing: 0.5px !important;
-        }
-
-        /* QR Code Container Box */
-        .qr-image-wrapper {
-            background: #ffffff !important;
-            border: 1px solid #e2e8f0 !important;
-            border-radius: 6px !important;
-            padding: 2px !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-        }
-
-        .qr-card img {
-            width: 80px !important;
-            height: 80px !important;
-            max-width: 100% !important;
-            object-fit: contain !important;
-        }
-
-        .grid-3x5 .qr-card img {
-            width: 98px !important;
-            height: 98px !important;
-        }
-
-        .grid-4x6 .qr-card img {
-            width: 72px !important;
-            height: 72px !important;
-        }
-
-        .grid-5x7 .qr-card img {
-            width: 58px !important;
-            height: 58px !important;
-        }
-
-        .grid-2x4 .qr-card img {
-            width: 130px !important;
-            height: 130px !important;
-        }
-
-        .grid-single .qr-card img {
-            width: 220px !important;
-            height: 220px !important;
-        }
-
-        /* Card Content Details */
-        .qr-card-title {
-            font-size: 10px !important;
-            font-weight: 800 !important;
-            color: #0f172a !important;
-            margin-top: 2px !important;
-            line-height: 1.2 !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-            width: 100% !important;
-        }
-
-        .qr-card-bin {
-            font-size: 10px !important;
-            font-weight: 900 !important;
-            color: #ffffff !important;
-            background: #0f172a !important;
-            padding: 2px 6px !important;
-            border-radius: 4px !important;
-            margin-top: 2px !important;
-            letter-spacing: 0.5px !important;
-            width: 100% !important;
-            box-sizing: border-box !important;
-        }
+        /* Penyesuaian font untuk grid yang lebih kecil */
+        .grid-5x7 .qr-card-header { font-size: 8px !important; padding: 2px 4px !important; }
+        .grid-5x7 .qr-card-middle-row { font-size: 7px !important; padding: 2px 4px !important; }
+        .grid-5x7 .qr-card-footer { font-size: 8px !important; padding: 2px 4px !important; }
+        
+        .grid-4x6 .qr-card-header { font-size: 9px !important; padding: 3px 5px !important; }
+        .grid-4x6 .qr-card-middle-row { font-size: 8px !important; padding: 3px 5px !important; }
+        .grid-4x6 .qr-card-footer { font-size: 9px !important; padding: 3px 5px !important; }
     }
 </style>
 @endpush
@@ -399,41 +342,40 @@
                         $qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' . urlencode($qrPayload);
                     @endphp
                     
-                    <!-- Modern Styled Card -->
-                    <div class="qr-card relative p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center flex flex-col items-center justify-between shadow-sm transition hover:shadow-md">
-                        
-                        <!-- Header Accent Bar (SKU on top right, no INVENTORY CONTROL) -->
-                        <div class="qr-card-header w-full flex items-center justify-between pb-1 mb-1 border-b border-slate-100 dark:border-slate-800">
-                            <span class="qr-card-seq text-[9px] font-black bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 px-1.5 py-0.5 rounded">
-                                #{{ sprintf('%02d', $item->seq_num ?? $loop->iteration) }}
-                            </span>
-                            <span class="qr-card-sku font-mono text-[10px] font-black tracking-wider text-sky-600 dark:text-sky-400 bg-sky-50 dark:bg-sky-950/80 px-2 py-0.5 rounded border border-sky-200 dark:border-sky-800">
-                                {{ $item->sku }}
-                            </span>
-                        </div>
-
-                        <!-- High-Density QR Image Container -->
-                        <div class="qr-image-wrapper p-1.5 bg-white rounded-xl border border-slate-200 shadow-inner my-0.5">
-                            <img src="{{ $qrApiUrl }}" alt="QR {{ $item->sku }}" class="w-24 h-24 sm:w-28 sm:h-28 object-contain mx-auto">
-                        </div>
-
-                        <!-- Item Details & Prominent Location Badge -->
-                        <div class="w-full space-y-1 mt-1">
-                            <div class="qr-card-title text-xs font-bold text-slate-900 dark:text-white truncate" title="{{ $item->name }}">
+                    <!-- Layout Kartu Cetak Bergaris Sesuai Gambar -->
+                    <div class="qr-card-wrapper transition hover:shadow-lg dark:hover:shadow-slate-800/50">
+                        <div class="qr-card">
+                            <!-- Baris 1: Nama Barang -->
+                            <div class="qr-card-header">
                                 {{ $item->name }}
                             </div>
-
-                            <!-- Prominent Location Badge (Tanpa Ikon) -->
-                            <div class="qr-card-bin py-1 px-2.5 rounded-lg bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black text-xs flex items-center justify-center shadow-sm">
-                                <span>RAK: {{ strtoupper($item->location_bin) }}</span>
+                            
+                            <!-- Baris 2: Tengah -->
+                            <div class="qr-card-middle">
+                                <div class="qr-card-middle-left">
+                                    <div class="qr-card-middle-row">
+                                        ITEM GIS : {{ $item->gis_category ?? 'SPAREPART INVENTARIS' }}
+                                    </div>
+                                    <div class="qr-card-middle-row">
+                                        KODE : {{ $item->sku }}
+                                    </div>
+                                </div>
+                                <div class="qr-card-middle-right">
+                                    <img src="{{ $qrApiUrl }}" alt="QR {{ $item->sku }}">
+                                </div>
                             </div>
 
-                            <!-- Tombol Cetak Stiker Mandiri / Thermal Label (No-Print) -->
-                            <button onclick="printSingleSticker('{{ addslashes($item->name) }}', '{{ addslashes($item->sku) }}', '{{ $qrApiUrl }}', '{{ addslashes($item->location_bin) }}', '{{ addslashes($item->gis_category ?? 'TANPA KATEGORI') }}')" type="button" title="Cetak Stiker Single untuk Printer Thermal" class="no-print mt-1.5 w-full py-1.5 px-2 text-[10px] font-extrabold rounded-xl bg-sky-500/10 hover:bg-sky-600 text-sky-600 hover:text-white dark:text-sky-400 dark:hover:text-white transition flex items-center justify-center space-x-1 border border-sky-500/20 shadow-sm active:scale-95">
-                                <i class="fa-solid fa-print text-xs"></i>
-                                <span>Cetak Stiker Single</span>
-                            </button>
+                            <!-- Baris 3: Lokasi -->
+                            <div class="qr-card-footer">
+                                LOKASI: {{ strtoupper($item->location_bin) }}
+                            </div>
                         </div>
+                        
+                        <!-- Tombol Cetak Stiker Mandiri / Thermal Label (No-Print) -->
+                        <button onclick="printSingleSticker('{{ addslashes($item->name) }}', '{{ addslashes($item->sku) }}', '{{ $qrApiUrl }}', '{{ addslashes($item->location_bin) }}', '{{ addslashes($item->gis_category ?? 'SPAREPART INVENTARIS') }}')" type="button" title="Cetak Stiker Single untuk Printer Thermal" class="no-print mx-auto mt-2 mb-2 w-11/12 py-1.5 px-2 text-[10px] font-extrabold rounded-xl bg-sky-50 hover:bg-sky-600 text-sky-600 hover:text-white dark:bg-sky-500/10 dark:text-sky-400 dark:hover:text-white transition flex items-center justify-center space-x-1 border border-sky-500/20 shadow-sm active:scale-95">
+                            <i class="fa-solid fa-print text-xs"></i>
+                            <span>Cetak Stiker Single</span>
+                        </button>
                     </div>
                 @endforeach
             </div>
@@ -458,7 +400,7 @@
                         margin: 0;
                     }
                     body {
-                        font-family: Arial, sans-serif;
+                        font-family: Arial, Helvetica, sans-serif;
                         margin: 0;
                         padding: 0;
                         background: #ffffff;
@@ -476,60 +418,82 @@
                         border: 1px solid #000;
                         box-sizing: border-box;
                         display: flex;
-                        flex-direction: row;
-                    }
-                    .left-col {
-                        width: 62%;
-                        border-right: 1px solid #000;
-                        display: flex;
                         flex-direction: column;
                     }
-                    .right-col {
-                        width: 38%;
+                    .row-header {
+                        border-bottom: 1px solid #000;
+                        padding: 4px 6px;
+                        font-weight: bold;
+                        font-size: 11px;
+                        text-align: center;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        text-transform: uppercase;
+                        min-height: 12mm;
+                        line-height: 1.2;
+                    }
+                    .row-middle {
+                        display: flex;
+                        flex: 1;
+                    }
+                    .middle-left {
+                        width: 65%;
+                        display: flex;
+                        flex-direction: column;
+                        border-right: 1px solid #000;
+                    }
+                    .info-row {
+                        flex: 1;
+                        padding: 2px 4px;
+                        font-size: 10px;
+                        font-weight: bold;
+                        display: flex;
+                        align-items: center;
+                        text-transform: uppercase;
+                        line-height: 1.2;
+                    }
+                    .info-row:first-child {
+                        border-bottom: 1px solid #000;
+                    }
+                    .middle-right {
+                        width: 35%;
                         display: flex;
                         align-items: center;
                         justify-content: center;
                         padding: 2px;
                     }
-                    .row {
-                        flex: 1;
-                        border-bottom: 1px solid #000;
-                        display: flex;
-                        align-items: center;
-                        padding: 2px 4px;
-                        font-size: 10px;
-                        text-transform: uppercase;
-                        word-wrap: break-word;
-                        white-space: normal;
-                        line-height: 1.1;
-                    }
-                    .row:last-child {
-                        border-bottom: none;
-                    }
-                    .row-title {
-                        font-weight: bold;
-                        font-size: 11px;
-                        white-space: normal;
-                        line-height: 1.1;
-                    }
                     .qr-img {
                         width: 100%;
                         height: 100%;
+                        max-height: 20mm;
                         object-fit: contain;
+                    }
+                    .row-footer {
+                        border-top: 1px solid #000;
+                        padding: 4px 6px;
+                        font-size: 10px;
+                        font-weight: bold;
+                        display: flex;
+                        align-items: center;
+                        text-transform: uppercase;
+                        min-height: 8mm;
                     }
                 </style>
             </head>
             <body onload="window.print(); setTimeout(function(){ window.close(); }, 500);">
                 <div class="sticker-container">
-                    <div class="left-col">
-                        <div class="row row-title">${name}</div>
-                        <div class="row">ITEM GIS : ${category}</div>
-                        <div class="row">KODE : ${sku}</div>
-                        <div class="row">LOKASI: ${bin}</div>
+                    <div class="row-header">${name}</div>
+                    <div class="row-middle">
+                        <div class="middle-left">
+                            <div class="info-row">ITEM GIS : ${category}</div>
+                            <div class="info-row">KODE : ${sku}</div>
+                        </div>
+                        <div class="middle-right">
+                            <img class="qr-img" src="${qrUrl}" alt="QR ${sku}">
+                        </div>
                     </div>
-                    <div class="right-col">
-                        <img class="qr-img" src="${qrUrl}" alt="QR ${sku}">
-                    </div>
+                    <div class="row-footer">LOKASI: ${bin}</div>
                 </div>
             </body>
             </html>
