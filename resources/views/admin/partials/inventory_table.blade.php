@@ -84,7 +84,7 @@
                         </td>
                         <!-- Kolom 8: Aksi QR Code -->
                         <td class="px-4 py-3 text-center">
-                            <button type="button" onclick="openQrModal('{{ addslashes($item->name) }}', '{{ $item->sku }}', '{{ $item->qr_code_payload }}', '{{ $item->location_bin }}')" class="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-bold text-xs rounded-xl border border-cyan-500/30 transition flex items-center justify-center mx-auto shadow-sm">
+                            <button type="button" onclick="openQrModal('{{ addslashes($item->name) }}', '{{ $item->sku }}', '{{ $item->qr_code_payload }}', '{{ $item->location_bin }}', '{{ addslashes($item->gis_category ?? 'SPAREPART INVENTARIS') }}')" class="px-3 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-bold text-xs rounded-xl border border-cyan-500/30 transition flex items-center justify-center mx-auto shadow-sm">
                                 <i class="fa-solid fa-qrcode mr-1.5"></i> Terbitkan QR
                             </button>
                         </td>

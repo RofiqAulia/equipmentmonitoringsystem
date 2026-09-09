@@ -548,10 +548,11 @@
             window.location.reload();
         }
 
-        function openQrModal(name, sku, payload, bin) {
+        function openQrModal(name, sku, payload, bin, category) {
             document.getElementById('qr-modal-title').innerText = name;
-            document.getElementById('qr-modal-sku').innerText = 'SKU: ' + sku;
-            document.getElementById('qr-modal-bin').innerText = 'Lokasi Rak: ' + bin;
+            document.getElementById('qr-modal-sku').innerText = 'KODE : ' + sku;
+            document.getElementById('qr-modal-category').innerText = 'ITEM GIS : ' + (category || 'SPAREPART INVENTARIS');
+            document.getElementById('qr-modal-bin').innerText = 'LOKASI: ' + bin;
             
             var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=' + encodeURIComponent(payload);
             document.getElementById('qr-modal-image').src = qrUrl;
@@ -564,31 +565,118 @@
         }
 
         function printQrCode() {
-            var printWin = window.open('', '_blank');
+            var printWin = window.open('', '_blank', 'width=450,height=520');
             var imgUrl = document.getElementById('qr-modal-image').src;
             var title = document.getElementById('qr-modal-title').innerText;
-            var sku = document.getElementById('qr-modal-sku').innerText;
-            var bin = document.getElementById('qr-modal-bin').innerText;
+            var sku = document.getElementById('qr-modal-sku').innerText.replace('KODE : ', '');
+            var category = document.getElementById('qr-modal-category').innerText.replace('ITEM GIS : ', '');
+            var bin = document.getElementById('qr-modal-bin').innerText.replace('LOKASI: ', '');
 
             printWin.document.write(`
+                <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>Cetak QR Code - ${sku}</title>
+                    <title>Cetak Stiker Single - ${sku}</title>
                     <style>
-                        body { font-family: sans-serif; text-align: center; padding: 40px; }
-                        .qr-card { border: 2px dashed #333; padding: 25px; display: inline-block; border-radius: 16px; }
-                        img { width: 220px; height: 220px; }
-                        h2 { margin: 10px 0 5px; font-size: 20px; }
-                        p { margin: 3px 0; font-size: 14px; color: #555; }
-                        .sku { font-weight: bold; font-family: monospace; color: #0284c7; }
+                        @page {
+                            size: 70mm 50mm;
+                            margin: 0;
+                        }
+                        body {
+                            font-family: Arial, Helvetica, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background: #ffffff;
+                            color: #000000;
+                            width: 70mm;
+                            height: 50mm;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            box-sizing: border-box;
+                        }
+                        .sticker-container {
+                            width: 68mm;
+                            height: 48mm;
+                            border: 1px solid #000;
+                            box-sizing: border-box;
+                            display: flex;
+                            flex-direction: column;
+                        }
+                        .row-header {
+                            border-bottom: 1px solid #000;
+                            padding: 4px 6px;
+                            font-weight: bold;
+                            font-size: 11px;
+                            text-align: center;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            text-transform: uppercase;
+                            min-height: 12mm;
+                            line-height: 1.2;
+                        }
+                        .row-middle {
+                            display: flex;
+                            flex: 1;
+                        }
+                        .middle-left {
+                            width: 65%;
+                            display: flex;
+                            flex-direction: column;
+                            border-right: 1px solid #000;
+                        }
+                        .info-row {
+                            flex: 1;
+                            padding: 2px 4px;
+                            font-size: 10px;
+                            font-weight: bold;
+                            display: flex;
+                            align-items: center;
+                            text-transform: uppercase;
+                            line-height: 1.2;
+                        }
+                        .info-row:first-child {
+                            border-bottom: 1px solid #000;
+                        }
+                        .middle-right {
+                            width: 35%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            padding: 2px;
+                        }
+                        .qr-img {
+                            width: 100%;
+                            height: 100%;
+                            max-height: 20mm;
+                            object-fit: contain;
+                        }
+                        .row-footer {
+                            border-top: 1px solid #000;
+                            padding: 4px 6px;
+                            font-size: 10px;
+                            font-weight: bold;
+                            display: flex;
+                            align-items: center;
+                            text-transform: uppercase;
+                            min-height: 8mm;
+                        }
                     </style>
                 </head>
-                <body onload="window.print(); window.close();">
-                    <div class="qr-card">
-                        <img src="${imgUrl}">
-                        <h2>${title}</h2>
-                        <p class="sku">${sku}</p>
-                        <p>${bin}</p>
+                <body onload="window.print(); setTimeout(function(){ window.close(); }, 500);">
+                    <div class="sticker-container">
+                        <div class="row-header">${title}</div>
+                        <div class="row-middle">
+                            <div class="middle-left">
+                                <div class="info-row">ITEM GIS : ${category}</div>
+                                <div class="info-row">KODE : ${sku}</div>
+                            </div>
+                            <div class="middle-right">
+                                <img class="qr-img" src="${imgUrl}" alt="QR ${sku}">
+                            </div>
+                        </div>
+                        <div class="row-footer">LOKASI: ${bin}</div>
                     </div>
                 </body>
                 </html>

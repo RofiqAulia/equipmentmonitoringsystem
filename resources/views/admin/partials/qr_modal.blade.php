@@ -10,14 +10,27 @@
             </button>
         </div>
 
-        <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-inner inline-block mx-auto">
-            <img id="qr-modal-image" src="" alt="QR Code Barang" class="w-48 h-48 mx-auto object-contain">
-        </div>
-
-        <div>
-            <h4 id="qr-modal-title" class="font-extrabold text-slate-900 dark:text-white text-base"></h4>
-            <div id="qr-modal-sku" class="text-xs font-mono text-cyan-600 dark:text-cyan-400 font-bold mt-0.5"></div>
-            <div id="qr-modal-bin" class="text-xs text-slate-500 dark:text-slate-400 mt-1"></div>
+        <div class="border-[2px] border-black bg-white text-black flex flex-col font-sans w-full mx-auto" style="max-width: 300px;">
+            <!-- Header -->
+            <div id="qr-modal-title" class="border-b-[2px] border-black p-2 text-center font-black text-[13px] uppercase leading-tight flex items-center justify-center min-h-[36px]">
+            </div>
+            <!-- Middle -->
+            <div class="flex flex-1">
+                <!-- Left -->
+                <div class="w-[65%] flex flex-col border-r-[2px] border-black">
+                    <div id="qr-modal-category" class="border-b-[2px] border-black px-2 py-1.5 text-[10px] font-extrabold flex items-center flex-1 uppercase leading-tight min-h-[32px]">
+                    </div>
+                    <div id="qr-modal-sku" class="px-2 py-1.5 text-[10px] font-extrabold flex items-center flex-1 uppercase leading-tight min-h-[32px]">
+                    </div>
+                </div>
+                <!-- Right -->
+                <div class="w-[35%] flex items-center justify-center p-1 bg-white">
+                    <img id="qr-modal-image" src="" alt="QR Code" class="w-full h-auto max-h-[80px] object-contain">
+                </div>
+            </div>
+            <!-- Footer -->
+            <div id="qr-modal-bin" class="border-t-[2px] border-black p-2 text-[11px] font-black uppercase flex items-center min-h-[32px]">
+            </div>
         </div>
 
         <div class="p-3 bg-cyan-500/10 rounded-xl border border-cyan-500/20 text-[11px] text-cyan-700 dark:text-cyan-300 text-left">
