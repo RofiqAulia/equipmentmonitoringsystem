@@ -34,12 +34,12 @@
                 <tr>
                     <th class="px-3 py-3.5 text-center w-12 cursor-pointer sorting">No</th>
                     <th class="px-4 py-3.5 w-14 no-sort">Foto</th>
-                    <th class="px-4 py-3.5 cursor-pointer sorting">Kode SKU</th>
-                    <th class="px-4 py-3.5 min-w-[180px] cursor-pointer sorting">Nama Barang</th>
-                    <th class="px-4 py-3.5 cursor-pointer sorting">Kategori GIS</th>
-                    <th class="px-4 py-3.5 cursor-pointer sorting">Lokasi Gudang/Rak</th>
+                    <th class="px-4 py-3.5 cursor-pointer sorting">Kode Item</th>
+                    <th class="px-4 py-3.5 min-w-[180px] cursor-pointer sorting">Nama Item</th>
+                    <th class="px-4 py-3.5 cursor-pointer sorting">Item Kategori GIS</th>
+                    <th class="px-4 py-3.5 cursor-pointer sorting">Lokasi Item</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Stok Available</th>
-                    <th class="px-4 py-3.5 text-center cursor-pointer sorting">Min Threshold</th>
+                    <th class="px-4 py-3.5 text-center cursor-pointer sorting">Safety Stok</th>
                     <th class="px-4 py-3.5 text-center cursor-pointer sorting">Status Stok</th>
                     <th class="px-4 py-3.5 text-center no-sort">Aksi QR Code</th>
                     <th class="px-4 py-3.5 text-center no-sort min-w-[130px]">Aksi</th>
@@ -215,7 +215,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Minimum Stock <span class="text-rose-500">*</span></label>
-                    <input type="number" name="minimum_stock" id="edit-item-min" min="0" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
+                    <input type="number" name="minimum_stock" id="edit-item-min" min="1" required class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-bold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
                 </div>
             </div>
 
