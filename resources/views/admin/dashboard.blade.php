@@ -3,10 +3,10 @@
 @section('title', 'Admin Dashboard - DataTables Inventory Control System')
 
 @push('styles')
-    <!-- DataTables Core, Buttons, & RowGroup CSS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.4.1/css/rowGroup.dataTables.min.css">
+    <!-- DataTables Core, Buttons, & RowGroup CSS (Local Assets) -->
+    <link rel="stylesheet" href="{{ asset('vendor/datatables/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/datatables/rowGroup.dataTables.min.css') }}">
     <style>
         /* Custom Dynamic & Clean Glassmorphism DataTables Theme */
         .dataTables_wrapper {
@@ -355,13 +355,13 @@
     <!-- Chart.js CDN for Interactive Dashboard Charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
-    <!-- DataTables Core + Export Extensions + RowGroup -->
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/rowgroup/1.4.1/js/dataTables.rowGroup.min.js"></script>
+    <!-- DataTables Core + Export Extensions + RowGroup (Local Vendor Assets) -->
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/jszip.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.rowGroup.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -479,8 +479,9 @@
                         exportOptions: activityExportOptions
                     }
                 ],
-                pageLength: -1,
-                lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
+                pageLength: 25,
+                lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Tampilkan Semua"]],
+                deferRender: true,
                 order: [[3, 'desc']], // Default Sort by Waktu Descending
                 columnDefs: [
                     { targets: 0, orderable: false },

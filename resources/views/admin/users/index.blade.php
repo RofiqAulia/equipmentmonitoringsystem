@@ -3,7 +3,7 @@
 @section('title', 'Manajemen User & Hak Akses - Inventory Control')
 
 @push('styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="{{ asset('vendor/datatables/jquery.dataTables.min.css') }}">
 <style>
     /* DataTables Layout & Elements Styling */
     .dataTables_wrapper .dataTables_length,
@@ -525,8 +525,8 @@
 </form>
 
 @push('scripts')
-<!-- DataTables JS Integration -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<!-- DataTables JS Integration (Local Asset) -->
+<script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 
 <script>
     $(document).ready(function() {
@@ -544,8 +544,9 @@
                     previous: "Kembali"
                 }
             },
-            pageLength: -1,
-            lengthMenu: [[-1, 10, 25, 50], ["Tampilkan Semua", 10, 25, 50]],
+            pageLength: 25,
+            lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Tampilkan Semua"]],
+            deferRender: true,
             order: [[3, 'desc']],
             columnDefs: [
                 { targets: 0, orderable: false }

@@ -45,13 +45,13 @@
 @endsection
 
 @push('scripts')
-    <!-- DataTables Core + Export Extensions + RowGroup -->
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/rowgroup/1.4.1/js/dataTables.rowGroup.min.js"></script>
+    <!-- DataTables Core + Export Extensions + RowGroup (Local Vendor Assets for Maximum Speed & Offline Support) -->
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/jszip.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/dataTables.rowGroup.min.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -90,11 +90,12 @@
             };
 
             var inventoryTable = $('#inventoryTable').DataTable({
-                pageLength: -1,
-                lengthMenu: [[-1, 10, 25, 50, 100], ["Tampilkan Semua", 10, 25, 50, 100]],
+                pageLength: 25,
+                lengthMenu: [[25, 50, 100, -1], [25, 50, 100, "Tampilkan Semua"]],
+                deferRender: true,
                 order: [[0, 'asc']], // Default Sort by No ASC
                 columnDefs: [
-                    { orderable: false, targets: [1, 9, 10] },
+                    { orderable: false, targets: [1, 9] },
                     { orderable: true, targets: [0, 2, 3, 4, 5, 6, 7, 8] }
                 ],
                 dom: '<"flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-4 p-3 bg-slate-50/70 dark:bg-slate-900/60 rounded-2xl border border-slate-200 dark:border-slate-800"<"flex flex-wrap items-center gap-3"lB><"w-full xl:w-auto"f>>rt<"flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 p-2"ip>',
