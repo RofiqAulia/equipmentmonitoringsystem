@@ -194,10 +194,16 @@
                 <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kategori Item GIS</label>
                 <select name="gis_category" id="edit-item-category-input" class="w-full px-3.5 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-amber-500">
                     <option value="">-- Tanpa Kategori --</option>
+                    <option value="ATK & FOTOCOPY">ATK & FOTOCOPY</option>
+                    <option value="SPAREPART INVENTARIS">SPAREPART INVENTARIS</option>
+                    <option value="KEBERSIHAN">KEBERSIHAN</option>
+                    <option value="BIAYA KONSUMSI">BIAYA KONSUMSI</option>
+                    <option value="BIAYA PACKAGING">BIAYA PACKAGING</option>
+                    <option value="JASA LAINNYA (ORANG PRIBADI)">JASA LAINNYA (ORANG PRIBADI)</option>
                     <option value="ATK & Fotocopy">ATK & Fotocopy</option>
-                    <option value="Biaya Packaging">Biaya Packaging</option>
-                    <option value="Kebersihan">Kebersihan (Biaya Kebersihan)</option>
                     <option value="Sparepart Inventaris">Sparepart Inventaris</option>
+                    <option value="Kebersihan">Kebersihan</option>
+                    <option value="Biaya Packaging">Biaya Packaging</option>
                     <option value="Jasa Lainnya">Jasa Lainnya</option>
                     <option value="Lain-lain">Lain-lain</option>
                 </select>
@@ -345,10 +351,45 @@
         document.getElementById('edit-item-form').action = '/admin/stock/' + item.id;
         document.getElementById('edit-item-sku').value = item.sku;
         document.getElementById('edit-item-name').value = item.name;
-        document.getElementById('edit-item-category-input').value = item.gis_category || '';
         document.getElementById('edit-item-location').value = item.location_bin;
         document.getElementById('edit-item-stock').value = item.available_stock;
         document.getElementById('edit-item-min').value = item.minimum_stock;
+
+        // Auto-select existing item GIS category from database
+        var selectEl = document.getElementById('edit-item-category-input');
+        var itemCategory = (item.gis_category || '').trim();
+
+        if (selectEl) {
+            // Remove previously added temporary dynamic option if any
+            var dynamicOpt = selectEl.querySelector('.dynamic-category-opt');
+            if (dynamicOpt) {
+                dynamicOpt.remove();
+            }
+
+            if (!itemCategory) {
+                selectEl.value = '';
+            } else {
+                var found = false;
+                for (var i = 0; i < selectEl.options.length; i++) {
+                    var optVal = selectEl.options[i].value.trim();
+                    if (optVal.toLowerCase() === itemCategory.toLowerCase()) {
+                        selectEl.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    var newOpt = document.createElement('option');
+                    newOpt.value = itemCategory;
+                    newOpt.text = itemCategory;
+                    newOpt.selected = true;
+                    newOpt.className = 'dynamic-category-opt';
+                    selectEl.appendChild(newOpt);
+                    selectEl.value = itemCategory;
+                }
+            }
+        }
 
         document.getElementById('edit-item-modal').classList.remove('hidden');
     }

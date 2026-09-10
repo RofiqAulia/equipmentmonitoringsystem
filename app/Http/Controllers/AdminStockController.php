@@ -36,7 +36,7 @@ class AdminStockController extends Controller
             'item_id' => 'nullable|required_if:mode,existing|exists:items,id',
             'sku' => 'nullable|required_if:mode,new|string|max:50',
             'name' => 'nullable|required_if:mode,new|string|max:255',
-            'gis_category' => 'nullable|string|in:ATK & Fotocopy,Biaya Packaging,Biaya Kebersihan,Kebersihan,Sparepart Inventaris,Jasa Lainnya,Lain-lain',
+            'gis_category' => 'nullable|string|max:255',
             'location_bin' => 'required|string|max:100',
             'quantity' => 'required|integer|min:0',
             'minimum_stock' => 'required|integer|min:0',
@@ -182,7 +182,7 @@ class AdminStockController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'gis_category' => 'nullable|string|in:ATK & Fotocopy,Biaya Packaging,Biaya Kebersihan,Kebersihan,Sparepart Inventaris,Jasa Lainnya,Lain-lain',
+            'gis_category' => 'nullable|string|max:255',
             'location_bin' => 'required|string|max:100',
             'available_stock' => 'required|integer|min:0',
             'minimum_stock' => 'required|integer|min:0',

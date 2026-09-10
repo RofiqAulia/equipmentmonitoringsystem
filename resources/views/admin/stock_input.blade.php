@@ -84,10 +84,16 @@
                         <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Kategori Item GIS (Opsional)</label>
                         <select name="gis_category" id="gis_category_input" class="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500">
                             <option value="">-- Tanpa Kategori / Kosongkan --</option>
+                            <option value="ATK & FOTOCOPY">ATK & FOTOCOPY</option>
+                            <option value="SPAREPART INVENTARIS">SPAREPART INVENTARIS</option>
+                            <option value="KEBERSIHAN">KEBERSIHAN</option>
+                            <option value="BIAYA KONSUMSI">BIAYA KONSUMSI</option>
+                            <option value="BIAYA PACKAGING">BIAYA PACKAGING</option>
+                            <option value="JASA LAINNYA (ORANG PRIBADI)">JASA LAINNYA (ORANG PRIBADI)</option>
                             <option value="ATK & Fotocopy">ATK & Fotocopy</option>
-                            <option value="Biaya Packaging">Biaya Packaging</option>
-                            <option value="Kebersihan">Kebersihan (Biaya Kebersihan)</option>
                             <option value="Sparepart Inventaris">Sparepart Inventaris</option>
+                            <option value="Kebersihan">Kebersihan</option>
+                            <option value="Biaya Packaging">Biaya Packaging</option>
                             <option value="Jasa Lainnya">Jasa Lainnya</option>
                             <option value="Lain-lain">Lain-lain</option>
                         </select>
