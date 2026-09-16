@@ -92,7 +92,7 @@
                 <!-- User Profile Avatar & Header Logout -->
                 <div class="flex items-center space-x-2 sm:space-x-3 pl-1.5 sm:pl-3 border-l border-slate-200 dark:border-slate-800">
                     @php
-                        $profileUser = Auth::user()->supervisor ?? Auth::user();
+                        $profileUser = Auth::user();
                     @endphp
                     <img src="{{ $profileUser->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode($profileUser->name).'&background=0284c7&color=fff' }}" 
                          alt="{{ $profileUser->name }}" class="w-8 h-8 rounded-full border border-pink-500/40 object-cover">
@@ -250,7 +250,7 @@
                             <div class="pt-4 border-t border-slate-200 dark:border-slate-800 space-y-3">
                                 <div class="flex items-center space-x-3 px-1">
                                     @php
-                                        $profileUser = Auth::user()->supervisor ?? Auth::user();
+                                        $profileUser = Auth::user();
                                     @endphp
                                     <img src="{{ $profileUser->avatar ?? 'https://ui-avatars.com/api/?name='.urlencode($profileUser->name).'&background=0284c7&color=fff' }}" 
                                          alt="{{ $profileUser->name }}" class="w-9 h-9 rounded-xl border border-sky-500/40 object-cover shadow-sm">
